@@ -1,1 +1,0 @@
-{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"am_ec2","Source":"../modules/ec2","Dir":"../modules/ec2"},{"Key":"am_ec2.am_ec2","Source":"./..","Dir":"../modules"},{"Key":"amec3","Source":"../modules/ec2","Dir":"../modules/ec2"},{"Key":"amec3.am_ec2","Source":"./..","Dir":"../modules"},{"Key":"ec2","Source":"../modules/ec2","Dir":"../modules/ec2"}]}

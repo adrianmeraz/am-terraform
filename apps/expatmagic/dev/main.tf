@@ -1,26 +1,16 @@
-#module "am_ecr" {
-#  source = "../../../modules/ecr"
-#}
-#module "am_ec2" {
-#  source = "../../../modules/ec2"
-#}
-
-#terraform {
-#  required_providers {
-#    aws = {
-#      source = "hashicorp/aws"
-#      version = "~> 5.32"
-#    }
+#module  "ec2" {
+#  source = "../modules/ec2"
+#  ami           = "ami-04e914639d0cca79a"
+#  instance_type = "t4g.nano"
+#  tags = {
+#    "Environment": "dev"
 #  }
 #}
-#
-#provider "aws" {
-#  region = "us-west-2"
-#}
-
-module  "amec3" {
-  source = "../../../apps/expatmagic/dev"
-  #  ami           = "ami-04e914639d0cca79a"
-#  instance_type = var.instance_type
-#  tags = var.tags
+module  "ecr" {
+  ecr_name = "em-ecr"
+  source = "../../../modules/ecr"
+  environment = "dev"
+  tags = {
+    "environment": "dev"
+  }
 }
