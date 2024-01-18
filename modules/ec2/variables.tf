@@ -1,3 +1,9 @@
+variable "ami" {
+  description = "ID of AMI to use for the instance"
+  type        = string
+  default     = null
+}
+
 variable "tags" {
   description = "A map of tags to add to all resources"
   type        = map(string)
