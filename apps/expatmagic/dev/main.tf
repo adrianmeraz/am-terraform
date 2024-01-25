@@ -1,30 +1,31 @@
-#module  "ec2" {
-#  source = "../modules/ec2"
-#  ami           = "ami-04e914639d0cca79a"
-#  instance_type = "t4g.nano"
-#  tags = {
-#    "Environment": "dev"
-#  }
-#}
+locals {
+  app_name          = "expatmagic"
+  environment       = "dev"
+  lambda_runtime    = "java17"
+}
 
 module  "ecr" {
-  name = "em-ecr"
   source = "../../../modules/ecr"
-  environment = var.environment
-  tags = {
-    "app_name": var.app_name
-    "environment": var.environment
-  }
+
+  name = local.app_name
+  environment = local.environment
 }
 
 module "lambda_role" {
   source = "../../../modules/lambda_role"
-  name = "em_lambda_role"
+
+  app_name = local.app_name
+  name = local.app_name
+  environment = local.environment
 }
 
 module "lambda_iam_policy" {
   source = "../../../modules/lambda_iam_policy"
-  name = "aws_iam_policy_for_terraform_aws_lambda_role"
+
+  app_name = local.app_name
+  name = local.app_name
+  environment = local.environment
+
   path = "/"
   description = "AWS IAM Policy for managing aws lambda role"
 }
@@ -32,4 +33,23 @@ module "lambda_iam_policy" {
 resource "aws_iam_role_policy_attachment" "attach_iam_policy_to_iam_role" {
   role        = module.lambda_role.name
   policy_arn  = module.lambda_iam_policy.arn
+}
+
+resource "aws_lambda_function" "lambda_function" {
+  app_name                       = local.app_name
+  filename                       = "${path.module}/python/hello-python.zip"
+  function_name                  = "Spacelift_Test_Lambda_Function"
+  role                           = module.lambda_iam_policy.arn
+  handler                        = "index.lambda_handler"
+  runtime                        = "python3.8"
+  depends_on                     = [aws_iam_role_policy_attachment.attach_iam_policy_to_iam_role]
+}
+
+module "lambda_function" {
+  source = "../../../modules/lambda_function"
+  app_name = local.app_name
+  environment = local.environment
+  role = module.lambda_iam_policy.arn
+  function_name = "function1"
+  runtime = local.lambda_runtime
 }

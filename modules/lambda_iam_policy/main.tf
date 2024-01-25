@@ -1,6 +1,12 @@
 resource "aws_iam_policy" "lambda_iam_policy" {
-  tags         = var.tags
-  name         = var.name
+  name         = "${var.environment}-${var.app_name}-${var.name}-lambda_iam_policy"
+  tags = merge(
+    tomap({
+      "app_name": var.app_name
+      "environment": var.environment
+    }),
+    var.tags,
+  )
   path         = var.path
   description  = var.description
   policy = <<EOF

@@ -1,3 +1,9 @@
+variable "app_name" {
+  description = "Name of application"
+  type        = string
+  default     = ""
+}
+
 variable "name" {
   description = "The name of the ECR registry"
   type        = any

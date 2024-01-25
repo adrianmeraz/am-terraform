@@ -1,4 +1,10 @@
-variable "bucket_name" {
+variable "app_name" {
+  description = "Name of application"
+  type        = string
+  default     = ""
+}
+
+variable "bucket" {
   description = "Name of s3 bucket"
   type        = string
   default     = null
