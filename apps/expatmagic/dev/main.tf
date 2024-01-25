@@ -42,9 +42,10 @@ module "lambda_function" {
   app_name = local.app_name
   environment = local.environment
 
-  function_name = local.app_name
+  function_name = "${local.app_name}_entry"
   handler = local.handler_entry_point
   image_uri = module.ecr.repository_url
+  package_type = "Image"
   role = module.lambda_role.arn
   runtime = local.lambda_runtime
 }
