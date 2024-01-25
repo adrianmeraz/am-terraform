@@ -38,6 +38,7 @@ resource "aws_iam_role_policy_attachment" "attach_iam_policy_to_iam_role" {
 resource "aws_lambda_function" "lambda_function" {
   app_name                       = local.app_name
   filename                       = "${path.module}/python/hello-python.zip"
+
   function_name                  = "Spacelift_Test_Lambda_Function"
   role                           = module.lambda_iam_policy.arn
   handler                        = "index.lambda_handler"
@@ -49,7 +50,10 @@ module "lambda_function" {
   source = "../../../modules/lambda_function"
   app_name = local.app_name
   environment = local.environment
+
+  function_name = "Expat Magic lambda function"
+  handler = "com.dn.StreamLambdaHandler"
+  image_uri = module.ecr.repository_url
   role = module.lambda_iam_policy.arn
-  function_name = "function1"
   runtime = local.lambda_runtime
 }

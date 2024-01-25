@@ -22,26 +22,26 @@ variable "function_name" {
   default     = ""
 }
 
-variable "role" {
-  description = "Amazon Resource Name (ARN) of the function's execution role."
-  type        = string
-  default     = ""
-}
-
 variable "handler" {
   description = "Function entrypoint in your code."
   type        = string
   default     = ""
 }
 
-variable "runtime" {
-  description = "Identifier of the function's runtime."
+variable "image_uri" {
+  description = "ECR image URI containing the function's deployment package"
   type        = string
   default     = ""
 }
 
-variable "image_uri" {
-  description = "ECR image URI containing the function's deployment package"
+variable "role" {
+  description = "Amazon Resource Name (ARN) of the function's execution role."
+  type        = string
+  default     = ""
+}
+
+variable "runtime" {
+  description = "Identifier of the function's runtime."
   type        = string
   default     = ""
 }
