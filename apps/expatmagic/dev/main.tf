@@ -1,8 +1,9 @@
 locals {
   app_name            = "expatmagic"
   environment         = "dev"
+  lambda_memory_size  = 128
   lambda_runtime      = "java17"
-  handler_entry_point = "com.dn.StreamLambdaHandler"
+  lambda_handler      = "com.dn.StreamLambdaHandler"
 }
 
 module  "ecr" {
@@ -42,9 +43,10 @@ module "lambda_function" {
   app_name = local.app_name
   environment = local.environment
 
-  function_name = "${local.app_name}_entry"
-  handler = local.handler_entry_point
-  image_uri = module.ecr.repository_url
+  function_name = "api"
+  handler = local.lambda_handler
+  image_uri = "${module.ecr.repository_url}:latest"
+  memory_size = local.lambda_memory_size
   package_type = "Image"
   role = module.lambda_role.arn
   runtime = local.lambda_runtime

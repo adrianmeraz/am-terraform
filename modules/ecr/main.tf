@@ -13,4 +13,12 @@ resource  "aws_ecr_repository" "ecr" {
   image_scanning_configuration {
     scan_on_push = true
   }
+
+  provisioner "local-exec" {
+    command = <<-EOT
+      docker pull alpine
+      docker tag alpine dummy_container
+      docker push dummy_container
+    EOT
+  }
 }
