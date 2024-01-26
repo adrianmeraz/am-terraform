@@ -1,0 +1,66 @@
+variable "app_name" {
+  description = "Name of application"
+  type        = string
+  default     = ""
+}
+
+variable "environment" {
+  description = "Environment name"
+  type        = string
+  default     = ""
+}
+
+variable "tags" {
+  description = "A map of tags to add to all resources"
+  type        = map(string)
+  default     = {}
+}
+
+variable "allocated_storage" {
+  description = "The allocated storage in gibibytes"
+  type        = string
+  default     = 10
+}
+
+variable "engine" {
+  description = "The database engine to use"
+  type        = string
+}
+
+variable "engine_version" {
+  description = "The engine version to use"
+  type        = string
+}
+
+variable "identifier" {
+  description = "The name of the RDS instance, if omitted, Terraform will assign a random, unique identifier"
+  type        = string
+}
+
+variable "instance_class" {
+  description = "The instance type of the RDS instance."
+  type        = string
+  default     = "db.t3.micro"
+}
+
+variable "password" {
+  description = "Password for the master DB user"
+  type        = string
+}
+
+variable "publicly_accessible" {
+  description = "Bool to control if instance is publicly accessible"
+  type        = string
+  default     = false
+}
+
+variable "skip_final_snapshot" {
+  description = "Determines whether a final DB snapshot is created before the DB instance is deleted."
+  type        = string
+  default     = false
+}
+
+variable "username" {
+  description = "Username for the master DB user."
+  type        = string
+}
