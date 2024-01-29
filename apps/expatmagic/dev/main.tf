@@ -15,7 +15,7 @@ module  "secrets_manager" {
 
   app_name = local.app_name
   environment = local.environment
-  recovery_window_in_days = 0
+  recovery_window_in_days = 0 # Allows for instant deletes
   secret_map = {
     "aws_access_key": var.aws_access_key,
     "aws_region": var.aws_region,
