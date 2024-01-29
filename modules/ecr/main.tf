@@ -10,6 +10,7 @@ resource  "aws_ecr_repository" "this" {
     var.tags,
   )
 
+  force_delete = var.force_delete
   image_tag_mutability = var.image_tag_mutability
   
   image_scanning_configuration {

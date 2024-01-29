@@ -31,6 +31,8 @@ module  "ecr" {
   app_name = local.app_name
   environment = local.environment
   name = local.app_name
+
+  force_delete = true
 }
 
 module "lambda_role" {
@@ -63,12 +65,12 @@ module "lambda_function" {
   environment = local.environment
 
   function_name = "api"
-  handler = local.lambda.handler
+  # handler = local.lambda.handler
   image_uri = "${module.ecr.repository_url}:latest"
   memory_size = local.lambda.memory_size
   package_type = "Image"
   role = module.lambda_role.arn
-  runtime = local.lambda.runtime
+  # runtime = local.lambda.runtime
 }
 
 module "rds" {
@@ -81,9 +83,9 @@ module "rds" {
   engine_version = "14.5"
   identifier = local.app_name
   instance_class = "db.t3.micro"
-  # password = var.db_password
-  password = module.secrets_manager.secret_map["db_password"]
+  password = var.db_password
+  # password = module.secrets_manager.secret_map["db_password"]
   publicly_accessible = true
-#  username = var.db_username
-  username = module.secrets_manager.secret_map["db_username"]
+  username = var.db_username
+  # username = module.secrets_manager.secret_map["db_username"]
 }
