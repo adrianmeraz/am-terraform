@@ -1,6 +1,8 @@
 resource "aws_secretsmanager_secret" "this" {
   name = "${var.app_name}/${var.environment}/secret"
   tags = var.tags
+
+  recovery_window_in_days = var.recovery_window_in_days
 }
 
 resource "aws_secretsmanager_secret_version" "r_secrets_version" {
