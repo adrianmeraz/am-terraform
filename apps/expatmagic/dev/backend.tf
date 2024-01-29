@@ -16,6 +16,10 @@ terraform {
       source = "hashicorp/hcp"
       version = "0.63.0"
     }
+    time = {
+      source = "hashicorp/time"
+      version = "0.10.0"
+    }
   }
 }
 
