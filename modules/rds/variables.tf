@@ -32,6 +32,12 @@ variable "engine_version" {
   type        = string
 }
 
+variable "final_snapshot_identifier" {
+  description = "The name of your final DB snapshot when this DB instance is deleted. Must be provided if skip_final_snapshot is set to false"
+  type        = string
+  default     = ""
+}
+
 variable "identifier" {
   description = "The name of the RDS instance, if omitted, Terraform will assign a random, unique identifier"
   type        = string
@@ -50,13 +56,13 @@ variable "password" {
 
 variable "publicly_accessible" {
   description = "Bool to control if instance is publicly accessible"
-  type        = string
+  type        = bool
   default     = false
 }
 
 variable "skip_final_snapshot" {
   description = "Determines whether a final DB snapshot is created before the DB instance is deleted."
-  type        = string
+  type        = bool
   default     = false
 }
 
