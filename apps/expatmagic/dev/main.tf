@@ -92,10 +92,12 @@ module "rds" {
 
   allocated_storage = 20
   engine = "postgres"
-  engine_version = "13.6"
+  engine_version = "14.5"
   identifier = local.app_name
   instance_class = "db.t3.micro"
-  password = var.db_password
+  # password = var.db_password
+  password = module.secrets_manager.secret_map["db_password"]
   publicly_accessible = true
-  username = var.db_username
+#  username = var.db_username
+  username = module.secrets_manager.secret_map["db_username"]
 }
