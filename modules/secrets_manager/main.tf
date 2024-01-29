@@ -6,7 +6,7 @@ resource "aws_secretsmanager_secret" "r_secrets" {
 resource "aws_secretsmanager_secret_version" "r_secrets_version" {
   secret_id = aws_secretsmanager_secret.r_secrets.id
   secret_string = <<EOF
-  ${var.secret_map}
+  ${jsonencode(var.secret_map)}
 EOF
 }
 

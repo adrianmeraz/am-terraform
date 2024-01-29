@@ -1,5 +1,3 @@
-# Environment variables must start with TF_VAR_
-
 variable "aws_access_key" {
   type = string
 }
