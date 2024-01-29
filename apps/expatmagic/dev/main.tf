@@ -22,23 +22,6 @@ module  "secrets_manager" {
   }
 }
 
-#resource "aws_secretsmanager_secret" "secrets" {
-#  name = "${local.app_name}-${local.environment}"
-#}
-
-#resource "aws_secretsmanager_secret_version" "secrets_version" {
-#  secret_id = aws_secretsmanager_secret.secrets.id
-#  secret_string = <<EOF
-#    {
-#      "aws_access_key": "${var.aws_access_key},
-#      "aws_region": "${var.aws_region},
-#      "aws_secret_key": "${var.aws_secret_key},
-#      "db_password": "${var.db_password},
-#      "db_username": "${var.db_username}
-#    }
-#EOF
-#}
-
 module  "ecr" {
   source = "../../../modules/ecr"
 

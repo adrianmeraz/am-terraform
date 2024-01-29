@@ -6,5 +6,5 @@ resource "aws_s3_bucket" "s3" {
     }),
     var.tags,
   )
-  bucket = "${var.app_name}-${var.environment}-${var.bucket}"
+  bucket = "${var.app_name}_${var.environment}_${var.bucket}"
 }

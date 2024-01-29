@@ -1,4 +1,6 @@
-resource  "aws_ecr_repository" "ecr" {
+data "aws_ecr_authorization_token" "token" {}
+
+resource  "aws_ecr_repository" "this" {
   name = "${var.name}-${var.environment}-ecr"
   tags = merge(
     tomap({
@@ -14,12 +16,16 @@ resource  "aws_ecr_repository" "ecr" {
     scan_on_push = true
   }
 
-  # Push a placeholder image to avoid "No Valid Image Exists" errors
+  # This is a 1-time execution to put a dummy image into the ECR repo, so
+  # terraform provisioning works on the lambda function. Otherwise there is
+  # a chicken-egg scenario where the lambda can't be provisioned because no
+  # image exists in the ECR
   provisioner "local-exec" {
     command = <<-EOT
+      docker login ${data.aws_ecr_authorization_token.token.proxy_endpoint} -u AWS -p ${data.aws_ecr_authorization_token.token.password}
       docker pull hello-world
-      docker tag hello-world latest
-      docker push latest
+      docker tag hello-world ${self.repository_url}:latest
+      docker push ${self.repository_url}:latest
     EOT
   }
 }

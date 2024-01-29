@@ -1,5 +1,5 @@
-resource "aws_iam_policy" "lambda_iam_policy" {
-  name         = "${var.name}-${var.environment}-lambda_iam_policy"
+resource "aws_iam_policy" "lambda" {
+  name         = "${var.name}_${var.environment}_lambda"
   tags = merge(
     tomap({
       "app_name": var.app_name
