@@ -6,8 +6,8 @@ build/
 !**/src/test/**/build/
 
 ### Environment Variables ###
-/src/main/resources/.env
 */.env
+apps/expatmagic/dev/.env
 
 ### STS ###
 .apt_generated

@@ -1,0 +1,21 @@
+# Environment variables must start with TF_VAR_
+
+variable "aws_access_key" {
+  type = string
+}
+
+variable "aws_region" {
+  type = string
+}
+
+variable "aws_secret_key" {
+  type = string
+}
+
+
+variable "db_password" {
+  type = string
+}
+variable "db_username" {
+  type = string
+}

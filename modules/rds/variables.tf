@@ -19,7 +19,7 @@ variable "tags" {
 variable "allocated_storage" {
   description = "The allocated storage in gibibytes"
   type        = string
-  default     = 10
+  default     = 20
 }
 
 variable "engine" {
