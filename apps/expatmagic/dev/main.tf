@@ -1,9 +1,11 @@
 locals {
   app_name            = "expatmagic"
   environment         = "dev"
-  lambda_memory_size  = 128
-  lambda_runtime      = "java17"
-  lambda_handler      = "com.dn.StreamLambdaHandler"
+  lambda = {
+    memory_size: 128,
+    runtime: "java17",
+    handler: "com.dn.StreamLambdaHandler"
+  }
 }
 
 # Setting secrets in secrets manager
@@ -60,12 +62,12 @@ module "lambda_function" {
   environment = local.environment
 
   function_name = "api"
-  handler = local.lambda_handler
+  handler = local.lambda.handler
   image_uri = "${module.ecr.repository_url}:latest"
-  memory_size = local.lambda_memory_size
+  memory_size = local.lambda.memory_size
   package_type = "Image"
   role = module.lambda_role.arn
-  runtime = local.lambda_runtime
+  runtime = local.lambda.runtime
 }
 
 module "rds" {
