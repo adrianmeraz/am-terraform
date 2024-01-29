@@ -14,12 +14,12 @@ resource  "aws_ecr_repository" "ecr" {
     scan_on_push = true
   }
 
-  # Push a dummy image to avoid "No Valid Image Exists" errors
+  # Push a placeholder image to avoid "No Valid Image Exists" errors
   provisioner "local-exec" {
     command = <<-EOT
       docker pull hello-world
-      docker tag hello-world dummy_container
-      docker push dummy_container
+      docker tag hello-world latest
+      docker push latest
     EOT
   }
 }
