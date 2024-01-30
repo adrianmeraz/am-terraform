@@ -1,3 +1,7 @@
+locals {
+  tag = "latest"
+}
+
 data "aws_ecr_authorization_token" "token" {}
 
 resource  "aws_ecr_repository" "this" {
@@ -22,11 +26,12 @@ resource  "aws_ecr_repository" "this" {
   # a chicken-egg scenario where the lambda can't be provisioned because no
   # image exists in the ECR
   provisioner "local-exec" {
+    interpreter = ["PowerShell", "-Command"]
     command = <<-EOT
       docker login ${data.aws_ecr_authorization_token.token.proxy_endpoint} -u AWS -p ${data.aws_ecr_authorization_token.token.password}
       docker pull hello-world
-      docker tag hello-world ${self.repository_url}:latest
-      docker push ${self.repository_url}:latest
+      docker tag hello-world:${local.tag} ${self.repository_url}:${local.tag}
+      docker push ${self.repository_url}:${local.tag}
     EOT
   }
 }
