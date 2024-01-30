@@ -12,5 +12,7 @@ resource "aws_lambda_function" "this" {
   package_type  = var.package_type
   role          = var.role
   runtime       = var.runtime
-  snap_start    = var.snap_start
+#  snap_start {
+#    apply_on = var.apply_on
+#  }
 }

@@ -52,8 +52,8 @@ variable "runtime" {
   default     = null
 }
 
-variable "snap_start" {
-  description = "Identifier of the function's runtime."
-  type        = map(string)
-  default     = {}
-}
+#variable "apply_on" {
+#  description = "Snap start apply on"
+#  type        = string
+#  default     = ""
+#}

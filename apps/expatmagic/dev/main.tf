@@ -34,7 +34,7 @@ module  "ecr" {
   force_delete = true
 }
 
-module "lambda_role" {
+module "iam_role" {
   source = "../../../modules/lambda_role"
 
   app_name = local.app_name
@@ -43,7 +43,7 @@ module "lambda_role" {
 }
 
 module "lambda_iam_policy" {
-  source = "../../../modules/lambda_iam_policy"
+  source = "../../../modules/logs_iam_policy"
 
   app_name = local.app_name
   environment = local.environment
@@ -51,6 +51,11 @@ module "lambda_iam_policy" {
 
   path = "/"
   description = "AWS IAM Policy for managing aws lambda role"
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_iam_attachment" {
+  role       = module.iam_role.name
+  policy_arn = module.lambda_iam_policy.arn
 }
 
 module "lambda_function" {
@@ -64,11 +69,11 @@ module "lambda_function" {
 
   memory_size = local.lambda.memory_size
   package_type = "Image"
-  role = module.lambda_role.arn
+  role = module.iam_role.arn
   # runtime = local.lambda.runtime
-  snap_start = {
-    apply_on = "PublishedVersions"
-  }
+
+  # apply_on = "PublishedVersions"
+
 }
 
 module "rds" {
