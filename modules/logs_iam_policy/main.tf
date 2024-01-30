@@ -8,7 +8,7 @@ resource "aws_iam_policy" "logs" {
     var.tags,
   )
   path         = var.path
-  description  = var.description
+  description = "AWS IAM Policy for managing aws logs"
   policy = <<EOF
 {
   "Version": "2012-10-17",

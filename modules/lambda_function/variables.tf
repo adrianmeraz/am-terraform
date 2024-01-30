@@ -51,9 +51,3 @@ variable "runtime" {
   type        = string
   default     = null
 }
-
-#variable "apply_on" {
-#  description = "Snap start apply on"
-#  type        = string
-#  default     = ""
-#}

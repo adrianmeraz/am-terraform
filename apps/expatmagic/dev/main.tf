@@ -42,7 +42,7 @@ module "iam_role" {
   name = local.app_name
 }
 
-module "lambda_iam_policy" {
+module "logs_iam_policy" {
   source = "../../../modules/logs_iam_policy"
 
   app_name = local.app_name
@@ -50,31 +50,30 @@ module "lambda_iam_policy" {
   name = local.app_name
 
   path = "/"
-  description = "AWS IAM Policy for managing aws lambda role"
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_iam_attachment" {
+resource "aws_iam_role_policy_attachment" "logs_iam_attachment" {
   role       = module.iam_role.name
-  policy_arn = module.lambda_iam_policy.arn
+  policy_arn = module.logs_iam_policy.arn
 }
 
-module "lambda_function" {
-  source = "../../../modules/lambda_function"
-  app_name = local.app_name
-  environment = local.environment
-
-  function_name = "api"
-  # handler = local.lambda.handler
-  image_uri = "${module.ecr.repository_url}:latest"
-
-  memory_size = local.lambda.memory_size
-  package_type = "Image"
-  role = module.iam_role.arn
-  # runtime = local.lambda.runtime
-
-  # apply_on = "PublishedVersions"
-
-}
+#module "lambda_function" {
+#  source = "../../../modules/lambda_function"
+#  app_name = local.app_name
+#  environment = local.environment
+#
+#  function_name = "api"
+#  # handler = local.lambda.handler
+#  image_uri = "${module.ecr.repository_url}:latest"
+#
+#  memory_size = local.lambda.memory_size
+#  package_type = "Image"
+#  role = module.iam_role.arn
+#  # runtime = local.lambda.runtime
+#
+#  # apply_on = "PublishedVersions"
+#
+#}
 
 module "rds" {
   source      = "../../../modules/rds"
