@@ -2,7 +2,7 @@ locals {
   app_name            = "expatmagic"
   environment         = "dev"
   lambda = {
-    memory_size: 128,
+    memory_size: 512,
     runtime: "java17",
     handler: "com.dn.StreamLambdaHandler"
   }
