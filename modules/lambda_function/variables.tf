@@ -51,3 +51,9 @@ variable "runtime" {
   type        = string
   default     = null
 }
+
+variable "snap_start" {
+  description = "Identifier of the function's runtime."
+  type        = map(string)
+  default     = {}
+}
