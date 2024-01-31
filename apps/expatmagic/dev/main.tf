@@ -29,10 +29,22 @@ module "internet_gateway" {
 module "aws_subnet_public" {
   source = "../../../modules/subnet"
   tags = local.base_tags
+
   availability_zone = var.aws_region
   cidr_block = "10.1.0.0/24"
   map_public_ip_on_launch = true
+  vpc_id = module.vpc.id
+}
 
+module "route_table" {
+  source = "../../../modules/route_table"
+  tags = local.base_tags
+
+  cidr_block = "10.1.0.0/24"
+  route = {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = module.internet_gateway.id
+  }
   vpc_id = module.vpc.id
 }
 

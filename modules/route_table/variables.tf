@@ -12,11 +12,6 @@ variable "tags" {
 # Parameters
 ################################################################################
 
-variable "vpc_id" {
-  description = "Id of VPC"
-  type        = string
-}
-
 variable "cidr_block" {
   description = ""
   type        = string
@@ -28,4 +23,9 @@ variable "route" {
     cidr_block = string
     gateway_id = string
   })
+}
+
+variable "vpc_id" {
+  description = "Id of VPC"
+  type        = string
 }
