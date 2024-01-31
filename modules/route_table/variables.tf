@@ -12,11 +12,6 @@ variable "tags" {
 # Parameters
 ################################################################################
 
-variable "cidr_block" {
-  description = ""
-  type        = string
-}
-
 variable "route" {
   description = "Route values"
   type = object({

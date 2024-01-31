@@ -1,4 +1,7 @@
 locals {
+  subnet            = {
+    availability_zone = "us-west-2a"
+  }
   name_prefix       = "${var.app_name}_${var.environment}"
   base_tags         = {
     "app_name" : var.app_name
@@ -26,11 +29,11 @@ module "internet_gateway" {
   vpc_id = module.vpc.id
 }
 
-module "aws_subnet_public" {
+module "subnet_public" {
   source = "../../../modules/subnet"
   tags = local.base_tags
 
-  availability_zone = var.aws_region
+  availability_zone = local.subnet.availability_zone
   cidr_block = "10.1.0.0/24"
   map_public_ip_on_launch = true
   vpc_id = module.vpc.id
@@ -40,14 +43,12 @@ module "route_table" {
   source = "../../../modules/route_table"
   tags = local.base_tags
 
-  cidr_block = "10.1.0.0/24"
   route = {
     cidr_block = "0.0.0.0/0"
     gateway_id = module.internet_gateway.id
   }
   vpc_id = module.vpc.id
 }
-
 
 #module  "secrets_manager" {
 #  source = "../../../modules/secrets_manager"
@@ -111,6 +112,13 @@ module "ecs_cluster" {
   name = local.name_prefix
   execution_role_arn = module.iam_role.arn
   image = module.ecr.repository_url_with_tag
+  service = {
+    desired_count = 1
+    network_configuration = {
+      assign_public_ip = true
+      subnets = [module.subnet_public.id]
+    }
+  }
   task = {
     cpu = var.ecs.cpu
     memory = var.ecs.memory

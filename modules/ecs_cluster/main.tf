@@ -36,5 +36,9 @@ resource "aws_ecs_service" "this" {
   launch_type     = var.service.launch_type
 
   desired_count = var.service.desired_count
+  network_configuration {
+    assign_public_ip = var.service.network_configuration.assign_public_ip
+    subnets = var.service.network_configuration.subnets
+  }
 }
 

@@ -24,6 +24,10 @@ variable "service" {
   type = object({
     launch_type = string
     desired_count = number
+    network_configuration = object({
+      assign_public_ip = bool
+      subnets = list(string)
+    })
   })
 
   default = {
