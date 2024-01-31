@@ -4,11 +4,6 @@ variable "tags" {
   default     = {}
 }
 
-variable "name" {
-  description = "Name of cluster"
-  type        = string
-}
-
 variable "execution_role_arn" {
   description = "ARN of Role to execute the task"
   type        = string
@@ -16,6 +11,11 @@ variable "execution_role_arn" {
 
 variable "image" {
   description = "The ECR image to deploy"
+  type        = string
+}
+
+variable "name" {
+  description = "Name of cluster"
   type        = string
 }
 
