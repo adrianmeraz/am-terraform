@@ -114,6 +114,7 @@ module "ecs_cluster" {
   image = module.ecr.repository_url_with_tag
   service = {
     desired_count = 1
+    launch_type = "FARGATE"
     network_configuration = {
       assign_public_ip = true
       subnets = [module.subnet_public.id]

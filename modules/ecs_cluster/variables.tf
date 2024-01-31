@@ -29,11 +29,6 @@ variable "service" {
       subnets = list(string)
     })
   })
-
-  default = {
-    launch_type = "FARGATE"
-    desired_count = 0
-  }
 }
 
 variable "task" {
