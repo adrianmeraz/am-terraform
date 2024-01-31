@@ -15,6 +15,21 @@ variable "aws_secret_key" {
   type = string
 }
 
+variable "db" {
+  description = "Variables for database"
+  type = object({
+    username = string
+    password = string
+  })
+}
+
+variable "db_password" {
+  type = string
+}
+variable "db_username" {
+  type = string
+}
+
 variable "ecs" {
   description = "Variables for ecs cluster"
   type = object({
@@ -31,11 +46,4 @@ variable "ecs" {
 variable "environment" {
   description = "Environment name"
   type        = string
-}
-
-variable "db_password" {
-  type = string
-}
-variable "db_username" {
-  type = string
 }

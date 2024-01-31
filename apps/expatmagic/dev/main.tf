@@ -40,8 +40,8 @@ module  "secrets_manager" {
     "aws_access_key": var.aws_access_key,
     "aws_region": var.aws_region,
     "aws_secret_key": var.aws_secret_key,
-    "db_password": var.db_password,
-    "db_username": var.db_username
+    "db_password": var.db.password,
+    "db_username": var.db.username
   }
 }
 
@@ -119,9 +119,9 @@ module "rds" {
   engine_version = "14.5"
   identifier = var.app_name
   instance_class = "db.t3.micro"
-  password = var.db_password
+  password = var.db.password
   # password = module.secrets_manager.secret_map["db_password"]
   publicly_accessible = true
-  username = var.db_username
+  username = var.db.username
   # username = module.secrets_manager.secret_map["db_username"]
 }
