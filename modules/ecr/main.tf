@@ -1,7 +1,3 @@
-locals {
-  tag = "latest"
-}
-
 data "aws_ecr_authorization_token" "token" {}
 
 resource  "aws_ecr_repository" "this" {
@@ -30,8 +26,8 @@ resource  "aws_ecr_repository" "this" {
     command = <<-EOT
       docker login ${data.aws_ecr_authorization_token.token.proxy_endpoint} -u AWS -p ${data.aws_ecr_authorization_token.token.password}
       docker pull hello-world
-      docker tag hello-world:${local.tag} ${self.repository_url}:${local.tag}
-      docker push ${self.repository_url}:${local.tag}
+      docker tag hello-world:${var.image_tag} ${self.repository_url}:${var.image_tag}
+      docker push ${self.repository_url}:${var.image_tag}
     EOT
   }
 }

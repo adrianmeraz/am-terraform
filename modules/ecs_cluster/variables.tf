@@ -16,10 +16,14 @@ variable "tags" {
   default     = {}
 }
 
+variable "execution_role_arn" {
+  description = "ARN of Role to execute the task"
+  type        = string
+}
+
 variable "image" {
   description = "The ECR image to deploy"
   type        = string
-  default     = ""
 }
 
 variable "service" {
@@ -35,14 +39,15 @@ variable "service" {
   }
 }
 
-variable "task_cpu" {
-  description = "Number of cpu units used by the task. If the requires_compatibilities is FARGATE this field is required."
-  type        = number
-  default     = 1
-}
+variable "task" {
+  description = "Variables for ecs task"
+  type = object({
+    cpu = number
+    memory = number
+  })
 
-variable "task_memory" {
-  description = "Amount (in MiB) of memory used by the task. If the requires_compatibilities is FARGATE this field is required."
-  type        = number
-  default     = 128
+  default = {
+    cpu = 256 # 256 (.25 vCPU) https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
+    memory = 512
+  }
 }

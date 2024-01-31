@@ -8,11 +8,41 @@ locals {
   }
 }
 
+
+
+# Add a private and public VPC. The public VPC subnet should have an internet gateway
+
+module "vpc_public" {
+  source = "../../../modules/vpc"
+
+  app_name    = local.app_name
+  environment = local.environment
+}
+
+module "internet_gateway" {
+  source = "../../../modules/aws_internet_gateway"
+
+  app_name    = local.app_name
+  environment = local.environment
+
+  vpc_id = module.vpc_public.id
+}
+
+
+
+module  "secrets_manager" {
+  source = "../../../modules/secrets_manager"
+
+  app_name    = local.app_name
+  environment = local.environment
+}
+
 module  "secrets_manager" {
   source = "../../../modules/secrets_manager"
 
   app_name = local.app_name
   environment = local.environment
+
   recovery_window_in_days = 0 # Allows for instant deletes
   secret_map = {
     "aws_access_key": var.aws_access_key,
@@ -32,6 +62,7 @@ module  "ecr" {
   name = local.app_name
 
   force_delete = true
+  image_tag = "latest"
 }
 
 module "iam_role" {
@@ -52,9 +83,28 @@ module "logs_iam_policy" {
   path = "/"
 }
 
-resource "aws_iam_role_policy_attachment" "logs_iam_attachment" {
+resource "aws_iam_role_policy_attachment" "attach_logs_iam" {
   role       = module.iam_role.name
   policy_arn = module.logs_iam_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "attach_ecs_task" {
+  role       = module.iam_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
+module "ecs_cluster" {
+  source = "../../../modules/ecs_cluster"
+
+  app_name = local.app_name
+  environment = local.environment
+
+  execution_role_arn = module.iam_role.arn
+  image = module.ecr.repository_url_with_tag
+  task = {
+    cpu = 256
+    memory = 512
+  }
 }
 
 #module "lambda_function" {
@@ -64,7 +114,7 @@ resource "aws_iam_role_policy_attachment" "logs_iam_attachment" {
 #
 #  function_name = "api"
 #  # handler = local.lambda.handler
-#  image_uri = "${module.ecr.repository_url}:latest"
+#  image_uri = "${module.ecr.repository_url_with_tag}"
 #
 #  memory_size = local.lambda.memory_size
 #  package_type = "Image"

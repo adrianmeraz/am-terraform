@@ -1,27 +1,27 @@
 resource "aws_ecs_cluster" "this" {
-  name = "${var.app_name}_${var.environment}_cluster"
+  name = "${var.app_name}_${var.environment}"
 }
 
 resource "aws_ecs_task_definition" "this" {
   family                   = "${var.app_name}_${var.environment}_task"
   network_mode             = "awsvpc"
   requires_compatibilities = [var.service.launch_type]
-  memory                   = var.task_memory
-  cpu                      = var.task_cpu
-  execution_role_arn       = "arn:aws:iam::123456789012:role/ecsTaskExecutionRole"
+  memory                   = var.task.memory
+  cpu                      = var.task.cpu
+  execution_role_arn       = var.execution_role_arn
   container_definitions    = <<EOF
 [
   {
     "name": "${var.app_name}_${var.environment}",
     "image": "${var.image}",
-    "memory": ${var.task_memory},
-    "cpu": ${var.task_cpu},
+    "memory": ${var.task.memory},
+    "cpu": ${var.task.cpu},
     "essential": true,
     "entryPoint": ["/"],
     "portMappings": [
       {
-        "containerPort": 80,
-        "hostPort": 80
+        "containerPort": 5000,
+        "hostPort": 5000
       }
     ]
   }
