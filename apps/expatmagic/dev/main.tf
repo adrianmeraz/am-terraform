@@ -50,6 +50,11 @@ module "route_table" {
   vpc_id = module.vpc.id
 }
 
+resource "aws_route_table_association" "this" {
+  subnet_id      = module.subnet_public.id
+  route_table_id = module.route_table.id
+}
+
 #module  "secrets_manager" {
 #  source = "../../../modules/secrets_manager"
 #}
