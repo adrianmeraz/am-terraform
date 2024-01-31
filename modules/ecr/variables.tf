@@ -1,21 +1,6 @@
 ################################################################################
-# Common Attributes
+# Attributes
 ################################################################################
-
-variable "app_name" {
-  description = "Name of application"
-  type        = string
-}
-
-variable "name" {
-  description = "The name of the ECR registry"
-  type        = any
-}
-
-variable "environment" {
-  description = "Environment name"
-  type        = string
-}
 
 variable "tags" {
   description = "A map of tags to add to all resources"
@@ -23,9 +8,10 @@ variable "tags" {
   default     = {}
 }
 
-################################################################################
-# Parameters
-################################################################################
+variable "name" {
+  description = "The name of the ECR registry"
+  type        = any
+}
 
 variable "image_tag" {
   description = "Image Tag"

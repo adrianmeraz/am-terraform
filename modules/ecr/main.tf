@@ -1,14 +1,8 @@
 data "aws_ecr_authorization_token" "token" {}
 
 resource  "aws_ecr_repository" "this" {
-  name = "${var.name}-${var.environment}-ecr"
-  tags = merge(
-    tomap({
-      "app_name": var.app_name
-      "environment": var.environment
-    }),
-    var.tags,
-  )
+  name = "${var.name}_ecr"
+  tags = var.tags
 
   force_delete = var.force_delete
   image_tag_mutability = var.image_tag_mutability

@@ -16,3 +16,18 @@ variable "vpc_id" {
   description = "Id of VPC"
   type        = string
 }
+
+variable "cidr_block" {
+  description = ""
+  type        = string
+}
+
+variable "map_public_ip_on_launch" {
+  description = ""
+  type        = bool
+}
+
+variable "availability_zone" {
+  description = ""
+  type        = string
+}

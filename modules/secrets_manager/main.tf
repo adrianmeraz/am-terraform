@@ -1,5 +1,5 @@
 resource "aws_secretsmanager_secret" "this" {
-  name = "${var.app_name}/${var.environment}/secret"
+  name = "${var.name}/secret"
   tags = var.tags
 
   recovery_window_in_days = var.recovery_window_in_days

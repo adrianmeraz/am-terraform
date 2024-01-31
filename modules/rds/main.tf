@@ -4,8 +4,8 @@ resource "aws_db_instance" "rds" {
   allocated_storage         = var.allocated_storage
   engine                    = var.engine
   engine_version            = var.engine_version
-  final_snapshot_identifier = "${var.identifier}-${var.environment}-${time_static.this.unix}-final"
-  identifier                = "${var.identifier}-${var.environment}-db"
+  final_snapshot_identifier = "${var.identifier}-${time_static.this.unix}-final"
+  identifier                = "${var.identifier}-db"
   instance_class            = var.instance_class
   password                  = var.password
   publicly_accessible       = var.publicly_accessible

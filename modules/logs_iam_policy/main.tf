@@ -1,12 +1,5 @@
 resource "aws_iam_policy" "logs" {
-  name         = "${var.name}_${var.environment}_logs"
-  tags = merge(
-    tomap({
-      "app_name": var.app_name
-      "environment": var.environment
-    }),
-    var.tags,
-  )
+  name         = "${var.name}_logs"
   path         = var.path
   description = "AWS IAM Policy for managing aws logs"
   policy = <<EOF

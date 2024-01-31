@@ -1,9 +1,9 @@
 resource "aws_ecs_cluster" "this" {
-  name = "${var.app_name}_${var.environment}"
+  name = var.name
 }
 
 resource "aws_ecs_task_definition" "this" {
-  family                   = "${var.app_name}_${var.environment}_task"
+  family                   = "${var.name}_task"
   network_mode             = "awsvpc"
   requires_compatibilities = [var.service.launch_type]
   memory                   = var.task.memory
@@ -12,7 +12,7 @@ resource "aws_ecs_task_definition" "this" {
   container_definitions    = <<EOF
 [
   {
-    "name": "${var.app_name}_${var.environment}",
+    "name": "${var.name}",
     "image": "${var.image}",
     "memory": ${var.task.memory},
     "cpu": ${var.task.cpu},
@@ -30,7 +30,7 @@ EOF
 }
 
 resource "aws_ecs_service" "this" {
-  name            = "${var.app_name}_${var.environment}_service"
+  name            = "${var.name}_service"
   cluster         = aws_ecs_cluster.this.id
   task_definition = aws_ecs_task_definition.this.arn
   launch_type     = var.service.launch_type

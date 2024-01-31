@@ -1,15 +1,3 @@
-variable "app_name" {
-  description = "Name of application"
-  type        = string
-  default     = ""
-}
-
-variable "environment" {
-  description = "Environment name"
-  type        = string
-  default     = ""
-}
-
 variable "tags" {
   description = "A map of tags to add to all resources"
   type        = map(string)
@@ -22,3 +10,14 @@ variable "cidr_block" {
   default     = ""
 }
 
+variable "enable_dns_support" {
+  description = ""
+  type        = bool
+  default     = false
+}
+
+variable "enable_dns_hostnames" {
+  description = ""
+  type        = bool
+  default     = false
+}

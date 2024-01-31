@@ -1,15 +1,3 @@
-variable "app_name" {
-  description = "Name of application"
-  type        = string
-  default     = ""
-}
-
-variable "environment" {
-  description = "Environment name"
-  type        = string
-  default     = ""
-}
-
 variable "ami" {
   description = "ID of AMI to use for the instance"
   type        = string
