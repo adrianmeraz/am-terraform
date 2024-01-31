@@ -20,11 +20,22 @@ module "vpc" {
 }
 
 module "internet_gateway" {
-  source = "../../../modules/aws_internet_gateway"
+  source = "../../../modules/internet_gateway"
   tags = local.base_tags
 
   vpc_id = module.vpc.id
 }
+
+module "aws_subnet_public" {
+  source = "../../../modules/subnet"
+  tags = local.base_tags
+  availability_zone = var.aws_region
+  cidr_block = "10.1.0.0/24"
+  map_public_ip_on_launch = true
+
+  vpc_id = module.vpc.id
+}
+
 
 #module  "secrets_manager" {
 #  source = "../../../modules/secrets_manager"

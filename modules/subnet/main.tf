@@ -1,8 +1,8 @@
-resource "aws_subnet" "subnet_public" {
+resource "aws_subnet" "this" {
   tags = var.tags
 
   vpc_id = var.vpc_id
   cidr_block = var.cidr_block
-  map_public_ip_on_launch = "true"
+  map_public_ip_on_launch = var.map_public_ip_on_launch
   availability_zone = var.availability_zone
 }
