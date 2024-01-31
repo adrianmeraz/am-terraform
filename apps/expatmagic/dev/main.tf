@@ -7,6 +7,13 @@ locals {
     "app_name" : var.app_name
     "environment" : var.environment
   }
+  cidr              = {
+    all     = "0.0.0.0/0"
+    base    = "10.0.0.0/16"
+    # subnet  = "10.0.0.0/24"
+    public_subnet  = "10.0.50.0/24"
+    private_subnet  = "10.0.51.0/24"
+  }
 }
 
 
@@ -16,7 +23,7 @@ module "vpc" {
   source = "../../../modules/vpc"
   tags = local.base_tags
 
-  cidr_block = "10.0.0.0/16"
+  cidr_block = local.cidr.base
 
   enable_dns_hostnames = true
   enable_dns_support = true
@@ -34,17 +41,28 @@ module "subnet_public" {
   tags = local.base_tags
 
   availability_zone = local.subnet.availability_zone
-  cidr_block = "10.1.0.0/24"
+  cidr_block = local.cidr.public_subnet
   map_public_ip_on_launch = true
   vpc_id = module.vpc.id
 }
+
+module "subnet_private" {
+  source = "../../../modules/subnet"
+  tags = local.base_tags
+
+  availability_zone = local.subnet.availability_zone
+  cidr_block = local.cidr.private_subnet
+  map_public_ip_on_launch = false
+  vpc_id = module.vpc.id
+}
+
 
 module "route_table" {
   source = "../../../modules/route_table"
   tags = local.base_tags
 
   route = {
-    cidr_block = "0.0.0.0/0"
+    cidr_block = local.cidr.all
     gateway_id = module.internet_gateway.id
   }
   vpc_id = module.vpc.id
@@ -158,7 +176,7 @@ module "rds" {
   instance_class = "db.t3.micro"
   password = var.db.password
   # password = module.secrets_manager.secret_map["db_password"]
-  publicly_accessible = true
+  publicly_accessible = false
   username = var.db.username
   # username = module.secrets_manager.secret_map["db_username"]
 }
