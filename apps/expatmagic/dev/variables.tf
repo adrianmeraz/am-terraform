@@ -23,13 +23,6 @@ variable "db" {
   })
 }
 
-variable "db_password" {
-  type = string
-}
-variable "db_username" {
-  type = string
-}
-
 variable "ecs" {
   description = "Variables for ecs cluster"
   type = object({
