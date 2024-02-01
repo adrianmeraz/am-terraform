@@ -58,3 +58,8 @@ variable "username" {
   description = "Username for the master DB user."
   type        = string
 }
+
+variable "vpc_security_group_ids" {
+  description = ""
+  type        = list(string)
+}

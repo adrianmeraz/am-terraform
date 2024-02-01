@@ -155,22 +155,6 @@ module "ecs_cluster" {
   }
 }
 
-#module "lambda_function" {
-#  source = "../../../modules/lambda_function"
-#
-#  function_name = "api"
-#  # handler = local.lambda.handler
-#  image_uri = "${module.ecr.repository_url_with_tag}"
-#
-#  memory_size = local.lambda.memory_size
-#  package_type = "Image"
-#  role = module.iam_role.arn
-#  # runtime = local.lambda.runtime
-#
-#  # apply_on = "PublishedVersions"
-#
-#}
-
 module "rds" {
   source      = "../../../modules/rds"
   tags = local.base_tags
@@ -183,4 +167,5 @@ module "rds" {
   password = var.db.password
   publicly_accessible = false
   username = var.db.username
+  vpc_security_group_ids = [module.vpc.id]
 }

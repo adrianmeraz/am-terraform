@@ -11,4 +11,5 @@ resource "aws_db_instance" "rds" {
   publicly_accessible       = var.publicly_accessible
   skip_final_snapshot       = var.skip_final_snapshot
   username                  = var.username
+  vpc_security_group_ids    = var.vpc_security_group_ids
 }
