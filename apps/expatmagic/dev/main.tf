@@ -14,10 +14,20 @@ locals {
     availability_zone = "us-west-2a"
   }
   cidr = {
-    all             = "0.0.0.0/0"
-    base            = "10.0.0.0/16"
-    public_subnet   = "10.0.1.0/24"
-    private_subnet  = "10.0.101.0/24"
+    all              = "0.0.0.0/0"
+    vpc              = "10.0.0.0/16"
+    public_subnets   = [
+      "10.0.1.0/24",
+      "10.0.2.0/24",
+      "10.0.3.0/24",
+      "10.0.4.0/24"
+    ]
+    private_subnets  = [
+      "10.0.101.0/24",
+      "10.0.102.0/24",
+      "10.0.103.0/24",
+      "10.0.104.0/24"
+    ]
   }
 }
 
@@ -27,7 +37,7 @@ module "vpc" {
   source = "../../../modules/vpc"
   tags = local.base_tags
 
-  cidr_block = local.cidr.base
+  cidr_block = local.cidr.vpc
 
   enable_dns_hostnames = true
   enable_dns_support = true
@@ -45,7 +55,7 @@ module "subnet_public" {
   tags = local.base_tags
 
   availability_zone = local.subnet.availability_zone
-  cidr_block = local.cidr.public_subnet
+  cidr_block = local.cidr.public_subnets[0]
   map_public_ip_on_launch = true
   vpc_id = module.vpc.id
 }
@@ -55,7 +65,7 @@ module "subnet_private" {
   tags = local.base_tags
 
   availability_zone = local.subnet.availability_zone
-  cidr_block = local.cidr.private_subnet
+  cidr_block = local.cidr.private_subnets[0]
   map_public_ip_on_launch = false
   vpc_id = module.vpc.id
 }
