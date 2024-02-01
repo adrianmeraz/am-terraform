@@ -1,16 +1,22 @@
 locals {
-  subnet            = {
+  app_name = "expatmagic"
+  base_tags         = {
+    "app_name" :    local.app_name
+    "environment" : local.environment
+  }
+  ecs = {
+    cpu:    256
+    memory: 512
+  }
+  environment = "dev"
+  subnet = {
     availability_zone = "us-west-2a"
   }
-  name_prefix       = "${var.app_name}_${var.environment}"
-  base_tags         = {
-    "app_name" : var.app_name
-    "environment" : var.environment
-  }
-  cidr              = {
-    all     = "0.0.0.0/0"
-    base    = "10.0.0.0/16"
-    public_subnet  = "10.0.50.0/24"
+  name_prefix = "${local.app_name}_${local.environment}"
+  cidr = {
+    all             = "0.0.0.0/0"
+    base            = "10.0.0.0/16"
+    public_subnet   = "10.0.50.0/24"
     private_subnet  = "10.0.51.0/24"
   }
 }
@@ -83,11 +89,11 @@ module  "secrets_manager" {
   name = local.name_prefix
   recovery_window_in_days = 0 # Allows for instant deletes
   secret_map = {
-    "aws_access_key": var.aws_access_key,
-    "aws_region": var.aws_region,
-    "aws_secret_key": var.aws_secret_key,
-    "db_password": var.db.password,
-    "db_username": var.db.username
+    "AWS_ACCESS_KEY": var.aws_access_key,
+    "AWS_REGION": var.aws_region,
+    "AWS_SECRET_KEY": var.aws_secret_key,
+    "DB_PASSWORD": var.db.password,
+    "DB_USERNAME": var.db.username
   }
 }
 
@@ -143,8 +149,8 @@ module "ecs_cluster" {
     }
   }
   task = {
-    cpu = var.ecs.cpu
-    memory = var.ecs.memory
+    cpu = local.ecs.cpu
+    memory = local.ecs.memory
     secrets = module.secrets_manager.secret_map
   }
 }
@@ -172,7 +178,7 @@ module "rds" {
   allocated_storage = 20
   engine = "postgres"
   engine_version = "14.5"
-  identifier = var.app_name
+  identifier = local.app_name
   instance_class = "db.t3.micro"
   password = var.db.password
   publicly_accessible = false
