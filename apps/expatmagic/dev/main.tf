@@ -10,7 +10,6 @@ locals {
   cidr              = {
     all     = "0.0.0.0/0"
     base    = "10.0.0.0/16"
-    # subnet  = "10.0.0.0/24"
     public_subnet  = "10.0.50.0/24"
     private_subnet  = "10.0.51.0/24"
   }
@@ -146,6 +145,7 @@ module "ecs_cluster" {
   task = {
     cpu = var.ecs.cpu
     memory = var.ecs.memory
+    secrets = module.secrets_manager.secret_map
   }
 }
 
@@ -175,8 +175,6 @@ module "rds" {
   identifier = var.app_name
   instance_class = "db.t3.micro"
   password = var.db.password
-  # password = module.secrets_manager.secret_map["db_password"]
   publicly_accessible = false
   username = var.db.username
-  # username = module.secrets_manager.secret_map["db_username"]
 }
