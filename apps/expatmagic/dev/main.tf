@@ -9,18 +9,17 @@ locals {
     memory: 512
   }
   environment = "dev"
+  name_prefix = "${local.app_name}_${local.environment}"
   subnet = {
     availability_zone = "us-west-2a"
   }
-  name_prefix = "${local.app_name}_${local.environment}"
   cidr = {
     all             = "0.0.0.0/0"
     base            = "10.0.0.0/16"
-    public_subnet   = "10.0.50.0/24"
-    private_subnet  = "10.0.51.0/24"
+    public_subnet   = "10.0.1.0/24"
+    private_subnet  = "10.0.101.0/24"
   }
 }
-
 
 # Add a private and public VPC. The public VPC subnet should have an internet gateway
 
@@ -167,5 +166,5 @@ module "rds" {
   password = var.db.password
   publicly_accessible = false
   username = var.db.username
-  vpc_security_group_ids = [module.vpc.id]
+  vpc_security_group_ids = [module.vpc.security_group_id]
 }
