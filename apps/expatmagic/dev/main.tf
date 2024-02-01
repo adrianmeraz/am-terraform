@@ -5,8 +5,9 @@ locals {
     "environment" : local.environment
   }
   ecs = {
-    cpu:    256
-    memory: 512
+    cpu:         256
+    launch_type: "FARGATE"
+    memory:      512
   }
   environment = "dev"
   name_prefix = "${local.app_name}_${local.environment}"
@@ -117,15 +118,15 @@ module  "ecr" {
   image_tag = "latest"
 }
 
-module "iam_role" {
-  source = "../../../modules/lambda_role"
+module "iam_role_lambda" {
+  source = "../../../modules/iam_role/lambda"
   tags = local.base_tags
 
   name = local.name_prefix
 }
 
-module "logs_iam_policy" {
-  source = "../../../modules/logs_iam_policy"
+module "iam_policy_logs" {
+  source = "../../../modules/iam_policy/logs"
   tags = local.base_tags
 
   name = local.name_prefix
@@ -133,12 +134,12 @@ module "logs_iam_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "attach_logs_iam" {
-  role       = module.iam_role.name
-  policy_arn = module.logs_iam_policy.arn
+  role       = module.iam_role_lambda.name
+  policy_arn = module.iam_policy_logs.arn
 }
 
 resource "aws_iam_role_policy_attachment" "attach_ecs_task" {
-  role       = module.iam_role.name
+  role       = module.iam_role_lambda.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
@@ -147,11 +148,11 @@ module "ecs_cluster" {
   tags = local.base_tags
 
   name = local.name_prefix
-  execution_role_arn = module.iam_role.arn
+  execution_role_arn = module.iam_role_lambda.arn
   image = module.ecr.repository_url_with_tag
   service = {
     desired_count = 1
-    launch_type = "FARGATE"
+    launch_type = local.ecs.launch_type
     network_configuration = {
       assign_public_ip = true
       subnets = [module.subnet_public.id]
