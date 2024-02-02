@@ -4,6 +4,13 @@ variable "tags" {
   default     = {}
 }
 
+variable "availability_zones" {
+  type = list(string)
+  default = [
+    "us-west-2a"
+  ]
+}
+
 variable "cidr_block" {
   description = "The IPv4 CIDR block for the VPC. CIDR can be explicitly set or it can be derived from IPAM using ipv4_netmask_length."
   type        = string

@@ -11,15 +11,3 @@ resource "aws_secretsmanager_secret_version" "r_secrets_version" {
   ${jsonencode(var.secret_map)}
 EOF
 }
-
-# Importing the AWS secrets created previously using arn.
-
-data "aws_secretsmanager_secret" "this" {
-  arn = aws_secretsmanager_secret.this.arn
-}
-
-# Importing the AWS secret version created previously using arn.
-
-data "aws_secretsmanager_secret_version" "this" {
-  secret_id = data.aws_secretsmanager_secret.this.arn
-}

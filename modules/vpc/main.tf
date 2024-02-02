@@ -1,11 +1,3 @@
-locals {
-  subnet = {
-    availability_zones = [
-      "us-west-2a"
-    ]
-  }
-}
-
 resource "aws_vpc" "this" {
   tags = var.tags
 
@@ -24,17 +16,17 @@ module "subnet_public" {
   source = "../../modules/subnet"
   tags = var.tags
 
-  availability_zone = local.subnet.availability_zones[0]
-  cidr_block = var.public_subnets[0]
-  map_public_ip_on_launch = true
   vpc_id = aws_vpc.this.id
+  cidr_block = var.cidr_block
+  map_public_ip_on_launch = true
+  availability_zone = var.availability_zones[0]
 }
 
 module "subnet_private" {
   source = "../../modules/subnet"
   tags = var.tags
 
-  availability_zone = local.subnet.availability_zones[0]
+  availability_zone = var.availability_zones[0]
   cidr_block = var.private_subnets[0]
   map_public_ip_on_launch = false
   vpc_id = aws_vpc.this.id

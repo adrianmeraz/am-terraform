@@ -13,8 +13,6 @@ locals {
   name_prefix = "${local.app_name}_${local.environment}"
 }
 
-# Add a private and public VPC. The public VPC subnet should have an internet gateway
-
 module "vpc" {
   source = "../../../modules/vpc"
   tags = local.base_tags
@@ -25,9 +23,7 @@ module "vpc" {
   enable_dns_support = true
 }
 
-
-
-module  "secrets_manager" {
+module "secrets_manager" {
   source = "../../../modules/secrets_manager"
   tags = local.base_tags
 
