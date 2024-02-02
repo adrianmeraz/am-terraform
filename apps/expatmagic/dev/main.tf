@@ -12,7 +12,9 @@ locals {
   environment = "dev"
   name_prefix = "${local.app_name}_${local.environment}"
   subnet = {
-    availability_zone = "us-west-2a"
+    availability_zones = [
+      "us-west-2a"
+    ]
   }
   cidr = {
     all              = "0.0.0.0/0"
@@ -55,7 +57,7 @@ module "subnet_public" {
   source = "../../../modules/subnet"
   tags = local.base_tags
 
-  availability_zone = local.subnet.availability_zone
+  availability_zone = local.subnet.availability_zones[0]
   cidr_block = local.cidr.public_subnets[0]
   map_public_ip_on_launch = true
   vpc_id = module.vpc.id
@@ -65,12 +67,11 @@ module "subnet_private" {
   source = "../../../modules/subnet"
   tags = local.base_tags
 
-  availability_zone = local.subnet.availability_zone
+  availability_zone = local.subnet.availability_zones[0]
   cidr_block = local.cidr.private_subnets[0]
   map_public_ip_on_launch = false
   vpc_id = module.vpc.id
 }
-
 
 module "route_table" {
   source = "../../../modules/route_table"
@@ -88,10 +89,6 @@ resource "aws_route_table_association" "this" {
   route_table_id = module.route_table.id
 }
 
-#module  "secrets_manager" {
-#  source = "../../../modules/secrets_manager"
-#}
-
 module  "secrets_manager" {
   source = "../../../modules/secrets_manager"
   tags = local.base_tags
@@ -106,7 +103,6 @@ module  "secrets_manager" {
     "DB_USERNAME": var.db.username
   }
 }
-
 
 module  "ecr" {
   source = "../../../modules/ecr"

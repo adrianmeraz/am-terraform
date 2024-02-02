@@ -8,3 +8,13 @@ variable "vpc_id" {
   description = "Id of VPC"
   type        = string
 }
+
+variable "cidr_ipv4" {
+  description = "cidr block of ipv4"
+  type        = string
+}
+
+variable "cidr_ipv6" {
+  description = "cidr block of ipv6"
+  type        = string
+}
