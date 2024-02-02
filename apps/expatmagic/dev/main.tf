@@ -11,27 +11,6 @@ locals {
   }
   environment = "dev"
   name_prefix = "${local.app_name}_${local.environment}"
-  subnet = {
-    availability_zones = [
-      "us-west-2a"
-    ]
-  }
-  cidr = {
-    all              = "0.0.0.0/0"
-    vpc              = "10.0.0.0/16"
-    public_subnets   = [
-      "10.0.1.0/24",
-      "10.0.2.0/24",
-      "10.0.3.0/24",
-      "10.0.4.0/24"
-    ]
-    private_subnets  = [
-      "10.0.101.0/24",
-      "10.0.102.0/24",
-      "10.0.103.0/24",
-      "10.0.104.0/24"
-    ]
-  }
 }
 
 # Add a private and public VPC. The public VPC subnet should have an internet gateway
@@ -40,54 +19,13 @@ module "vpc" {
   source = "../../../modules/vpc"
   tags = local.base_tags
 
-  cidr_block = local.cidr.vpc
+  cidr_block = "10.0.0.0/16"
 
   enable_dns_hostnames = true
   enable_dns_support = true
 }
 
-module "internet_gateway" {
-  source = "../../../modules/internet_gateway"
-  tags = local.base_tags
 
-  vpc_id = module.vpc.id
-}
-
-module "subnet_public" {
-  source = "../../../modules/subnet"
-  tags = local.base_tags
-
-  availability_zone = local.subnet.availability_zones[0]
-  cidr_block = local.cidr.public_subnets[0]
-  map_public_ip_on_launch = true
-  vpc_id = module.vpc.id
-}
-
-module "subnet_private" {
-  source = "../../../modules/subnet"
-  tags = local.base_tags
-
-  availability_zone = local.subnet.availability_zones[0]
-  cidr_block = local.cidr.private_subnets[0]
-  map_public_ip_on_launch = false
-  vpc_id = module.vpc.id
-}
-
-module "route_table" {
-  source = "../../../modules/route_table"
-  tags = local.base_tags
-
-  route = {
-    cidr_block = local.cidr.all
-    gateway_id = module.internet_gateway.id
-  }
-  vpc_id = module.vpc.id
-}
-
-resource "aws_route_table_association" "this" {
-  subnet_id      = module.subnet_public.id
-  route_table_id = module.route_table.id
-}
 
 module  "secrets_manager" {
   source = "../../../modules/secrets_manager"
@@ -121,24 +59,6 @@ module "iam_role_lambda" {
   name = local.name_prefix
 }
 
-module "iam_policy_logs" {
-  source = "../../../modules/iam_policy/logs"
-  tags = local.base_tags
-
-  name = local.name_prefix
-  path = "/"
-}
-
-resource "aws_iam_role_policy_attachment" "attach_logs_iam" {
-  role       = module.iam_role_lambda.name
-  policy_arn = module.iam_policy_logs.arn
-}
-
-resource "aws_iam_role_policy_attachment" "attach_ecs_task" {
-  role       = module.iam_role_lambda.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-}
-
 module "ecs_cluster" {
   source = "../../../modules/ecs_cluster"
   tags = local.base_tags
@@ -151,7 +71,7 @@ module "ecs_cluster" {
     launch_type = local.ecs.launch_type
     network_configuration = {
       assign_public_ip = true
-      subnets = [module.subnet_public.id]
+      subnets = [module.vpc.public_subnets]
     }
   }
   task = {
@@ -161,17 +81,14 @@ module "ecs_cluster" {
   }
 }
 
-module "rds" {
-  source      = "../../../modules/rds"
+module "postgres_db" {
+  source      = "../../../modules/database/postgres"
   tags = local.base_tags
 
   allocated_storage = 20
-  engine = "postgres"
-  engine_version = "14.5"
   identifier = local.app_name
   instance_class = "db.t3.micro"
   password = var.db.password
-  publicly_accessible = false
   username = var.db.username
   vpc_security_group_ids = [module.vpc.security_group_id]
 }

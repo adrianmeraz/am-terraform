@@ -10,16 +10,6 @@ variable "allocated_storage" {
   default     = 20
 }
 
-variable "engine" {
-  description = "The database engine to use"
-  type        = string
-}
-
-variable "engine_version" {
-  description = "The engine version to use"
-  type        = string
-}
-
 variable "final_snapshot_identifier" {
   description = "The name of your final DB snapshot when this DB instance is deleted. Must be provided if skip_final_snapshot is set to false"
   type        = string
