@@ -8,6 +8,6 @@ db = {
 }
 environment = "dev"
 ecs = {
-  cpu: 256
-  memory: 512
+  vcpu: 256
+  memory_mb: 512
 }

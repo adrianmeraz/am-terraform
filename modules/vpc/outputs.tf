@@ -10,10 +10,10 @@ output "security_group_id" {
 
 output "public_subnets" {
   description = "All public subnets of VPC"
-  value       = var.public_subnets
+  value       = var.public_subnet_blocks
 }
 
 output "private_subnets" {
   description = "All private subnets of VPC"
-  value       = var.private_subnets
+  value       = var.private_subnet_blocks
 }

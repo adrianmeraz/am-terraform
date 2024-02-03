@@ -12,16 +12,16 @@ resource "aws_ecs_task_definition" "this" {
   family                   = "${var.name}_task"
   network_mode             = "awsvpc"
   requires_compatibilities = [var.service.launch_type]
-  memory                   = var.task.memory
-  cpu                      = var.task.cpu
+  memory                   = var.task.memory_mb
+  cpu                      = var.task.vcpu
   execution_role_arn       = var.execution_role_arn
   container_definitions    = <<EOF
 [
   {
     "name": "${var.name}",
     "image": "${var.image}",
-    "memory": ${var.task.memory},
-    "cpu": ${var.task.cpu},
+    "memory": ${var.task.memory_mb},
+    "cpu": ${var.task.vcpu},
     "essential": true,
     "entryPoint": ["/"],
     "secrets": ${jsonencode(local.task_secrets)},

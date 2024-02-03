@@ -12,9 +12,10 @@ resource "aws_internet_gateway" "this" {
   tags = var.tags
 }
 
-module "subnet_public" {
-  source = "../../modules/subnet"
+resource "aws_subnet" "public" {
   tags = var.tags
+
+  # count = var.
 
   vpc_id = aws_vpc.this.id
   cidr_block = var.cidr_block
@@ -22,12 +23,11 @@ module "subnet_public" {
   availability_zone = var.availability_zones[0]
 }
 
-module "subnet_private" {
-  source = "../../modules/subnet"
+resource "aws_subnet" "private" {
   tags = var.tags
 
   availability_zone = var.availability_zones[0]
-  cidr_block = var.private_subnets[0]
+  cidr_block = var.private_subnet_blocks[0]
   map_public_ip_on_launch = false
   vpc_id = aws_vpc.this.id
 }

@@ -5,16 +5,16 @@ locals {
     "environment" : local.environment
   }
   ecs = {
-    cpu:         256
+    vcpu:        256
     launch_type: "FARGATE"
-    memory:      512
+    memory_mb:   512
   }
   environment = "dev"
   name_prefix = "${local.app_name}_${local.environment}"
 }
 
 module "vpc" {
-  source = "../../../modules/vpc"
+  source = "../../../../modules/vpc"
   tags = local.base_tags
 
   cidr_block = "10.0.0.0/16"
@@ -24,7 +24,7 @@ module "vpc" {
 }
 
 module "secrets_manager" {
-  source = "../../../modules/secrets_manager"
+  source = "../../../../modules/secrets_manager"
   tags = local.base_tags
 
   name = local.name_prefix
@@ -39,7 +39,7 @@ module "secrets_manager" {
 }
 
 module  "ecr" {
-  source = "../../../modules/ecr"
+  source = "../../../../modules/ecr"
   tags = local.base_tags
 
   name = local.name_prefix
@@ -49,14 +49,14 @@ module  "ecr" {
 }
 
 module "iam_role_lambda" {
-  source = "../../../modules/iam_role/lambda"
+  source = "../../../../modules/iam_role/lambda"
   tags = local.base_tags
 
   name = local.name_prefix
 }
 
 module "ecs_cluster" {
-  source = "../../../modules/ecs_cluster"
+  source = "../../../../modules/ecs_cluster"
   tags = local.base_tags
 
   name = local.name_prefix
@@ -71,14 +71,14 @@ module "ecs_cluster" {
     }
   }
   task = {
-    cpu = local.ecs.cpu
-    memory = local.ecs.memory
+    cpu = local.ecs.vcpu
+    memory = local.ecs.memory_mb
     secrets = module.secrets_manager.secret_map
   }
 }
 
 module "postgres_db" {
-  source      = "../../../modules/database/postgres"
+  source      = "../../../../modules/database/postgres"
   tags = local.base_tags
 
   allocated_storage = 20

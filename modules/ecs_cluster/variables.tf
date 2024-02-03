@@ -34,14 +34,14 @@ variable "service" {
 variable "task" {
   description = "Variables for ecs task"
   type = object({
-    cpu = number
-    memory = number
+    vcpu = number
+    memory_mb = number
     secrets = map(string)
   })
 
   default = {
-    cpu = 256 # 256 (.25 vCPU) https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
-    memory = 512
+    vcpu = 256 # 256 (.25 vCPU) https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
+    memory_mb = 512
     secrets = {}
   }
 }
