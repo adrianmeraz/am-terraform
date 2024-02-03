@@ -49,6 +49,6 @@ resource "aws_route_table" "main" {
 }
 
 resource "aws_route_table_association" "main" {
-  subnet_id      = module.subnet_public.id
+  subnet_id      = aws_subnet.public.id
   route_table_id = aws_route_table.main.id
 }
