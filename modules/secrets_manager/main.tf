@@ -1,4 +1,4 @@
-resource "aws_secretsmanager_secret" "this" {
+resource "aws_secretsmanager_secret" "main" {
   name = "${var.name}/secret"
   tags = var.tags
 
@@ -6,7 +6,7 @@ resource "aws_secretsmanager_secret" "this" {
 }
 
 resource "aws_secretsmanager_secret_version" "r_secrets_version" {
-  secret_id = aws_secretsmanager_secret.this.id
+  secret_id = aws_secretsmanager_secret.main.id
   secret_string = <<EOF
   ${jsonencode(var.secret_map)}
 EOF

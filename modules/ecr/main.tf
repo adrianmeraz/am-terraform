@@ -1,6 +1,6 @@
 data "aws_ecr_authorization_token" "token" {}
 
-resource  "aws_ecr_repository" "this" {
+resource  "aws_ecr_repository" "main" {
   name = "${var.name}_ecr"
   tags = var.tags
 

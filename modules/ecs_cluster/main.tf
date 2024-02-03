@@ -2,12 +2,12 @@ locals {
   task_secrets = [for k, v in var.task.secrets : {name: k, valueFrom: v}]
 }
 
-resource "aws_ecs_cluster" "this" {
+resource "aws_ecs_cluster" "main" {
   name = var.name
   tags = var.tags
 }
 
-resource "aws_ecs_task_definition" "this" {
+resource "aws_ecs_task_definition" "main" {
   tags = var.tags
   family                   = "${var.name}_task"
   network_mode             = "awsvpc"
@@ -36,12 +36,12 @@ resource "aws_ecs_task_definition" "this" {
 EOF
 }
 
-resource "aws_ecs_service" "this" {
+resource "aws_ecs_service" "main" {
   tags = var.tags
 
   name            = "${var.name}_service"
-  cluster         = aws_ecs_cluster.this.id
-  task_definition = aws_ecs_task_definition.this.arn
+  cluster         = aws_ecs_cluster.main.id
+  task_definition = aws_ecs_task_definition.main.arn
   launch_type     = var.service.launch_type
 
   desired_count = var.service.desired_count

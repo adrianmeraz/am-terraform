@@ -1,4 +1,4 @@
-resource "aws_lambda_function" "this" {
+resource "aws_lambda_function" "main" {
   tags = var.tags
 
   function_name = var.function_name
