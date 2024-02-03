@@ -12,22 +12,28 @@ resource "aws_internet_gateway" "this" {
   tags = var.tags
 }
 
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
 resource "aws_subnet" "public" {
   tags = var.tags
 
-  # count = var.
+  count = var.subnet_counts.public
 
-  vpc_id = aws_vpc.this.id
+  availability_zone = data.aws_availability_zones.available[count.index]
   cidr_block = var.cidr_block
   map_public_ip_on_launch = true
-  availability_zone = var.availability_zones[0]
+  vpc_id = aws_vpc.this.id
 }
 
 resource "aws_subnet" "private" {
   tags = var.tags
 
-  availability_zone = var.availability_zones[0]
-  cidr_block = var.private_subnet_blocks[0]
+  count = var.subnet_counts.private
+
+  availability_zone = data.aws_availability_zones.available[count.index]
+  cidr_block = var.private_subnet_blocks[count.index]
   map_public_ip_on_launch = false
   vpc_id = aws_vpc.this.id
 }

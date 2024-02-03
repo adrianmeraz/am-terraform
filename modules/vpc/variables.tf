@@ -4,27 +4,19 @@ variable "tags" {
   default     = {}
 }
 
-variable "availability_zones" {
-  type = list(string)
-  default = [
-    "us-west-2a"
-  ]
-}
-
 variable "cidr_block" {
   description = "The IPv4 CIDR block for the VPC. CIDR can be explicitly set or it can be derived from IPAM using ipv4_netmask_length."
   type        = string
   default     = "10.0.0.0/16"
 }
 
-variable "private_subnets" {
-  type = number
-  default = 0
-}
-
-variable "public_subnets" {
-  type = number
-  default = 0
+variable "subnet_counts" {
+  description = "Number of subnets"
+  type = map(number)
+  default = {
+    public  = 1,
+    private = 2
+  }
 }
 
 variable "public_subnet_blocks" {
