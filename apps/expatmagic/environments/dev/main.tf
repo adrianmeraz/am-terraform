@@ -71,8 +71,8 @@ module "ecs_cluster" {
     }
   }
   task = {
-    cpu = local.ecs.vcpu
-    memory = local.ecs.memory_mb
+    vcpu = local.ecs.vcpu
+    memory_mb = local.ecs.memory_mb
     secrets = module.secrets_manager.secret_map
   }
 }
