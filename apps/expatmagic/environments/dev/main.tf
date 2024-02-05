@@ -66,7 +66,7 @@ module "ecs_cluster" {
     launch_type = local.ecs.launch_type
     network_configuration = {
       assign_public_ip = true
-      subnets = [module.network.public_subnets]
+      subnets = [for subnet in module.network.public_subnets : subnet.id]
     }
   }
   task = {

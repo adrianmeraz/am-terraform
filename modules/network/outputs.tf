@@ -5,12 +5,12 @@ output "id" {
 
 output "public_subnets" {
   description = "All public subnets of VPC"
-  value       = var.public_subnet_blocks
+  value       = aws_subnet.public
 }
 
 output "private_subnets" {
   description = "All private subnets of VPC"
-  value       = var.private_subnet_blocks
+  value       = aws_subnet.private
 }
 
 output "security_group_id" {
