@@ -46,8 +46,8 @@ resource "aws_ecs_service" "main" {
   network_configuration {
     assign_public_ip = var.service.network_configuration.assign_public_ip
     subnets = var.service.network_configuration.subnets
+    security_groups = var.service.network_configuration.security_groups
   }
 
   tags = var.tags
 }
-

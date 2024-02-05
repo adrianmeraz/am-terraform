@@ -26,6 +26,7 @@ variable "service" {
     desired_count = number
     network_configuration = object({
       assign_public_ip = bool
+      security_groups = list(string)
       subnets = list(string)
     })
   })

@@ -27,6 +27,20 @@ resource "aws_subnet" "private" {
   tags = var.tags
 }
 
+resource "aws_route_table" "private" {
+  # No route added since this is a private route table
+  vpc_id = aws_vpc.main.id
+
+  tags = var.tags
+}
+
+resource "aws_route_table_association" "private" {
+  count = var.subnet_counts.private
+
+  route_table_id = aws_route_table.private.id
+  subnet_id      = aws_subnet.private[count.index].id
+}
+
 resource "aws_subnet" "public" {
   count = var.subnet_counts.public
 

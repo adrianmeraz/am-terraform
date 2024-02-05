@@ -21,7 +21,7 @@ resource  "aws_ecr_repository" "main" {
       docker pull hello-world
       docker tag hello-world:${var.image_tag} ${self.repository_url}:${var.image_tag}
       docker push ${self.repository_url}:${var.image_tag}
-    EOT
+EOT
   }
 
   tags = var.tags

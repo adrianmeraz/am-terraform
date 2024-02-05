@@ -55,6 +55,15 @@ module "iam_role_lambda" {
   tags = local.base_tags
 }
 
+module "http_sg" {
+
+}
+
+module "tls_sg" {
+
+}
+
+
 module "ecs_cluster" {
   source = "../../../../modules/ecs_cluster"
 
@@ -66,6 +75,7 @@ module "ecs_cluster" {
     launch_type = local.ecs.launch_type
     network_configuration = {
       assign_public_ip = true
+      security_groups = [module.network.security_group_id]
       subnets = [for subnet in module.network.public_subnets : subnet.id]
     }
   }

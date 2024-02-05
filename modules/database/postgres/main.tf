@@ -2,6 +2,7 @@ resource "time_static" "main" {}
 
 resource "aws_db_instance" "postgres_db" {
   allocated_storage         = var.allocated_storage
+  db_subnet_group_name      = ""
   engine                    = "postgres"
   engine_version            = "14.5"
   final_snapshot_identifier = "${var.identifier}-${time_static.main.unix}-final"
