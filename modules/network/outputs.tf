@@ -20,5 +20,5 @@ output "security_group_id" {
 
 output "vpc" {
   description = "Network VPC"
-  value       = aws_vpc
+  value       = aws_vpc.main
 }
