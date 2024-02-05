@@ -8,7 +8,6 @@ resource "aws_ecs_cluster" "main" {
 }
 
 resource "aws_ecs_task_definition" "main" {
-  tags = var.tags
   family                   = "${var.name}_task"
   network_mode             = "awsvpc"
   requires_compatibilities = [var.service.launch_type]
@@ -34,11 +33,10 @@ resource "aws_ecs_task_definition" "main" {
   }
 ]
 EOF
+  tags = var.tags
 }
 
 resource "aws_ecs_service" "main" {
-  tags = var.tags
-
   name            = "${var.name}_service"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.main.arn
@@ -49,5 +47,7 @@ resource "aws_ecs_service" "main" {
     assign_public_ip = var.service.network_configuration.assign_public_ip
     subnets = var.service.network_configuration.subnets
   }
+
+  tags = var.tags
 }
 
