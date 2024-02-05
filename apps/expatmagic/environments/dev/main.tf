@@ -13,19 +13,18 @@ locals {
   name_prefix = "${local.app_name}_${local.environment}"
 }
 
-module "vpc" {
-  source = "../../../../modules/vpc"
-  tags = local.base_tags
+module "network" {
+  source = "../../../../modules/network"
 
   cidr_block = "10.0.0.0/16"
-
   enable_dns_hostnames = true
   enable_dns_support = true
+
+  tags = local.base_tags
 }
 
 module "secrets_manager" {
   source = "../../../../modules/secrets_manager"
-  tags = local.base_tags
 
   name = local.name_prefix
   recovery_window_in_days = 0 # Allows for instant deletes
@@ -36,28 +35,30 @@ module "secrets_manager" {
     "DB_PASSWORD": var.db.password,
     "DB_USERNAME": var.db.username
   }
+
+  tags = local.base_tags
 }
 
 module  "ecr" {
   source = "../../../../modules/ecr"
-  tags = local.base_tags
 
   name = local.name_prefix
-
   force_delete = true
   image_tag = "latest"
+
+  tags = local.base_tags
 }
 
 module "iam_role_lambda" {
   source = "../../../../modules/iam_role/lambda"
-  tags = local.base_tags
 
   name = local.name_prefix
+
+  tags = local.base_tags
 }
 
 module "ecs_cluster" {
   source = "../../../../modules/ecs_cluster"
-  tags = local.base_tags
 
   name = local.name_prefix
   execution_role_arn = module.iam_role_lambda.arn
@@ -67,7 +68,7 @@ module "ecs_cluster" {
     launch_type = local.ecs.launch_type
     network_configuration = {
       assign_public_ip = true
-      subnets = [module.vpc.public_subnets]
+      subnets = [module.network.public_subnets]
     }
   }
   task = {
@@ -75,16 +76,18 @@ module "ecs_cluster" {
     memory_mb = local.ecs.memory_mb
     secrets = module.secrets_manager.secret_map
   }
+  tags = local.base_tags
 }
 
 module "postgres_db" {
   source      = "../../../../modules/database/postgres"
-  tags = local.base_tags
 
   allocated_storage = 20
   identifier = local.app_name
   instance_class = "db.t3.micro"
   password = var.db.password
   username = var.db.username
-  vpc_security_group_ids = [module.vpc.security_group_id]
+  vpc_security_group_ids = [module.network.security_group_id]
+
+  tags = local.base_tags
 }
