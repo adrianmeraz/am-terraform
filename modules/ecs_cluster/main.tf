@@ -23,7 +23,6 @@ resource "aws_ecs_task_definition" "main" {
     "memory": ${var.task.memory_mb},
     "cpu": ${var.task.vcpu},
     "essential": true,
-    "entryPoint": ${var.task.entry_point},
     "secrets": [
       {
         "valueFrom": "${var.task.secrets.secretsmanager_arn}",
