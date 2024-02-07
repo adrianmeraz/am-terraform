@@ -35,6 +35,7 @@ variable "service" {
 variable "task" {
   description = "Variables for ecs task"
   type = object({
+    entry_point = list(string)
     vcpu = number
     memory_mb = number
     secrets = object({
@@ -44,6 +45,7 @@ variable "task" {
   })
 
   default = {
+    entry_point = ["java","-jar","/CHANGE_ME.jar"]
     vcpu = 256 # 256 (.25 vCPU) https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
     memory_mb = 512
     secrets = {

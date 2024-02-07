@@ -5,6 +5,7 @@ locals {
     "environment" : local.environment
   }
   ecs = {
+    entry_point: ["java","-jar","/${local.app_name}.jar"]
     vcpu:        256
     launch_type: "FARGATE"
     memory_mb:   512
@@ -72,6 +73,7 @@ module "ecs_cluster" {
     }
   }
   task = {
+    entry_point = local.ecs.entry_point
     vcpu = local.ecs.vcpu
     memory_mb = local.ecs.memory_mb
     secrets = {
