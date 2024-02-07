@@ -33,8 +33,8 @@ variable "service" {
 }
 
 variable "container_definitions" {
-  description = "Variables for ecs task"
-  type = list(string)
+  description = "ECS Task container definitions"
+  type = list(object({}))
 }
 
 variable "vcpu" {

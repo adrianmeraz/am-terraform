@@ -15,7 +15,7 @@ resource "aws_ecs_task_definition" "main" {
   memory                   = var.memory_mb
   network_mode             = "awsvpc"
   requires_compatibilities = [var.service.launch_type]
-  container_definitions    = var.container_definitions
+  container_definitions    = jsonencode(var.container_definitions)
   tags = var.tags
 }
 

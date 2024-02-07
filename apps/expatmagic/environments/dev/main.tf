@@ -100,7 +100,6 @@ module "ecs_container_definition" {
     }
   ]
 
-
   readonly_root_filesystem = false
 
   tags = local.base_tags
