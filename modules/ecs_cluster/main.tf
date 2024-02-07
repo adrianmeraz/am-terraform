@@ -31,7 +31,8 @@ resource "aws_ecs_task_definition" "main" {
         "containerPort": 5000,
         "hostPort": 5000
       }
-    ]
+    ],
+    "tags": ${var.tags}
   }
 ]
 EOF

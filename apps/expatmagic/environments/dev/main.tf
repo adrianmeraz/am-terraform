@@ -47,10 +47,11 @@ module  "ecr" {
   tags = local.base_tags
 }
 
-module "ecs_role" {
-  source = "../../../../modules/iam_role/ecs"
+module "iam" {
+  source = "../../modules/iam/"
 
   name = local.name_prefix
+  secrets_manager_arn = module.secrets_manager.arn
 
   tags = local.base_tags
 }
@@ -59,7 +60,7 @@ module "ecs_cluster" {
   source = "../../../../modules/ecs_cluster"
 
   name = local.name_prefix
-  execution_role_arn = module.ecs_role.arn
+  execution_role_arn = module.iam.role_arn
   image = module.ecr.repository_url_with_tag
   service = {
     desired_count = 1
