@@ -1,5 +1,7 @@
 locals {
   task_secrets = [for k, v in var.task.secrets : {name: k, valueFrom: v}]
+  cidr_ipv4    = "0.0.0.0/0"
+  cidr_ipv6    = "::/0"
 }
 
 resource "aws_ecs_cluster" "main" {
@@ -8,12 +10,12 @@ resource "aws_ecs_cluster" "main" {
 }
 
 resource "aws_ecs_task_definition" "main" {
-  family                   = "${var.name}_task"
-  network_mode             = "awsvpc"
-  requires_compatibilities = [var.service.launch_type]
-  memory                   = var.task.memory_mb
   cpu                      = var.task.vcpu
   execution_role_arn       = var.execution_role_arn
+  family                   = "${var.name}_task"
+  memory                   = var.task.memory_mb
+  network_mode             = "awsvpc"
+  requires_compatibilities = [var.service.launch_type]
   container_definitions    = <<EOF
 [
   {
@@ -44,10 +46,77 @@ resource "aws_ecs_service" "main" {
 
   desired_count = var.service.desired_count
   network_configuration {
-    assign_public_ip = var.service.network_configuration.assign_public_ip
-    subnets = var.service.network_configuration.subnets
-    security_groups = var.service.network_configuration.security_groups
+    # assign_public_ip = var.service.network_configuration.assign_public_ip
+    subnets = var.service.network_configuration.subnet_ids
+    # security_groups = var.service.network_configuration.security_groups
+    security_groups = [aws_security_group.main.id]
   }
+
+  tags = var.tags
+}
+#######################
+##### Security group
+#######################
+resource "aws_security_group" "main" {
+  name        = "ecs_allow_http"
+  description = "Allow secure and insecure http inbound traffic and all outbound traffic"
+  vpc_id      = var.vpc_id
+
+  tags = var.tags
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_http_ipv4" {
+  cidr_ipv4         = local.cidr_ipv4
+  from_port         = 80
+  to_port           = 80
+  ip_protocol       = "tcp"
+  security_group_id = aws_security_group.main.id
+
+  tags = var.tags
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_http_ipv6" {
+  cidr_ipv6         = local.cidr_ipv6
+  from_port         = 80
+  to_port           = 80
+  ip_protocol       = "tcp"
+  security_group_id = aws_security_group.main.id
+
+  tags = var.tags
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv4" {
+  cidr_ipv4         = local.cidr_ipv4
+  from_port         = 443
+  to_port           = 443
+  ip_protocol       = "tcp"
+  security_group_id = aws_security_group.main.id
+
+  tags = var.tags
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv6" {
+  cidr_ipv6         = local.cidr_ipv6
+  from_port         = 443
+  to_port           = 443
+  ip_protocol       = "tcp"
+  security_group_id = aws_security_group.main.id
+
+  tags = var.tags
+}
+
+resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
+  cidr_ipv4         = local.cidr_ipv4
+  ip_protocol       = "-1" # semantically equivalent to all ports
+  security_group_id = aws_security_group.main.id
+
+  tags = var.tags
+}
+
+resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv6" {
+  cidr_ipv6         = local.cidr_ipv6
+  ip_protocol       = "-1" # semantically equivalent to all ports
+  security_group_id = aws_security_group.main.id
 
   tags = var.tags
 }

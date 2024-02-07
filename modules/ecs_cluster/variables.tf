@@ -27,7 +27,7 @@ variable "service" {
     network_configuration = object({
       assign_public_ip = bool
       security_groups = list(string)
-      subnets = list(string)
+      subnet_ids = list(string)
     })
   })
 }
@@ -45,4 +45,9 @@ variable "task" {
     memory_mb = 512
     secrets = {}
   }
+}
+
+variable "vpc_id" {
+  description = "Id of VPC"
+  type        = string
 }

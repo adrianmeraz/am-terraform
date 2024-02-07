@@ -10,12 +10,6 @@ variable "allocated_storage" {
   default     = 20
 }
 
-variable "final_snapshot_identifier" {
-  description = "The name of your final DB snapshot when this DB instance is deleted. Must be provided if skip_final_snapshot is set to false"
-  type        = string
-  default     = ""
-}
-
 variable "identifier" {
   description = "The name of the RDS instance, if omitted, Terraform will assign a random, unique identifier"
   type        = string
@@ -32,20 +26,18 @@ variable "password" {
   type        = string
 }
 
-variable "publicly_accessible" {
-  description = "Bool to control if instance is publicly accessible"
-  type        = bool
-  default     = false
-}
-
-variable "skip_final_snapshot" {
-  description = "Determines whether a final DB snapshot is created before the DB instance is deleted."
-  type        = bool
-  default     = false
+variable "subnet_ids" {
+  description = "DB Subnet IDs"
+  type        = list(string)
 }
 
 variable "username" {
   description = "Username for the master DB user."
+  type        = string
+}
+
+variable "vpc_id" {
+  description = "Id of VPC"
   type        = string
 }
 

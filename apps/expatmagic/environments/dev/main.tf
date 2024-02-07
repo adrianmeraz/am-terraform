@@ -1,6 +1,6 @@
 locals {
   app_name = "expatmagic"
-  base_tags         = {
+  base_tags = {
     "app_name" :    local.app_name
     "environment" : local.environment
   }
@@ -55,15 +55,6 @@ module "iam_role_lambda" {
   tags = local.base_tags
 }
 
-module "http_sg" {
-
-}
-
-module "tls_sg" {
-
-}
-
-
 module "ecs_cluster" {
   source = "../../../../modules/ecs_cluster"
 
@@ -76,7 +67,7 @@ module "ecs_cluster" {
     network_configuration = {
       assign_public_ip = true
       security_groups = [module.network.security_group_id]
-      subnets = [for subnet in module.network.public_subnets : subnet.id]
+      subnet_ids = [for subnet in module.network.public_subnets: subnet.id]
     }
   }
   task = {
@@ -84,6 +75,8 @@ module "ecs_cluster" {
     memory_mb = local.ecs.memory_mb
     secrets = module.secrets_manager.secret_map
   }
+  vpc_id = module.network.vpc.id
+
   tags = local.base_tags
 }
 
@@ -94,7 +87,9 @@ module "postgres_db" {
   identifier = local.app_name
   instance_class = "db.t3.micro"
   password = var.db.password
+  subnet_ids = [for subnet in module.network.private_subnets: subnet.id]
   username = var.db.username
+  vpc_id = module.network.vpc.id
   vpc_security_group_ids = [module.network.security_group_id]
 
   tags = local.base_tags
