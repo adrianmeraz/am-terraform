@@ -37,13 +37,19 @@ variable "task" {
   type = object({
     vcpu = number
     memory_mb = number
-    secrets = map(string)
+    secrets = object({
+      secretsmanager_arn = string
+      secretsmanager_name = string
+    })
   })
 
   default = {
     vcpu = 256 # 256 (.25 vCPU) https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
     memory_mb = 512
-    secrets = {}
+    secrets = {
+      secretsmanager_arn = null
+      secretsmanager_name = null
+    }
   }
 }
 

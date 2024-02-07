@@ -21,8 +21,8 @@ module "network" {
   tags = local.base_tags
 }
 
-module "secrets_manager" {
-  source = "../../../../modules/secrets_manager"
+module "secrets" {
+  source = "../../../../modules/secrets"
 
   name = local.name_prefix
   recovery_window_in_days = 0 # Allows for instant deletes
@@ -51,7 +51,7 @@ module "iam" {
   source = "../../modules/iam/"
 
   name = local.name_prefix
-  secrets_manager_arn = module.secrets_manager.arn
+  # secrets_manager_version_arn = module.secrets_manager.ssm_version_arn
 
   tags = local.base_tags
 }
@@ -74,7 +74,10 @@ module "ecs_cluster" {
   task = {
     vcpu = local.ecs.vcpu
     memory_mb = local.ecs.memory_mb
-    secrets = module.secrets_manager.secret_map
+    secrets = {
+      secretsmanager_arn = module.secrets.secretsmanager.arn
+      secretsmanager_name = module.secrets.secretsmanager.name
+    }
   }
   vpc_id = module.network.vpc.id
 

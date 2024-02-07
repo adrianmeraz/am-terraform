@@ -3,10 +3,10 @@ variable "name" {
   type        = string
 }
 
-variable "secrets_manager_arn" {
-  description = "Secrets manager arn"
-  type        = string
-}
+#variable "secrets_manager_version_arn" {
+#  description = "Secrets manager version arn"
+#  type        = string
+#}
 
 variable "tags" {
   description = "A map of tags to add to all resources"

@@ -1,5 +1,5 @@
 resource "aws_secretsmanager_secret" "main" {
-  name = "${var.name}/secret"
+  name_prefix = "${var.name}/secret"
   recovery_window_in_days = var.recovery_window_in_days
 
   tags = var.tags
@@ -11,3 +11,13 @@ resource "aws_secretsmanager_secret_version" "main" {
   ${jsonencode(var.secret_map)}
 EOF
 }
+
+#resource "aws_ssm_parameter" "this" {
+#  for_each = var.secret_map
+#
+#  name = each.key
+#  value = each.value
+#  type = "String"
+#
+#  tags = var.tags
+#}

@@ -8,7 +8,8 @@ data "aws_iam_policy_document" "ecs_tasks" {
     principals {
       type        = "Service"
       identifiers = [
-        "ecs-tasks.amazonaws.com"
+        "ecs-tasks.amazonaws.com",
+        "secretsmanager.amazonaws.com"
       ]
     }
   }
@@ -24,12 +25,22 @@ resource "aws_iam_role" "ecs" {
 data "aws_iam_policy_document" "ssm" {
     statement {
       actions = [
-        "secretsmanager:DescribeSecret",
-        "secretsmanager:GetSecretValue"
+        "ssm:GetParameters"
       ]
       effect  = "Allow"
       resources = [
-        var.secrets_manager_arn
+        "*"
+      ]
+    }
+
+    statement {
+      actions = [
+        "secretsmanager:DescribeSecret",
+        "secretsmanager:GetSecretValue",
+      ]
+      effect  = "Allow"
+      resources = [
+        "*"
       ]
     }
 }

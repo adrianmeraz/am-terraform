@@ -1,8 +1,7 @@
-output "arn" {
-  description = "ARN of secrets manager"
-  value       = aws_secretsmanager_secret.main.arn
+output "secretsmanager" {
+  description = "secrets manager"
+  value       = aws_secretsmanager_secret.main
 }
-
 
 output "secret_map" {
   description = "Map of secrets"

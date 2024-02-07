@@ -1,5 +1,4 @@
 locals {
-  task_secrets = [for k, v in var.task.secrets : {name: k, valueFrom: v}]
   cidr_ipv4    = "0.0.0.0/0"
   cidr_ipv6    = "::/0"
 }
@@ -24,8 +23,13 @@ resource "aws_ecs_task_definition" "main" {
     "memory": ${var.task.memory_mb},
     "cpu": ${var.task.vcpu},
     "essential": true,
-    "entryPoint": ["/"],
-    "secrets": ${jsonencode(local.task_secrets)},
+    "entryPoint": ["java","-jar","/expatmagic.jar"],
+    "secrets": [
+      {
+        "valueFrom": "${var.task.secrets.secretsmanager_arn}",
+        "name": "${var.task.secrets.secretsmanager_name}"
+      }
+    ],
     "portMappings": [
       {
         "containerPort": 5000,
@@ -46,9 +50,8 @@ resource "aws_ecs_service" "main" {
 
   desired_count = var.service.desired_count
   network_configuration {
-    # assign_public_ip = var.service.network_configuration.assign_public_ip
+    assign_public_ip = var.service.network_configuration.assign_public_ip
     subnets = var.service.network_configuration.subnet_ids
-    # security_groups = var.service.network_configuration.security_groups
     security_groups = [aws_security_group.main.id]
   }
 
