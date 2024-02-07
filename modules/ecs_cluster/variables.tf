@@ -32,27 +32,21 @@ variable "service" {
   })
 }
 
-variable "task" {
+variable "container_definitions" {
   description = "Variables for ecs task"
-  type = object({
-    entry_point = list(string)
-    vcpu = number
-    memory_mb = number
-    secrets = object({
-      secretsmanager_arn = string
-      secretsmanager_name = string
-    })
-  })
+  type = list(string)
+}
 
-  default = {
-    entry_point = ["java","-jar","/CHANGE_ME.jar"]
-    vcpu = 256 # 256 (.25 vCPU) https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html
-    memory_mb = 512
-    secrets = {
-      secretsmanager_arn = null
-      secretsmanager_name = null
-    }
-  }
+variable "vcpu" {
+  description = ""
+  type = number
+  default = 256
+}
+
+variable "memory_mb" {
+  description = ""
+  type = number
+  default = 512
 }
 
 variable "vpc_id" {

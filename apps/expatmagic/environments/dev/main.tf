@@ -9,6 +9,9 @@ locals {
     vcpu:        256
     launch_type: "FARGATE"
     memory_mb:   512
+    logging: {
+      aws_region: var.aws_region
+    }
   }
   environment = "dev"
   name_prefix = "${local.app_name}_${local.environment}"
@@ -38,6 +41,15 @@ module "secrets" {
   tags = local.base_tags
 }
 
+module  "logs" {
+  source = "../../../../modules/logs"
+
+  name = local.name_prefix
+  retention_in_days = 14
+
+  tags = local.base_tags
+}
+
 module  "ecr" {
   source = "../../../../modules/ecr"
 
@@ -57,6 +69,43 @@ module "iam" {
   tags = local.base_tags
 }
 
+module "ecs_container_definition" {
+  source = "terraform-aws-modules/ecs/aws//modules/container-definition"
+
+  name      = local.name_prefix
+  cpu       = local.ecs.vcpu
+  memory    = local.ecs.memory_mb
+  essential = true
+  image     = module.ecr.repository_url_with_tag
+  log_configuration = {
+    logDriver = "awslogs",
+    options = {
+      awslogs-group         = module.logs.log_group,
+      awslogs-region        =  var.aws_region,
+      awslogs-stream-prefix = local.name_prefix
+    }
+  }
+  port_mappings = [
+    {
+      name          = "ecs"
+      containerPort = 5000
+      hostPort      = 5000
+      protocol      = "tcp"
+    },
+  ]
+  secrets = [
+    {
+      valueFrom = module.secrets.secretsmanager.arn,
+      name      = module.secrets.secretsmanager.name
+    }
+  ]
+
+
+  readonly_root_filesystem = false
+
+  tags = local.base_tags
+}
+
 module "ecs_cluster" {
   source = "../../../../modules/ecs_cluster"
 
@@ -72,15 +121,9 @@ module "ecs_cluster" {
       subnet_ids = [for subnet in module.network.public_subnets: subnet.id]
     }
   }
-  task = {
-    entry_point = local.ecs.entry_point
-    vcpu = local.ecs.vcpu
-    memory_mb = local.ecs.memory_mb
-    secrets = {
-      secretsmanager_arn = module.secrets.secretsmanager.arn
-      secretsmanager_name = module.secrets.secretsmanager.name
-    }
-  }
+
+  container_definitions = [module.ecs_container_definition.container_definition]
+
   vpc_id = module.network.vpc.id
 
   tags = local.base_tags

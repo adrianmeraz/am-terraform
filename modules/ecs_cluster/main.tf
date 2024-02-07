@@ -9,35 +9,13 @@ resource "aws_ecs_cluster" "main" {
 }
 
 resource "aws_ecs_task_definition" "main" {
-  cpu                      = var.task.vcpu
+  cpu                      = var.vcpu
   execution_role_arn       = var.execution_role_arn
   family                   = "${var.name}_task"
-  memory                   = var.task.memory_mb
+  memory                   = var.memory_mb
   network_mode             = "awsvpc"
   requires_compatibilities = [var.service.launch_type]
-  container_definitions    = <<EOF
-[
-  {
-    "name": "${var.name}",
-    "image": "${var.image}",
-    "memory": ${var.task.memory_mb},
-    "cpu": ${var.task.vcpu},
-    "essential": true,
-    "secrets": [
-      {
-        "valueFrom": "${var.task.secrets.secretsmanager_arn}",
-        "name": "${var.task.secrets.secretsmanager_name}"
-      }
-    ],
-    "portMappings": [
-      {
-        "containerPort": 5000,
-        "hostPort": 5000
-      }
-    ]
-  }
-]
-EOF
+  container_definitions    = var.container_definitions
   tags = var.tags
 }
 
