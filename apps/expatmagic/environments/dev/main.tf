@@ -5,13 +5,9 @@ locals {
     "environment" : local.environment
   }
   ecs = {
-    entry_point: ["java","-jar","/${local.app_name}.jar"]
-    vcpu:        256
     launch_type: "FARGATE"
     memory_mb:   512
-    logging: {
-      aws_region: var.aws_region
-    }
+    vcpu:        256
   }
   environment = "dev"
   name_prefix = "${local.app_name}_${local.environment}"
@@ -22,32 +18,32 @@ module "network" {
 
   cidr_block = "10.0.0.0/16"
 
-  tags = local.base_tags
+  tags       = local.base_tags
 }
 
 module "secrets" {
   source = "../../../../modules/secrets"
 
-  name = local.name_prefix
+  name                    = local.name_prefix
   recovery_window_in_days = 0 # Allows for instant deletes
-  secret_map = {
+  secret_map              = {
     "AWS_ACCESS_KEY": var.aws_access_key,
-    "AWS_REGION": var.aws_region,
+    "AWS_REGION":     var.aws_region,
     "AWS_SECRET_KEY": var.aws_secret_key,
-    "DB_PASSWORD": var.db.password,
-    "DB_USERNAME": var.db.username
+    "DB_PASSWORD":    var.db.password,
+    "DB_USERNAME":    var.db.username
   }
 
   tags = local.base_tags
 }
 
 module  "logs" {
-  source = "../../../../modules/logs"
+  source            = "../../../../modules/logs"
 
-  name = local.name_prefix
+  name              = local.name_prefix
   retention_in_days = 14
 
-  tags = local.base_tags
+  tags              = local.base_tags
 }
 
 module  "ecr" {
@@ -64,65 +60,67 @@ module "iam" {
   source = "../../modules/iam/"
 
   name = local.name_prefix
-  # secrets_manager_version_arn = module.secrets_manager.ssm_version_arn
 
   tags = local.base_tags
 }
 
 module "ecs_container_definition" {
-  source = "terraform-aws-modules/ecs/aws//modules/container-definition"
+  source = "cloudposse/ecs-container-definition/aws"
+  version = "0.61.1"
 
-  name      = local.name_prefix
-  cpu       = local.ecs.vcpu
-  memory    = local.ecs.memory_mb
-  essential = true
-  image     = module.ecr.repository_url_with_tag
-  log_configuration = {
-    logDriver = "awslogs",
-    options = {
-      awslogs-group         = module.logs.log_group,
-      awslogs-region        =  var.aws_region,
+  container_cpu             = local.ecs.vcpu
+  essential                 = true
+  container_memory          = local.ecs.memory_mb
+  container_name            = local.name_prefix
+  container_image           = module.ecr.repository_url_with_tag
+  log_configuration         = {
+    logDriver = "awslogs"
+    options   = {
+      awslogs-group         = module.logs.log_group.name
+      awslogs-region        = var.aws_region
       awslogs-stream-prefix = local.name_prefix
     }
   }
   port_mappings = [
     {
-      name          = "ecs"
       containerPort = 5000
       hostPort      = 5000
+      name          = "ecs"
       protocol      = "tcp"
-    },
+    }
   ]
+  readonly_root_filesystem = false
   secrets = [
     {
       valueFrom = module.secrets.secretsmanager.arn,
       name      = module.secrets.secretsmanager.name
     }
   ]
+}
 
-  readonly_root_filesystem = false
+module "ecs_task_definition" {
+  source = "../../../../modules/ecs_task_definition"
 
-  tags = local.base_tags
+  name                  = local.name_prefix
+  container_definitions = <<EOF
+    ${module.ecs_container_definition.json_map_encoded_list}
+  EOF
+  execution_role_arn    = module.iam.role_arn
+  launch_type           = local.ecs.launch_type
 }
 
 module "ecs_cluster" {
   source = "../../../../modules/ecs_cluster"
 
   name = local.name_prefix
-  execution_role_arn = module.iam.role_arn
-  image = module.ecr.repository_url_with_tag
-  service = {
-    desired_count = 1
-    launch_type = local.ecs.launch_type
-    network_configuration = {
-      assign_public_ip = true
-      security_groups = [module.network.security_group_id]
-      subnet_ids = [for subnet in module.network.public_subnets: subnet.id]
-    }
+  desired_count = 1
+  launch_type = local.ecs.launch_type
+  network_configuration = {
+    assign_public_ip = true
+    security_groups = [module.network.security_group_id]
+    subnets = [for subnet in module.network.public_subnets: subnet.id]
   }
-
-  container_definitions = [module.ecs_container_definition.container_definition]
-
+  task_definition_arn = module.ecs_task_definition.arn
   vpc_id = module.network.vpc.id
 
   tags = local.base_tags

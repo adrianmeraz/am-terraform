@@ -4,14 +4,20 @@ variable "tags" {
   default     = {}
 }
 
-variable "execution_role_arn" {
-  description = "ARN of Role to execute the task"
+variable "desired_count" {
+  description = "Desired number of tasks"
+  type        = number
+}
+
+variable "launch_type" {
+  description = "Launch type of service"
   type        = string
 }
 
-variable "image" {
-  description = "The ECR image to deploy"
-  type        = string
+variable "memory_mb" {
+  description = ""
+  type        = number
+  default     = 512
 }
 
 variable "name" {
@@ -19,34 +25,24 @@ variable "name" {
   type        = string
 }
 
-variable "service" {
-  description = "Variables for ecs service"
+variable "network_configuration" {
+  description = "Variables for ecs network configuration"
   type = object({
-    launch_type = string
-    desired_count = number
-    network_configuration = object({
-      assign_public_ip = bool
-      security_groups = list(string)
-      subnet_ids = list(string)
-    })
+    assign_public_ip = bool
+    security_groups  = list(string)
+    subnets          = list(string)
   })
 }
 
-variable "container_definitions" {
-  description = "ECS Task container definitions"
-  type = list(object({}))
+variable "task_definition_arn" {
+  description = "ARN of the task definition"
+  type        = string
 }
 
 variable "vcpu" {
   description = ""
-  type = number
-  default = 256
-}
-
-variable "memory_mb" {
-  description = ""
-  type = number
-  default = 512
+  type        = number
+  default     = 256
 }
 
 variable "vpc_id" {

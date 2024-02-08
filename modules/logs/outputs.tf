@@ -1,4 +1,4 @@
 output "log_group" {
-  description = "Full ARN of the repository"
+  description = "CloudWatch log group"
   value       = aws_cloudwatch_log_group.main
 }

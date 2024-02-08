@@ -8,32 +8,21 @@ resource "aws_ecs_cluster" "main" {
   tags = var.tags
 }
 
-resource "aws_ecs_task_definition" "main" {
-  cpu                      = var.vcpu
-  execution_role_arn       = var.execution_role_arn
-  family                   = "${var.name}_task"
-  memory                   = var.memory_mb
-  network_mode             = "awsvpc"
-  requires_compatibilities = [var.service.launch_type]
-  container_definitions    = jsonencode(var.container_definitions)
-  tags = var.tags
-}
-
 resource "aws_ecs_service" "main" {
   name            = "${var.name}_service"
   cluster         = aws_ecs_cluster.main.id
-  task_definition = aws_ecs_task_definition.main.arn
-  launch_type     = var.service.launch_type
-
-  desired_count = var.service.desired_count
+  desired_count = var.desired_count
+  launch_type     = var.launch_type
   network_configuration {
-    assign_public_ip = var.service.network_configuration.assign_public_ip
-    subnets = var.service.network_configuration.subnet_ids
+    assign_public_ip = var.network_configuration.assign_public_ip
     security_groups = [aws_security_group.main.id]
+    subnets = var.network_configuration.subnets
   }
+  task_definition = var.task_definition_arn
 
   tags = var.tags
 }
+
 #######################
 ##### Security group
 #######################
