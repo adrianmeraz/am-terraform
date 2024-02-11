@@ -21,6 +21,22 @@ module "network" {
   tags       = local.base_tags
 }
 
+module "postgres_db" {
+  source      = "../../../../modules/database/postgres"
+
+  allocated_storage = 20
+  db_name = local.name_prefix
+  identifier = local.app_name
+  instance_class = "db.t3.micro"
+  password = var.db.password
+  subnet_ids = [for subnet in module.network.private_subnets: subnet.id]
+  username = var.db.username
+  vpc_id = module.network.vpc.id
+  vpc_security_group_ids = [module.network.security_group_id]
+
+  tags = local.base_tags
+}
+
 module "secrets" {
   source = "../../../../modules/secrets"
 
@@ -31,13 +47,14 @@ module "secrets" {
     "AWS_REGION":     var.aws_region,
     "AWS_SECRET_KEY": var.aws_secret_key,
     "DB_PASSWORD":    var.db.password,
+    "DB_URL":         module.postgres_db.jdbc_url,
     "DB_USERNAME":    var.db.username
   }
 
   tags = local.base_tags
 }
 
-module  "logs" {
+module "logs" {
   source            = "../../../../modules/logs"
 
   name              = local.name_prefix
@@ -46,7 +63,7 @@ module  "logs" {
   tags              = local.base_tags
 }
 
-module  "ecr" {
+module "ecr" {
   source = "../../../../modules/ecr"
 
   name = local.name_prefix
@@ -126,17 +143,4 @@ module "ecs_cluster" {
   tags = local.base_tags
 }
 
-module "postgres_db" {
-  source      = "../../../../modules/database/postgres"
 
-  allocated_storage = 20
-  identifier = local.app_name
-  instance_class = "db.t3.micro"
-  password = var.db.password
-  subnet_ids = [for subnet in module.network.private_subnets: subnet.id]
-  username = var.db.username
-  vpc_id = module.network.vpc.id
-  vpc_security_group_ids = [module.network.security_group_id]
-
-  tags = local.base_tags
-}

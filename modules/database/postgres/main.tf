@@ -12,6 +12,7 @@ resource "time_static" "main" {}
 
 resource "aws_db_instance" "postgres_db" {
   allocated_storage         = var.allocated_storage
+  db_name                   = var.db_name
   db_subnet_group_name      = aws_db_subnet_group.main.name
   engine                    = "postgres"
   engine_version            = "14.5"

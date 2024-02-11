@@ -10,6 +10,11 @@ variable "allocated_storage" {
   default     = 20
 }
 
+variable "db_name" {
+  description = "The database name"
+  type        = string
+}
+
 variable "identifier" {
   description = "The name of the RDS instance, if omitted, Terraform will assign a random, unique identifier"
   type        = string
