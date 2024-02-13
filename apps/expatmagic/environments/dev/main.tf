@@ -4,6 +4,9 @@ locals {
     "app_name" :    local.app_name
     "environment" : local.environment
   }
+  ecr = {
+    image_tag: "latest"
+  }
   ecs = {
     launch_type: "FARGATE"
     memory_mb:   512
@@ -70,7 +73,7 @@ module "ecr" {
 
   name = local.name_prefix
   force_delete = true
-  image_tag = "latest"
+  image_tag = local.ecr.image_tag
 
   tags = local.base_tags
 }
