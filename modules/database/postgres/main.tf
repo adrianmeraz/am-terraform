@@ -23,7 +23,6 @@ resource "aws_db_instance" "postgres_db" {
   publicly_accessible       = false
   skip_final_snapshot       = false
   username                  = var.username
-  # vpc_security_group_ids    = var.vpc_security_group_ids
   vpc_security_group_ids    = [aws_security_group.postgres_db.id]
 }
 

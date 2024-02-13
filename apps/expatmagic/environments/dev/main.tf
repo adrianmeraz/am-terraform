@@ -11,6 +11,7 @@ locals {
   }
   environment = "dev"
   name_prefix = "${local.app_name}_${local.environment}"
+  spring_active_profile = "dev"
 }
 
 module "network" {
@@ -43,12 +44,13 @@ module "secrets" {
   name                    = local.name_prefix
   recovery_window_in_days = 0 # Allows for instant deletes
   secret_map              = {
-    "AWS_ACCESS_KEY": var.aws_access_key,
-    "AWS_REGION":     var.aws_region,
-    "AWS_SECRET_KEY": var.aws_secret_key,
-    "DB_PASSWORD":    var.db.password,
-    "DB_URL":         module.postgres_db.jdbc_url,
-    "DB_USERNAME":    var.db.username
+    "AWS_ACCESS_KEY":         var.aws_access_key,
+    "AWS_REGION":             var.aws_region,
+    "AWS_SECRET_KEY":         var.aws_secret_key,
+    "DB_PASSWORD":            var.db.password,
+    "DB_URL":                 module.postgres_db.jdbc_url,
+    "DB_USERNAME":            var.db.username,
+    "SPRING_PROFILES_ACTIVE": local.spring_active_profile
   }
 
   tags = local.base_tags
@@ -107,12 +109,7 @@ module "ecs_container_definition" {
     }
   ]
   readonly_root_filesystem = false
-  secrets = [
-    {
-      valueFrom = module.secrets.secretsmanager.arn,
-      name      = module.secrets.secretsmanager.name
-    }
-  ]
+  secrets = module.secrets.task_secrets
 }
 
 module "ecs_task_definition" {
