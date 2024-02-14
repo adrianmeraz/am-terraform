@@ -4,6 +4,9 @@ locals {
     "app_name" :    local.app_name
     "environment" : local.environment
   }
+  ecr = {
+    image_tag: "latest"
+  }
   ecs = {
     launch_type: "FARGATE"
     memory_mb:   512
@@ -70,7 +73,7 @@ module "ecr" {
 
   name = local.name_prefix
   force_delete = true
-  image_tag = "latest"
+  image_tag = local.ecr.image_tag
 
   tags = local.base_tags
 }
@@ -90,8 +93,8 @@ module "ecs_container_definition" {
   container_cpu             = local.ecs.vcpu
   essential                 = true
   container_memory          = local.ecs.memory_mb
-  container_name            = local.name_prefix
-  container_image           = module.ecr.repository_url_with_tag
+  container_name            = "${local.name_prefix}_container"
+  container_image           = module.ecr.repository_url
   log_configuration         = {
     logDriver = "awslogs"
     options   = {
@@ -115,7 +118,7 @@ module "ecs_container_definition" {
 module "ecs_task_definition" {
   source = "../../../../modules/ecs_task_definition"
 
-  name                  = local.name_prefix
+  name                  = "${local.name_prefix}_task"
   container_definitions = <<EOF
     ${module.ecs_container_definition.json_map_encoded_list}
   EOF
@@ -126,7 +129,7 @@ module "ecs_task_definition" {
 module "ecs_cluster" {
   source = "../../../../modules/ecs_cluster"
 
-  name = local.name_prefix
+  name = "${local.name_prefix}_cluster"
   desired_count = 1
   launch_type = local.ecs.launch_type
   network_configuration = {

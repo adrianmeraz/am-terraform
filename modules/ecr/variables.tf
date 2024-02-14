@@ -13,12 +13,6 @@ variable "name" {
   type        = any
 }
 
-variable "image_tag" {
-  description = "Image Tag"
-  type        = string
-  default     = "latest"
-}
-
 variable "force_delete" {
   description = "If true, will delete the repository even if it contains images"
   type        = bool
