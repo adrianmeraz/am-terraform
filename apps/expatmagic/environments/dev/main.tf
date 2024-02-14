@@ -47,9 +47,6 @@ module "secrets" {
   name                    = local.name_prefix
   recovery_window_in_days = 0 # Allows for instant deletes
   secret_map              = {
-    "AWS_ACCESS_KEY":              var.aws_access_key,
-    "AWS_REGION":                  var.aws_region,
-    "AWS_SECRET_KEY":              var.aws_secret_key,
     "CODECOV_TOKEN":               var.codecov_token,
     "DB_PASSWORD":                 var.db.password,
     "DB_URL":                      module.postgres_db.jdbc_url,
