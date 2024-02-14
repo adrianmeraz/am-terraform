@@ -1,3 +1,7 @@
+########################################################################
+Copy this file to a terraform.tfvars and set the values
+########################################################################
+
 aws_access_key =              "CHANGE_ME"
 aws_region =                  "CHANGE_ME"
 aws_secret_key =              "CHANGE_ME"
