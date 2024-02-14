@@ -1,9 +1,14 @@
-output "repository_arn" {
+output "arn" {
   description = "Full ARN of the repository"
   value       = aws_ecr_repository.main.arn
 }
 
-output "repository_registry_id" {
+output "name" {
+  description = "The registry name"
+  value       = aws_ecr_repository.main.name
+}
+
+output "registry_id" {
   description = "The registry ID where the repository was created"
   value       = aws_ecr_repository.main.registry_id
 }

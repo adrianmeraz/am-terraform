@@ -41,12 +41,23 @@ module "postgres_db" {
   tags = local.base_tags
 }
 
+module "ecr" {
+  source = "../../../../modules/ecr"
+
+  name = local.name_prefix
+  force_delete = true
+
+  tags = local.base_tags
+}
+
 module "secrets" {
   source = "../../../../modules/secrets"
 
   name                    = local.name_prefix
   recovery_window_in_days = 0 # Allows for instant deletes
   secret_map              = {
+    "AWS_ECR_REGISTRY_NAME":       module.ecr.name,
+    "AWS_ECR_REPOSITORY_URL":      module.ecr.repository_url,
     "CODECOV_TOKEN":               var.codecov_token,
     "DB_PASSWORD":                 var.db.password,
     "DB_URL":                      module.postgres_db.jdbc_url,
@@ -69,15 +80,6 @@ module "logs" {
   retention_in_days = 14
 
   tags              = local.base_tags
-}
-
-module "ecr" {
-  source = "../../../../modules/ecr"
-
-  name = local.name_prefix
-  force_delete = true
-
-  tags = local.base_tags
 }
 
 module "iam" {
