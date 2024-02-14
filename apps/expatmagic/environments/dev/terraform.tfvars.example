@@ -1,13 +1,7 @@
 aws_access_key = "CHANGE_ME"
 aws_region = "CHANGE_ME"
 aws_secret_key = "CHANGE_ME"
-app_name = "expatmagic"
 db = {
   username: "CHANGE_ME"
   password: "CHANGE_ME"
-}
-environment = "dev"
-ecs = {
-  vcpu: 256
-  memory_mb: 512
 }
