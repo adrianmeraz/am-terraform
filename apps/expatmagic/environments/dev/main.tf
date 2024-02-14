@@ -73,7 +73,6 @@ module "ecr" {
 
   name = local.name_prefix
   force_delete = true
-  image_tag = local.ecr.image_tag
 
   tags = local.base_tags
 }
@@ -94,7 +93,7 @@ module "ecs_container_definition" {
   essential                 = true
   container_memory          = local.ecs.memory_mb
   container_name            = "${local.name_prefix}_container"
-  container_image           = module.ecr.repository_url
+  container_image           = "${module.ecr.repository_url}:${local.ecr.image_tag}"
   log_configuration         = {
     logDriver = "awslogs"
     options   = {
