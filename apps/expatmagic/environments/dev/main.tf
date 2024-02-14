@@ -47,13 +47,19 @@ module "secrets" {
   name                    = local.name_prefix
   recovery_window_in_days = 0 # Allows for instant deletes
   secret_map              = {
-    "AWS_ACCESS_KEY":         var.aws_access_key,
-    "AWS_REGION":             var.aws_region,
-    "AWS_SECRET_KEY":         var.aws_secret_key,
-    "DB_PASSWORD":            var.db.password,
-    "DB_URL":                 module.postgres_db.jdbc_url,
-    "DB_USERNAME":            var.db.username,
-    "SPRING_PROFILES_ACTIVE": local.spring_active_profile
+    "AWS_ACCESS_KEY":              var.aws_access_key,
+    "AWS_REGION":                  var.aws_region,
+    "AWS_SECRET_KEY":              var.aws_secret_key,
+    "CODECOV_TOKEN":               var.codecov_token,
+    "DB_PASSWORD":                 var.db.password,
+    "DB_URL":                      module.postgres_db.jdbc_url,
+    "DB_USERNAME":                 var.db.username,
+    "SPRING_PROFILES_ACTIVE":      local.spring_active_profile,
+    "SPOOFER_PROXY_PASSWORD":      var.spoofer_proxy_password,
+    "SPOOFER_PROXY_USERNAME":      var.spoofer_proxy_username,
+    "TWO_CAPTCHA_API_KEY":         var.two_captcha_api_key,
+    "TWO_CAPTCHA_CALLBACK_DOMAIN": var.two_captcha_callback_domain,
+    "TWO_CAPTCHA_CALLBACK_TOKEN":  var.two_captcha_callback_token,
   }
 
   tags = local.base_tags
