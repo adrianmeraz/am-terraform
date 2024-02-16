@@ -22,7 +22,7 @@ resource "aws_ecs_service" "main" {
     subnets          = var.network_configuration.subnets
   }
   triggers = {
-    update = timestamp()  # force update in-place every apply
+    redeployment = plantimestamp()  # force update in-place every apply
   }
 
   tags = var.tags
