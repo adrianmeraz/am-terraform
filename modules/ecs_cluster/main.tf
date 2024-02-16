@@ -9,16 +9,18 @@ resource "aws_ecs_cluster" "main" {
 }
 
 resource "aws_ecs_service" "main" {
-  name            = "${var.name}_service"
-  cluster         = aws_ecs_cluster.main.id
-  desired_count = var.desired_count
-  launch_type     = var.launch_type
+  name                 = "${var.name}_service"
+  cluster              = aws_ecs_cluster.main.id
+  desired_count        = var.desired_count
+  force_new_deployment = true
+  launch_type          = var.launch_type
+  propagate_tags       = "TASK_DEFINITION"
+  task_definition      = var.task_definition_arn
   network_configuration {
     assign_public_ip = var.network_configuration.assign_public_ip
-    security_groups = [aws_security_group.main.id]
-    subnets = var.network_configuration.subnets
+    security_groups  = [aws_security_group.main.id]
+    subnets          = var.network_configuration.subnets
   }
-  task_definition = var.task_definition_arn
 
   tags = var.tags
 }
