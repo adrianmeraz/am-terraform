@@ -21,6 +21,9 @@ resource "aws_ecs_service" "main" {
     security_groups  = [aws_security_group.main.id]
     subnets          = var.network_configuration.subnets
   }
+  triggers = {
+    update = timestamp()  # force update in-place every apply
+  }
 
   tags = var.tags
 }
