@@ -1,5 +1,9 @@
 locals {
   app_name             = var.secret_map["APP_NAME"]
+  aws_access_key       = var.secret_map["AWS_ACCESS_KEY"]
+  aws_region           = var.secret_map["AWS_REGION"]
+  aws_secret_key       = var.secret_map["AWS_SECRET_KEY"]
+
   base_tags            = {
     "app_name" :    local.app_name
     "environment" : local.environment
