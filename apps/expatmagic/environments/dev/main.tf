@@ -14,7 +14,7 @@ locals {
   }
   environment = "dev"
   name_prefix = "${local.app_name}_${local.environment}"
-  spring_active_profile = "dev"
+  aws_secretsmanager_secret_name = "expatmagic_dev/secret"
 }
 
 module "network" {
@@ -25,6 +25,18 @@ module "network" {
   tags       = local.base_tags
 }
 
+data "aws_secretsmanager_secret" "this" {
+  name = local.aws_secretsmanager_secret_name
+}
+
+data "aws_secretsmanager_secret_version" "this" {
+  secret_id = data.aws_secretsmanager_secret.this.id
+}
+
+locals {
+  secrets_map = jsondecode(data.aws_secretsmanager_secret_version.this.secret_string)
+}
+
 module "postgres_db" {
   source      = "../../../../modules/database/postgres"
 
@@ -32,9 +44,9 @@ module "postgres_db" {
   db_name = local.name_prefix
   identifier = local.app_name
   instance_class = "db.t3.micro"
-  password = var.db.password
+  password = local.secrets_map['DB_PASSWORD']
   subnet_ids = [for subnet in module.network.private_subnets: subnet.id]
-  username = var.db.username
+  username = local.secrets_map['DB_USERNAME']
   vpc_id = module.network.vpc.id
   vpc_security_group_ids = [module.network.security_group_id]
 
@@ -50,28 +62,28 @@ module "ecr" {
   tags = local.base_tags
 }
 
-module "secrets" {
-  source = "../../../../modules/secrets"
-
-  name                    = local.name_prefix
-  recovery_window_in_days = 0 # Allows for instant deletes
-  secret_map              = {
-    "AWS_ECR_REGISTRY_NAME":       module.ecr.name,
-    "AWS_ECR_REPOSITORY_URL":      module.ecr.repository_url,
-    "CODECOV_TOKEN":               var.codecov_token,
-    "DB_PASSWORD":                 var.db.password,
-    "DB_URL":                      module.postgres_db.jdbc_url,
-    "DB_USERNAME":                 var.db.username,
-    "SPRING_PROFILES_ACTIVE":      local.spring_active_profile,
-    "SPOOFER_PROXY_PASSWORD":      var.spoofer_proxy_password,
-    "SPOOFER_PROXY_USERNAME":      var.spoofer_proxy_username,
-    "TWO_CAPTCHA_API_KEY":         var.two_captcha_api_key,
-    "TWO_CAPTCHA_CALLBACK_DOMAIN": var.two_captcha_callback_domain,
-    "TWO_CAPTCHA_CALLBACK_TOKEN":  var.two_captcha_callback_token,
-  }
-
-  tags = local.base_tags
-}
+#module "secrets" {
+#  source = "../../../../modules/secrets"
+#
+#  name                    = local.name_prefix
+#  recovery_window_in_days = 0 # Allows for instant deletes
+#  secret_map              = {
+#    "AWS_ECR_REGISTRY_NAME":       module.ecr.name,
+#    "AWS_ECR_REPOSITORY_URL":      module.ecr.repository_url,
+#    "CODECOV_TOKEN":               var.codecov_token,
+#    "DB_PASSWORD":                 var.db.password,
+#    "DB_URL":                      module.postgres_db.jdbc_url,
+#    "DB_USERNAME":                 var.db.username,
+#    "SPRING_PROFILES_ACTIVE":      local.spring_active_profile,
+#    "SPOOFER_PROXY_PASSWORD":      var.spoofer_proxy_password,
+#    "SPOOFER_PROXY_USERNAME":      var.spoofer_proxy_username,
+#    "TWO_CAPTCHA_API_KEY":         var.two_captcha_api_key,
+#    "TWO_CAPTCHA_CALLBACK_DOMAIN": var.two_captcha_callback_domain,
+#    "TWO_CAPTCHA_CALLBACK_TOKEN":  var.two_captcha_callback_token,
+#  }
+#
+#  tags = local.base_tags
+#}
 
 module "logs" {
   source            = "../../../../modules/logs"
@@ -103,7 +115,7 @@ module "ecs_container_definition" {
     logDriver = "awslogs"
     options   = {
       awslogs-group         = module.logs.log_group.name
-      awslogs-region        = var.aws_region
+      awslogs-region        = var.aws_region # Get Region from data block
       awslogs-stream-prefix = local.name_prefix
     }
   }
@@ -116,7 +128,8 @@ module "ecs_container_definition" {
     }
   ]
   readonly_root_filesystem = false
-  secrets = module.secrets.task_secrets
+  # TODO Merge ECS and DB JDBC into secrets!
+  secrets = [for key, value in jsondecode(data.aws_secretsmanager_secret_version.this.secret_string): {name = key, valueFrom = "${data.aws_secretsmanager_secret_version.this.arn}:${key}::"}]
 }
 
 module "ecs_task_definition" {

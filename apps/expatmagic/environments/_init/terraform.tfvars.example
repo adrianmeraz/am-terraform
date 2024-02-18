@@ -1,0 +1,20 @@
+########################################################################
+Copy this file to a terraform.tfvars in this directory and set the values
+########################################################################
+
+app_name =                    "CHANGE_ME"
+environment =                 "CHANGE_ME"
+
+aws_access_key =              "CHANGE_ME"
+aws_region =                  "CHANGE_ME"
+aws_secret_key =              "CHANGE_ME"
+codecov_token =               "CHANGE_ME"
+db = {
+  username: "CHANGE_ME"
+  password: "CHANGE_ME"
+}
+spoofer_proxy_password =      "CHANGE_ME"
+spoofer_proxy_username =      "CHANGE_ME"
+two_captcha_api_key =         "CHANGE_ME"
+two_captcha_callback_domain = "CHANGE_ME"
+two_captcha_callback_token =  "CHANGE_ME"
