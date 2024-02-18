@@ -44,9 +44,9 @@ module "postgres_db" {
   db_name = local.name_prefix
   identifier = local.app_name
   instance_class = "db.t3.micro"
-  password = local.secrets_map['DB_PASSWORD']
+  password = local.secrets_map["DB_PASSWORD"]
   subnet_ids = [for subnet in module.network.private_subnets: subnet.id]
-  username = local.secrets_map['DB_USERNAME']
+  username = local.secrets_map["DB_USERNAME"]
   vpc_id = module.network.vpc.id
   vpc_security_group_ids = [module.network.security_group_id]
 
