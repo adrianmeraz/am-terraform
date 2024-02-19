@@ -1,12 +1,7 @@
 variable "name" {
-  description = "Name of lambda role"
+  description = "Name of role"
   type        = string
 }
-
-#variable "secrets_manager_version_arn" {
-#  description = "Secrets manager version arn"
-#  type        = string
-#}
 
 variable "tags" {
   description = "A map of tags to add to all resources"
