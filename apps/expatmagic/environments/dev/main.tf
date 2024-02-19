@@ -1,9 +1,5 @@
-locals {
-  aws_secretsmanager_secret_name = "expatmagic_dev/secret"
-}
-
 data "aws_secretsmanager_secret" "this" {
-  name = local.aws_secretsmanager_secret_name
+  name = var.aws_secretsmanager_secret_name
 }
 
 data "aws_secretsmanager_secret_version" "this" {
@@ -19,13 +15,12 @@ locals {
     image_tag: "latest"
   }
   ecs = {
-    launch_type: "FARGATE"
-    memory_mb:   512
-    vcpu:        256
+    launch_type: var.ecs.launch_type
+    memory_mb:   var.ecs.memory_mb
+    vcpu:        var.ecs.vcpu
   }
-  environment = "dev"
+  environment = var.environment
   name_prefix = "${local.app_name}_${local.environment}"
-
 
   base_tags = {
     "app_name" :    local.app_name

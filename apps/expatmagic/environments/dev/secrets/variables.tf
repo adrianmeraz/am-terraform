@@ -1,5 +1,3 @@
-# TODO Add App name and other vars to pass in that change per environment
-
 variable "aws_access_key" {
   description = "AWS Access Key"
   type = string

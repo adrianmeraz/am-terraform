@@ -1,9 +1,9 @@
 terraform {
 
   backend "s3" {
-    bucket         = "expatmagic-tfstate-dev"
-    region         = "us-west-2"
-    key            = "expatmagic/terraform.tfstate"
+    bucket = "expatmagic-tfstate-dev"
+    region = "us-west-2"
+    key    = "expatmagic/terraform.tfstate"
 #    encrypt        = true
   }
 
