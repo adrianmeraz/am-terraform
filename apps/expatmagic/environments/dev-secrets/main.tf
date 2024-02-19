@@ -10,7 +10,7 @@ locals {
 }
 
 module "secrets" {
-  source = "../../../../../modules/secrets"
+  source = "../../../../modules/secrets"
 
   name                    = local.name_prefix
   recovery_window_in_days = 0 # Allows for instant deletes
