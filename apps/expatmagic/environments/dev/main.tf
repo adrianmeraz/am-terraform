@@ -1,28 +1,5 @@
 locals {
-  app_name = "expatmagic"
-  base_tags = {
-    "app_name" :    local.app_name
-    "environment" : local.environment
-  }
-  ecr = {
-    image_tag: "latest"
-  }
-  ecs = {
-    launch_type: "FARGATE"
-    memory_mb:   512
-    vcpu:        256
-  }
-  environment = "dev"
-  name_prefix = "${local.app_name}_${local.environment}"
   aws_secretsmanager_secret_name = "expatmagic_dev/secret"
-}
-
-module "network" {
-  source = "../../../../modules/network"
-
-  cidr_block = "10.0.0.0/16"
-
-  tags       = local.base_tags
 }
 
 data "aws_secretsmanager_secret" "this" {
@@ -34,7 +11,34 @@ data "aws_secretsmanager_secret_version" "this" {
 }
 
 locals {
+  # Secrets being pulled in
   secrets_map = jsondecode(data.aws_secretsmanager_secret_version.this.secret_string)
+
+  app_name = "expatmagic"
+  ecr = {
+    image_tag: "latest"
+  }
+  ecs = {
+    launch_type: "FARGATE"
+    memory_mb:   512
+    vcpu:        256
+  }
+  environment = "dev"
+  name_prefix = "${local.app_name}_${local.environment}"
+
+
+  base_tags = {
+    "app_name" :    local.app_name
+    "environment" : local.environment
+  }
+}
+
+module "network" {
+  source = "../../../../modules/network"
+
+  cidr_block = "10.0.0.0/16"
+
+  tags       = local.base_tags
 }
 
 module "postgres_db" {
