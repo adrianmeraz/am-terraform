@@ -1,15 +1,38 @@
-variable "name" {
-  description = "Name of lambda role"
-  type        = string
+variable "aws_access_key" {
+  description = "AWS Access Key ID"
+  type = string
 }
 
-#variable "secrets_manager_version_arn" {
-#  description = "Secrets manager version arn"
-#  type        = string
-#}
+variable "aws_region" {
+  description = "AWS Region"
+  type = string
+}
 
-variable "tags" {
-  description = "A map of tags to add to all resources"
-  type        = map(string)
-  default     = {}
+variable "aws_secret_key" {
+  description = "AWS Secret Key"
+  type = string
+}
+
+variable "aws_secretsmanager_secret_name" {
+  description = "AWS Secret Name"
+  type = string
+}
+
+variable "ecs" {
+  description = "ECS task parameters"
+  type = object({
+    launch_type = string,
+    memory_mb   = number,
+    vcpu        = number
+  })
+  default = {
+    launch_type: "FARGATE"
+    memory_mb:   512
+    vcpu:        256
+  }
+}
+
+variable "environment" {
+  description = "Environment"
+  type = string
 }
