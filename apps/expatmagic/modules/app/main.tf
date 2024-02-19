@@ -118,7 +118,7 @@ module "ecs_container_definition" {
   readonly_root_filesystem = false
   # TODO Merge ECS and DB JDBC into AWS secrets! Then merge just the secrets map
 
-  secrets = [for key, value in merge(local.secrets_map, local.ecr_secrets, local.postgres_secrets): {name = key, valueFrom = "${local.secrets_arn}:${key}::"}]
+  secrets = [for key, value in local.secrets_map: {name = key, valueFrom = "${local.secrets_arn}:${key}::"}]
 }
 
 module "ecs_task_definition" {
