@@ -7,10 +7,12 @@ data "aws_secretsmanager_secret_version" "this" {
 }
 
 locals {
-  # Secrets being pulled in
+  secrets_arn = data.aws_secretsmanager_secret_version.this.arn
   secrets_map = jsondecode(data.aws_secretsmanager_secret_version.this.secret_string)
 
   app_name = "expatmagic"
+  environment = var.environment
+  name_prefix = "${local.app_name}_${local.environment}"
   ecr = {
     image_tag: "latest"
   }
@@ -19,9 +21,6 @@ locals {
     memory_mb:   var.ecs.memory_mb
     vcpu:        var.ecs.vcpu
   }
-  environment = var.environment
-  name_prefix = "${local.app_name}_${local.environment}"
-
   base_tags = {
     "app_name" :    local.app_name
     "environment" : local.environment
@@ -105,7 +104,7 @@ module "ecs_container_definition" {
   ]
   readonly_root_filesystem = false
   # TODO Merge ECS and DB JDBC into secrets!
-  secrets = [for key, value in jsondecode(data.aws_secretsmanager_secret_version.this.secret_string): {name = key, valueFrom = "${data.aws_secretsmanager_secret_version.this.arn}:${key}::"}]
+  secrets = [for key, value in local.secrets_map: {name = key, valueFrom = "${local.secrets_arn}:${key}::"}]
 }
 
 module "ecs_task_definition" {
