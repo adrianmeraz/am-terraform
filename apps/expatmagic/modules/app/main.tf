@@ -39,7 +39,7 @@ module "postgres_db" {
 
   allocated_storage = 20
   db_name = local.name_prefix
-  identifier = local.app_name
+  identifier = "${local.app_name}-${local.environment}"
   instance_class = "db.t3.micro"
   password = local.secrets_map["DB_PASSWORD"]
   subnet_ids = [for subnet in module.network.private_subnets: subnet.id]
