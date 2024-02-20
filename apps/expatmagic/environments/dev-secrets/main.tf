@@ -12,9 +12,10 @@ locals {
 module "secrets" {
   source = "../../../../modules/secrets"
 
-  name                    = "${local.name_prefix}/secret"
-  recovery_window_in_days = 0 # Allows for instant deletes
-  secret_map              = var.secret_map
+  name                           = "${local.name_prefix}/secret"
+  force_overwrite_replica_secret = true
+  recovery_window_in_days        = 0 # Allows for instant deletes
+  secret_map                     = var.secret_map
 
   tags = local.base_tags
 }

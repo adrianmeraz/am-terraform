@@ -1,6 +1,7 @@
 resource "aws_secretsmanager_secret" "main" {
   name = var.name
   recovery_window_in_days = var.recovery_window_in_days
+  force_overwrite_replica_secret = var.force_overwrite_replica_secret
 
   tags = var.tags
 }
