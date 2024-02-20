@@ -79,7 +79,7 @@ module "iam" {
 module "secrets" {
   source = "../../../../modules/secrets"
 
-  name                    = local.name_prefix
+  name                    = var.aws_secretsmanager_secret_name
   recovery_window_in_days = 0 # Allows for instant deletes
   secret_map              = merge(
     local.secrets_map,
