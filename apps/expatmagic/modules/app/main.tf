@@ -7,7 +7,6 @@ data "aws_secretsmanager_secret_version" "this" {
 }
 
 locals {
-  secrets_arn = data.aws_secretsmanager_secret_version.this.arn
   secrets_map = jsondecode(data.aws_secretsmanager_secret_version.this.secret_string)
 
   app_name = "expatmagic"
@@ -51,12 +50,6 @@ module "postgres_db" {
   tags = local.base_tags
 }
 
-locals {
-  postgres_secrets = {
-    "DB_URL": module.postgres_db.jdbc_url
-  }
-}
-
 module "ecr" {
   source = "../../../../modules/ecr"
 
@@ -64,13 +57,6 @@ module "ecr" {
   force_delete = true
 
   tags = local.base_tags
-}
-
-locals {
-  ecr_secrets = {
-    "AWS_ECR_REGISTRY_NAME": module.ecr.name
-    "AWS_ECR_REPOSITORY_URL": module.ecr.repository_url
-  }
 }
 
 module "logs" {
@@ -86,6 +72,23 @@ module "iam" {
   source = "../../modules/iam/"
 
   name = local.name_prefix
+
+  tags = local.base_tags
+}
+
+module "secrets" {
+  source = "../../../../modules/secrets"
+
+  name                    = local.name_prefix
+  recovery_window_in_days = 0 # Allows for instant deletes
+  secret_map              = merge(
+    local.secrets_map,
+    {
+      "AWS_ECR_REGISTRY_NAME": module.ecr.name
+      "AWS_ECR_REPOSITORY_URL": module.ecr.repository_url
+      "DB_URL": module.postgres_db.jdbc_url
+    }
+  )
 
   tags = local.base_tags
 }
@@ -116,9 +119,7 @@ module "ecs_container_definition" {
     }
   ]
   readonly_root_filesystem = false
-  # TODO Merge ECS and DB JDBC into AWS secrets! Then merge just the secrets map
-
-  secrets = [for key, value in local.secrets_map: {name = key, valueFrom = "${local.secrets_arn}:${key}::"}]
+  secrets = [for key, value in module.secrets.secret_map: {name = key, valueFrom = "${module.secrets.arn}:${key}::"}]
 }
 
 module "ecs_task_definition" {
