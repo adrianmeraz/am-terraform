@@ -76,12 +76,8 @@ module "iam" {
   tags = local.base_tags
 }
 
-module "secrets" {
-  source = "../../../../modules/secrets"
-
-  name                    = var.aws_secretsmanager_secret_name
-  recovery_window_in_days = 0 # Allows for instant deletes
-  secret_map              = merge(
+locals {
+  all_secrets_map = merge(
     local.secrets_map,
     {
       "AWS_ECR_REGISTRY_NAME": module.ecr.name
@@ -89,8 +85,13 @@ module "secrets" {
       "DB_URL": module.postgres_db.jdbc_url
     }
   )
+}
 
-  tags = local.base_tags
+resource "aws_secretsmanager_secret_version" "main" {
+  secret_id     = data.aws_secretsmanager_secret.this.id
+  secret_string = <<EOF
+  ${jsonencode(local.all_secrets_map)}
+EOF
 }
 
 module "ecs_container_definition" {

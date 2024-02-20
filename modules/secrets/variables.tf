@@ -4,11 +4,6 @@ variable "tags" {
   default     = {}
 }
 
-variable "force_overwrite_replica_secret" {
-  description = "Accepts boolean value to specify whether to overwrite a secret with the same name in the destination Region."
-  type        = bool
-}
-
 variable "name" {
   description = "Name of secrets manager"
   type        = string
