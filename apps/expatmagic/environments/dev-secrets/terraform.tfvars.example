@@ -1,0 +1,22 @@
+########################################################################
+Copy this file to a terraform.tfvars in this directory and set the values
+########################################################################
+
+aws_access_key       = "CHANGE_ME"
+aws_region           = "CHANGE_ME"
+aws_secret_key       = "CHANGE_ME"
+
+secret_map = {
+  "AWS_ECR_REGISTRY_NAME":  "CHANGE_ME"
+  "AWS_ECR_REPOSITORY_URL": "CHANGE_ME"
+  "CODECOV_TOKEN": "CHANGE_ME"
+  "DB_PASSWORD": "CHANGE_ME"
+  "DB_URL": "CHANGE_ME"
+  "DB_USERNAME": "CHANGE_ME"
+  "SPOOFER_PROXY_PASSWORD": "CHANGE_ME"
+  "SPOOFER_PROXY_USERNAME": "CHANGE_ME"
+  "SPRING_PROFILES_ACTIVE": "CHANGE_ME"
+  "TWO_CAPTCHA_API_KEY": "CHANGE_ME"
+  "TWO_CAPTCHA_CALLBACK_DOMAIN": "CHANGE_ME"
+  "TWO_CAPTCHA_CALLBACK_TOKEN": "CHANGE_ME"
+}

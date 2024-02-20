@@ -1,13 +1,9 @@
+########################################################################
+Copy this file to a terraform.tfvars in this directory and set the values
+########################################################################
+
 aws_access_key = "CHANGE_ME"
-aws_region = "CHANGE_ME"
+aws_region     = "CHANGE_ME"
 aws_secret_key = "CHANGE_ME"
-app_name = "expatmagic"
-db = {
-  username: "CHANGE_ME"
-  password: "CHANGE_ME"
-}
-environment = "dev"
-ecs = {
-  vcpu: 256
-  memory_mb: 512
-}
+
+aws_secretsmanager_secret_name = "CHANGE_ME"

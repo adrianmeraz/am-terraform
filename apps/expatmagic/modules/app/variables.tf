@@ -17,3 +17,22 @@ variable "aws_secretsmanager_secret_name" {
   description = "AWS Secret Name"
   type = string
 }
+
+variable "ecs" {
+  description = "ECS task parameters"
+  type = object({
+    launch_type = string,
+    memory_mb   = number,
+    vcpu        = number
+  })
+  default = {
+    launch_type: "FARGATE"
+    memory_mb:   512
+    vcpu:        256
+  }
+}
+
+variable "environment" {
+  description = "Environment"
+  type = string
+}
