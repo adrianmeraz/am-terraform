@@ -1,13 +1,13 @@
-data "aws_secretsmanager_secret" "this" {
+data "aws_secretsmanager_secret" "main" {
   name = var.aws_secretsmanager_secret_name
 }
 
-data "aws_secretsmanager_secret_version" "this" {
-  secret_id = data.aws_secretsmanager_secret.this.id
+data "aws_secretsmanager_secret_version" "main" {
+  secret_id = data.aws_secretsmanager_secret.main.id
 }
 
 locals {
-  secrets_map = jsondecode(data.aws_secretsmanager_secret_version.this.secret_string)
+  secrets_map = jsondecode(data.aws_secretsmanager_secret_version.main.secret_string)
 
   app_name = "expatmagic"
   environment = var.environment
@@ -75,7 +75,7 @@ module "iam" {
 
   tags = local.base_tags
 }
-
+# Write updated secrets to a new version
 locals {
   all_secrets_map = merge(
     local.secrets_map,
@@ -88,7 +88,7 @@ locals {
 }
 
 resource "aws_secretsmanager_secret_version" "main" {
-  secret_id     = data.aws_secretsmanager_secret.this.id
+  secret_id     = data.aws_secretsmanager_secret.main.id
   secret_string = <<EOF
   ${jsonencode(local.all_secrets_map)}
 EOF
@@ -120,7 +120,7 @@ module "ecs_container_definition" {
     }
   ]
   readonly_root_filesystem = false
-  secrets = [for key, value in module.secrets.secret_map: {name = key, valueFrom = "${module.secrets.arn}:${key}::"}]
+  secrets = [for key, value in jsondecode(aws_secretsmanager_secret_version.main.secret_string): {name = key, valueFrom = "${data.aws_secretsmanager_secret.main.arn}:${key}::"}]
 }
 
 module "ecs_task_definition" {
