@@ -1,5 +1,5 @@
-variable "name" {
-  description = "Name of role"
+variable "name_prefix" {
+  description = "Name prefix for role resources"
   type        = string
 }
 

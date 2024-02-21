@@ -8,8 +8,8 @@ variable "tags" {
   default     = {}
 }
 
-variable "name" {
-  description = "The name of the ECR registry"
+variable "name_prefix" {
+  description = "Name to prefix all ECR resources"
   type        = any
 }
 

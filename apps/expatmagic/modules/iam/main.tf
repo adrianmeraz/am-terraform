@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "ecs_tasks" {
 }
 
 resource "aws_iam_role" "ecs" {
-  name_prefix        = var.name
+  name_prefix        = var.name_prefix
   assume_role_policy = data.aws_iam_policy_document.ecs_tasks.json
 
   tags = var.tags

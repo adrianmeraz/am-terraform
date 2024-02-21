@@ -31,8 +31,8 @@ variable "password" {
   type        = string
 }
 
-variable "subnet_ids" {
-  description = "DB Subnet IDs"
+variable "private_subnet_ids" {
+  description = "DB private subnet IDs"
   type        = list(string)
 }
 

@@ -34,17 +34,31 @@ module "network" {
   tags       = local.base_tags
 }
 
+locals {
+  private_subnet_ids = [for subnet in module.network.private_subnets: subnet.id]
+}
+
+module "api" {
+  source = "../../../../modules/api"
+
+  environment = var.environment
+  name_prefix = local.name_prefix
+  private_subnet_ids = local.private_subnet_ids
+
+  tags       = local.base_tags
+}
+
 module "postgres_db" {
   source      = "../../../../modules/database/postgres"
 
-  allocated_storage = 20
-  db_name = local.name_prefix
-  identifier = "${local.app_name}-${local.environment}"
-  instance_class = "db.t3.micro"
-  password = local.secrets_map["DB_PASSWORD"]
-  subnet_ids = [for subnet in module.network.private_subnets: subnet.id]
-  username = local.secrets_map["DB_USERNAME"]
-  vpc_id = module.network.vpc.id
+  allocated_storage      = 20
+  db_name                = local.name_prefix
+  identifier             = "${local.app_name}-${local.environment}"
+  instance_class         = "db.t3.micro"
+  password               = local.secrets_map["DB_PASSWORD"]
+  private_subnet_ids     = local.private_subnet_ids
+  username               = local.secrets_map["DB_USERNAME"]
+  vpc_id                 = module.network.vpc.id
   vpc_security_group_ids = [module.network.security_group_id]
 
   tags = local.base_tags
@@ -53,7 +67,7 @@ module "postgres_db" {
 module "ecr" {
   source = "../../../../modules/ecr"
 
-  name = local.name_prefix
+  name_prefix  = local.name_prefix
   force_delete = true
 
   tags = local.base_tags
@@ -62,7 +76,7 @@ module "ecr" {
 module "logs" {
   source            = "../../../../modules/logs"
 
-  name              = local.name_prefix
+  name_prefix       = local.name_prefix
   retention_in_days = 14
 
   tags              = local.base_tags
@@ -71,7 +85,7 @@ module "logs" {
 module "iam" {
   source = "../../modules/iam/"
 
-  name = local.name_prefix
+  name_prefix = local.name_prefix
 
   tags = local.base_tags
 }
@@ -128,7 +142,7 @@ module "ecs_container_definition" {
 module "ecs_task_definition" {
   source = "../../../../modules/ecs_task_definition"
 
-  name                  = "${local.name_prefix}_task"
+  name_prefix           = "${local.name_prefix}_task"
   container_definitions = <<EOF
     ${module.ecs_container_definition.json_map_encoded_list}
   EOF
@@ -144,19 +158,16 @@ data "aws_ecr_image" "main" {
 module "ecs_cluster" {
   source = "../../../../modules/ecs_cluster"
 
-  name = "${local.name_prefix}_cluster"
-  desired_count = 1
-  latest_image_hash = data.aws_ecr_image.main.image_digest
-  launch_type = local.ecs.launch_type
+  name_prefix         = "${local.name_prefix}_cluster"
+  desired_count       = 1
+  latest_image_hash   = data.aws_ecr_image.main.image_digest
+  launch_type         = local.ecs.launch_type
+  task_definition_arn = module.ecs_task_definition.arn
+  vpc_id              = module.network.vpc.id
   network_configuration = {
     assign_public_ip = true
-    security_groups = [module.network.security_group_id]
-    subnets = [for subnet in module.network.public_subnets: subnet.id]
+    security_groups  = [module.network.security_group_id]
+    subnets          = [for subnet in module.network.public_subnets: subnet.id]
   }
-  task_definition_arn = module.ecs_task_definition.arn
-  vpc_id = module.network.vpc.id
-
-  tags = local.base_tags
+  tags                = local.base_tags
 }
-
-

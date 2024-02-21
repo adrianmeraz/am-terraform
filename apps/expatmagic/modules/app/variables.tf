@@ -33,6 +33,6 @@ variable "ecs" {
 }
 
 variable "environment" {
-  description = "Environment"
+  description = "App Environment"
   type = string
 }

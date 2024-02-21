@@ -4,9 +4,9 @@ variable "tags" {
   default     = {}
 }
 
-variable "name" {
-  description = "Name of cloudwatch group"
-  type        = string
+variable "name_prefix" {
+  description = "Name to prefix all Cloudwatch resources"
+  type        = any
 }
 
 variable "retention_in_days" {

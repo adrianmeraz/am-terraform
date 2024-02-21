@@ -14,9 +14,9 @@ variable "launch_type" {
   type        = string
 }
 
-variable "name" {
-  description = "Name of task definition"
-  type        = string
+variable "name_prefix" {
+  description = "Name to prefix all ECS Task resources"
+  type        = any
 }
 
 variable "container_definitions" {

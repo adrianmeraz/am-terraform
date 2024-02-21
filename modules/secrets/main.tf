@@ -1,5 +1,5 @@
 resource "aws_secretsmanager_secret" "main" {
-  name = var.name
+  name = var.name_prefix
   recovery_window_in_days = var.recovery_window_in_days
 
   tags = var.tags

@@ -4,7 +4,7 @@ variable "tags" {
   default     = {}
 }
 
-variable "name" {
+variable "name_prefix" {
   description = "Name of secrets manager"
   type        = string
 }

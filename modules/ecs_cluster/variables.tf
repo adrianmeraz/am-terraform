@@ -25,9 +25,9 @@ variable "memory_mb" {
   default     = 512
 }
 
-variable "name" {
-  description = "Name of cluster"
-  type        = string
+variable "name_prefix" {
+  description = "Name to prefix all ECS resources"
+  type        = any
 }
 
 variable "network_configuration" {

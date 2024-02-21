@@ -4,12 +4,12 @@ locals {
 }
 
 resource "aws_ecs_cluster" "main" {
-  name = var.name
+  name = var.name_prefix
   tags = var.tags
 }
 
 resource "aws_ecs_service" "main" {
-  name                 = "${var.name}_service"
+  name                 = "${var.name_prefix}_service"
   cluster              = aws_ecs_cluster.main.id
   desired_count        = var.desired_count
   force_new_deployment = true
