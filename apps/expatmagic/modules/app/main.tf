@@ -75,7 +75,7 @@ module "iam" {
 
   tags = local.base_tags
 }
-# Write updated secrets to a new version
+# Merging secrets from created resources with prior secrets map
 locals {
   all_secrets_map = merge(
     local.secrets_map,
