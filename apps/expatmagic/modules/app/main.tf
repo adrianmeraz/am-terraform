@@ -87,12 +87,13 @@ locals {
   )
 }
 
-resource "aws_secretsmanager_secret_version" "main" {
-  version_stages = ["LATEST"]
-  secret_id     = data.aws_secretsmanager_secret.main.id
-  secret_string = <<EOF
-${jsonencode(local.all_secrets_map)}
-EOF
+module "secret_version" {
+  # Only creates secrets if the secret string has changed
+  source          = "../../../../modules/secret_version"
+
+  create_resource = jsonencode(local.all_secrets_map) != data.aws_secretsmanager_secret_version.main.secret_string
+  secret_id       = data.aws_secretsmanager_secret.main.id
+  secret_map      = local.all_secrets_map
 }
 
 module "ecs_container_definition" {
@@ -121,7 +122,7 @@ module "ecs_container_definition" {
     }
   ]
   readonly_root_filesystem = false
-  secrets = [for key, value in jsondecode(aws_secretsmanager_secret_version.main.secret_string): {name = key, valueFrom = "${data.aws_secretsmanager_secret.main.arn}:${key}::"}]
+  secrets = [for key, value in local.all_secrets_map: {name = key, valueFrom = "${data.aws_secretsmanager_secret.main.arn}:${key}::"}]
 }
 
 module "ecs_task_definition" {
