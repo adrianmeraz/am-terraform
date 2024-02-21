@@ -14,6 +14,11 @@ variable "launch_type" {
   type        = string
 }
 
+variable "latest_image_hash" {
+  description = "Digest hash of the latest image"
+  type        = string
+}
+
 variable "memory_mb" {
   description = ""
   type        = number

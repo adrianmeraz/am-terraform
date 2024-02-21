@@ -136,11 +136,17 @@ module "ecs_task_definition" {
   launch_type           = local.ecs.launch_type
 }
 
+data "aws_ecr_image" "main" {
+  repository_name = module.ecr.name
+  most_recent       = true
+}
+
 module "ecs_cluster" {
   source = "../../../../modules/ecs_cluster"
 
   name = "${local.name_prefix}_cluster"
   desired_count = 1
+  latest_image_hash = data.aws_ecr_image.main.image_digest
   launch_type = local.ecs.launch_type
   network_configuration = {
     assign_public_ip = true
