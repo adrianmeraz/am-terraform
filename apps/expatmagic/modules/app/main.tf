@@ -38,8 +38,8 @@ locals {
   private_subnet_ids = [for subnet in module.network.private_subnets: subnet.id]
 }
 
-module "api" {
-  source = "../../../../modules/api"
+module "api_http" {
+  source = "../../../../modules/api_http"
 
   environment = var.environment
   name_prefix = local.name_prefix
