@@ -88,9 +88,10 @@ locals {
 }
 
 resource "aws_secretsmanager_secret_version" "main" {
+  version_stages = ["LATEST"]
   secret_id     = data.aws_secretsmanager_secret.main.id
   secret_string = <<EOF
-  ${jsonencode(local.all_secrets_map)}
+${jsonencode(local.all_secrets_map)}
 EOF
 }
 
