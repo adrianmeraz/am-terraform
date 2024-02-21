@@ -138,7 +138,7 @@ module "ecs_task_definition" {
 
 data "aws_ecr_image" "main" {
   repository_name = module.ecr.name
-  most_recent       = true
+  most_recent     = true
 }
 
 module "ecs_cluster" {
