@@ -18,7 +18,7 @@ resource "aws_ecs_service" "main" {
   task_definition      = var.task_definition_arn
   load_balancer {
     target_group_arn = var.lb_target_group_arn
-    container_name   = "web"
+    container_name   = var.container_name
     container_port   = 80
   }
   network_configuration {

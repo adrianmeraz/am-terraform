@@ -4,6 +4,11 @@ variable "tags" {
   default     = {}
 }
 
+variable "container_name" {
+  description = "ECS Container Name"
+  type        = string
+}
+
 variable "desired_count" {
   description = "Desired number of tasks"
   type        = number

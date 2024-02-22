@@ -1,7 +1,7 @@
 locals {
   app_name    = "expatmagic"
   environment = "dev"
-  name_prefix = "${local.app_name}_${local.environment}"
+  name_prefix = "${local.app_name}-${local.environment}"
 
   base_tags = {
     "app_name" :    local.app_name
@@ -12,7 +12,7 @@ locals {
 module "secrets" {
   source = "../../../../modules/secrets"
 
-  name                           = "${local.name_prefix}/secret"
+  name_prefix                    = "${local.name_prefix}/secret"
   recovery_window_in_days        = 0 # Allows for instant deletes
   secret_map                     = var.secret_map
 

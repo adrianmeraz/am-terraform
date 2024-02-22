@@ -125,6 +125,10 @@ module "secret_version" {
   secret_map      = local.all_secrets_map
 }
 
+locals {
+  container_name = "${local.name_prefix}-container"
+}
+
 module "ecs_container_definition" {
   source = "cloudposse/ecs-container-definition/aws"
   version = "0.61.1"
@@ -132,7 +136,7 @@ module "ecs_container_definition" {
   container_cpu             = local.ecs.vcpu
   essential                 = true
   container_memory          = local.ecs.memory_mb
-  container_name            = "${local.name_prefix}_container"
+  container_name            = local.container_name
   container_image           = "${module.ecr.repository_url}:${local.ecr.image_tag}"
   log_configuration         = {
     logDriver = "awslogs"
@@ -157,7 +161,7 @@ module "ecs_container_definition" {
 module "ecs_task_definition" {
   source = "../../../../modules/ecs_task_definition"
 
-  name_prefix           = "${local.name_prefix}_task"
+  name_prefix           = "${local.name_prefix}-task"
   container_definitions = <<EOF
     ${module.ecs_container_definition.json_map_encoded_list}
   EOF
@@ -168,7 +172,8 @@ module "ecs_task_definition" {
 module "ecs_cluster" {
   source = "../../../../modules/ecs_cluster"
 
-  name_prefix         = "${local.name_prefix}_cluster"
+  name_prefix         = "${local.name_prefix}-cluster"
+  container_name      = local.container_name
   desired_count       = 1
   launch_type         = local.ecs.launch_type
   task_definition_arn = module.ecs_task_definition.arn
