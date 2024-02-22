@@ -19,8 +19,8 @@ resource "aws_ecs_service" "main" {
   load_balancer {
     target_group_arn = var.lb_target_group_arn
     container_name   = var.container_name
-    # container_port   = 80
-    container_port   = 5000
+    container_port   = 8080
+    # container_port   = 5000
   }
   network_configuration {
     assign_public_ip = var.network_configuration.assign_public_ip
@@ -38,14 +38,24 @@ resource "aws_ecs_service" "main" {
 ##### Security group
 #######################
 resource "aws_security_group" "main" {
-  name        = "ecs_allow_http"
-  description = "Allow secure and insecure http inbound traffic and all outbound traffic"
+  name        = "ecs_sg"
+  description = "Allow http/https and tomcat inbound traffic and all outbound traffic"
   vpc_id      = var.vpc_id
 
   tags = var.tags
 }
 
-resource "aws_vpc_security_group_ingress_rule" "allow_http_ipv4" {
+resource "aws_vpc_security_group_ingress_rule" "allow_incoming_tomcat" {
+  cidr_ipv4         = local.cidr_ipv4
+  from_port         = 8080
+  to_port           = 8080
+  ip_protocol       = "tcp"
+  security_group_id = aws_security_group.main.id
+
+  tags = var.tags
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_incoming_http_ipv4" {
   cidr_ipv4         = local.cidr_ipv4
   from_port         = 80
   to_port           = 80
@@ -55,7 +65,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http_ipv4" {
   tags = var.tags
 }
 
-resource "aws_vpc_security_group_ingress_rule" "allow_http_ipv6" {
+resource "aws_vpc_security_group_ingress_rule" "allow_incoming_http_ipv6" {
   cidr_ipv6         = local.cidr_ipv6
   from_port         = 80
   to_port           = 80
@@ -65,7 +75,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http_ipv6" {
   tags = var.tags
 }
 
-resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv4" {
+resource "aws_vpc_security_group_ingress_rule" "allow_incoming_tls_ipv4" {
   cidr_ipv4         = local.cidr_ipv4
   from_port         = 443
   to_port           = 443
@@ -75,7 +85,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv4" {
   tags = var.tags
 }
 
-resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv6" {
+resource "aws_vpc_security_group_ingress_rule" "allow_incoming_tls_ipv6" {
   cidr_ipv6         = local.cidr_ipv6
   from_port         = 443
   to_port           = 443
@@ -85,7 +95,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv6" {
   tags = var.tags
 }
 
-resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
+resource "aws_vpc_security_group_egress_rule" "allow_outgoing_traffic_ipv4" {
   cidr_ipv4         = local.cidr_ipv4
   ip_protocol       = "-1" # semantically equivalent to all ports
   security_group_id = aws_security_group.main.id
@@ -93,7 +103,7 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
   tags = var.tags
 }
 
-resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv6" {
+resource "aws_vpc_security_group_egress_rule" "allow_outgoing_traffic_ipv6" {
   cidr_ipv6         = local.cidr_ipv6
   ip_protocol       = "-1" # semantically equivalent to all ports
   security_group_id = aws_security_group.main.id

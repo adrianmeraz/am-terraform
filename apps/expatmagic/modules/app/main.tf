@@ -143,9 +143,9 @@ module "ecs_container_definition" {
   }
   port_mappings = [
     {
-      containerPort = 5000
-      hostPort      = 5000
-      name          = "ecs"
+      containerPort = 8080
+      hostPort      = 8080
+      name          = local.container_name
       protocol      = "tcp"
     }
   ]
@@ -164,8 +164,8 @@ module "ecs_task_definition" {
   launch_type           = local.ecs.launch_type
 }
 
-module "ecs_cluster" {
-  source = "../../../../modules/ecs_cluster"
+module "ecs_cluster_public" {
+  source = "../../../../modules/ecs_cluster_public"
 
   name_prefix         = "${local.name_prefix}-cluster"
   container_name      = local.container_name

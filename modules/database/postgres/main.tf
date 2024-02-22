@@ -3,9 +3,28 @@ locals {
 }
 
 resource "aws_db_subnet_group" "main" {
-  name = "${var.identifier}-sg"
-  description = "DB Subnet for Postgres DB Instance"
+  name = "${var.identifier}-sng"
+  description = "DB Subnet for postgres DB"
   subnet_ids = var.private_subnet_ids
+}
+
+resource "aws_security_group" "main" {
+  name        = "${var.identifier}-sg"
+  description = "Allow incoming postgres traffic"
+  vpc_id      = var.vpc_id
+
+  tags = var.tags
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_postgres" {
+  description       = "Allow incoming postgres traffic"
+  cidr_ipv4         = local.cidr_ipv4
+  from_port         = 5432
+  to_port           = 5432
+  ip_protocol       = "tcp"
+  security_group_id = aws_security_group.main.id
+
+  tags = var.tags
 }
 
 resource "time_static" "main" {}
@@ -23,24 +42,5 @@ resource "aws_db_instance" "postgres_db" {
   publicly_accessible       = false
   skip_final_snapshot       = false
   username                  = var.username
-  vpc_security_group_ids    = [aws_security_group.postgres_db.id]
-}
-
-resource "aws_security_group" "postgres_db" {
-  name        = "db_allow_http"
-  description = "Allow insecure http inbound traffic and all outbound traffic"
-  vpc_id      = var.vpc_id
-
-  tags = var.tags
-}
-
-resource "aws_vpc_security_group_ingress_rule" "allow_postgres" {
-  description       = "Allow postgres traffic"
-  cidr_ipv4         = local.cidr_ipv4
-  from_port         = 5432
-  to_port           = 5432
-  ip_protocol       = "tcp"
-  security_group_id = aws_security_group.postgres_db.id
-
-  tags = var.tags
+  vpc_security_group_ids    = [aws_security_group.main.id]
 }
