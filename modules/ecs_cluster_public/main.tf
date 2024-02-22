@@ -3,42 +3,11 @@ locals {
   cidr_ipv6    = "::/0"
 }
 
-resource "aws_ecs_cluster" "main" {
-  name = var.name_prefix
-  tags = var.tags
-}
-
-resource "aws_ecs_service" "main" {
-  name                 = "${var.name_prefix}-service"
-  cluster              = aws_ecs_cluster.main.id
-  desired_count        = var.desired_count
-  force_new_deployment = true
-  launch_type          = var.launch_type
-  propagate_tags       = "TASK_DEFINITION"
-  task_definition      = var.task_definition_arn
-  load_balancer {
-    target_group_arn = var.lb_target_group_arn
-    container_name   = var.container_name
-    container_port   = 8080
-    # container_port   = 5000
-  }
-  network_configuration {
-    assign_public_ip = var.network_configuration.assign_public_ip
-    security_groups  = [aws_security_group.main.id]
-    subnets          = var.network_configuration.subnets
-  }
-  triggers = {
-    redeployment = plantimestamp()  # force update in-place every apply
-  }
-
-  tags = var.tags
-}
-
-#######################
+##############################################
 ##### Security group
-#######################
+##############################################
 resource "aws_security_group" "main" {
-  name        = "ecs_sg"
+  name        = "${var.name_prefix}-sg"
   description = "Allow http/https and tomcat inbound traffic and all outbound traffic"
   vpc_id      = var.vpc_id
 
@@ -107,6 +76,41 @@ resource "aws_vpc_security_group_egress_rule" "allow_outgoing_traffic_ipv6" {
   cidr_ipv6         = local.cidr_ipv6
   ip_protocol       = "-1" # semantically equivalent to all ports
   security_group_id = aws_security_group.main.id
+
+  tags = var.tags
+}
+
+##############################################
+##### ECS Cluster Config
+##############################################
+
+resource "aws_ecs_cluster" "main" {
+  name = "${var.name_prefix}-ecs-cluster"
+  tags = var.tags
+}
+
+resource "aws_ecs_service" "main" {
+  name                 = "${var.name_prefix}-ecs-service"
+  cluster              = aws_ecs_cluster.main.id
+  desired_count        = var.desired_count
+  force_new_deployment = true
+  launch_type          = var.launch_type
+  propagate_tags       = "TASK_DEFINITION"
+  task_definition      = var.task_definition_arn
+  load_balancer {
+    target_group_arn = var.lb_target_group_arn
+    container_name   = var.container_name
+    container_port   = 8080
+    # container_port   = 5000
+  }
+  network_configuration {
+    assign_public_ip = var.network_configuration.assign_public_ip
+    security_groups  = [aws_security_group.main.id]
+    subnets          = var.network_configuration.subnets
+  }
+  triggers = {
+    redeployment = plantimestamp()  # force update in-place every apply
+  }
 
   tags = var.tags
 }
