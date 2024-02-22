@@ -38,11 +38,26 @@ locals {
   private_subnet_ids = [for subnet in module.network.private_subnets: subnet.id]
 }
 
+module "alb_http" {
+  source = "../../../../modules/alb_http"
+
+  environment = var.environment
+  name_prefix = local.name_prefix
+
+  private_subnet_ids = local.private_subnet_ids
+  security_group_ids = [module.network.security_group_id]
+  vpc_id = module.network.vpc.id
+
+  tags       = local.base_tags
+}
+
 module "api_http" {
   source = "../../../../modules/api_http"
 
   environment = var.environment
   name_prefix = local.name_prefix
+
+  aws_lb_listener_arn = module.alb_http.aws_lb_listener_arn
   private_subnet_ids = local.private_subnet_ids
 
   tags       = local.base_tags

@@ -9,17 +9,23 @@ variable "environment" {
   type = string
 }
 
-variable "aws_lb_listener_arn" {
-  description = "ARN of the load balancer listener"
-  type        = string
-}
-
 variable "name_prefix" {
   description = "Name to prefix all API resources"
   type        = string
 }
 
 variable "private_subnet_ids" {
-  description = "Private subnet IDs"
+  description = "Private subnets"
   type        = list(string)
 }
+
+variable "security_group_ids" {
+  description = "Security group ids"
+  type        = list(string)
+}
+
+variable "vpc_id" {
+  description = "Id of VPC"
+  type        = string
+}
+
