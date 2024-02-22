@@ -67,8 +67,8 @@ module "postgres_db" {
   source      = "../../../../modules/database/postgres"
 
   allocated_storage      = 20
-  db_name                = local.name_prefix
-  identifier             = "${local.app_name}-${local.environment}"
+  db_name                = "${local.app_name}${local.environment}"
+  identifier             = local.name_prefix
   instance_class         = "db.t3.micro"
   password               = local.secrets_map["DB_PASSWORD"]
   private_subnet_ids     = local.private_subnet_ids
@@ -173,6 +173,7 @@ module "ecs_cluster" {
   launch_type         = local.ecs.launch_type
   task_definition_arn = module.ecs_task_definition.arn
   vpc_id              = module.network.vpc.id
+  lb_target_group_arn = module.alb_http.aws_lb_target_group_arn
   network_configuration = {
     assign_public_ip = true
     security_groups  = [module.network.security_group_id]

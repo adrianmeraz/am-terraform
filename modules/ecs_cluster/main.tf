@@ -16,6 +16,11 @@ resource "aws_ecs_service" "main" {
   launch_type          = var.launch_type
   propagate_tags       = "TASK_DEFINITION"
   task_definition      = var.task_definition_arn
+  load_balancer {
+    target_group_arn = var.lb_target_group_arn
+    container_name   = "web"
+    container_port   = 80
+  }
   network_configuration {
     assign_public_ip = var.network_configuration.assign_public_ip
     security_groups  = [aws_security_group.main.id]

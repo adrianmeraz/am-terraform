@@ -14,6 +14,11 @@ variable "launch_type" {
   type        = string
 }
 
+variable "lb_target_group_arn" {
+  description = "LB Target Group ARN"
+  type        = string
+}
+
 variable "memory_mb" {
   description = ""
   type        = number
