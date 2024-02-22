@@ -4,12 +4,6 @@ variable "tags" {
   default     = {}
 }
 
-variable "create_resource" {
-  description = "Flag if secret version will be created"
-  type        = bool
-  default     = true
-}
-
 variable "secret_id" {
   description = "ID of secrets manager"
   type        = string

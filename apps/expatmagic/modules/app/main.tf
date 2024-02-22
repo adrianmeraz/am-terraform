@@ -105,8 +105,12 @@ module "iam" {
   tags = local.base_tags
 }
 # Merging secrets from created resources with prior secrets map
-locals {
-  all_secrets_map = merge(
+module "secret_version" {
+  # Only creates secrets if the secret string has changed
+  source          = "../../../../modules/secret_version"
+
+  secret_id       = data.aws_secretsmanager_secret.main.id
+  secret_map      = merge(
     local.secrets_map,
     {
       "AWS_ECR_REGISTRY_NAME": module.ecr.name
@@ -114,15 +118,6 @@ locals {
       "DB_URL": module.postgres_db.jdbc_url
     }
   )
-}
-
-module "secret_version" {
-  # Only creates secrets if the secret string has changed
-  source          = "../../../../modules/secret_version"
-
-  create_resource = jsonencode(local.all_secrets_map) != data.aws_secretsmanager_secret_version.main.secret_string
-  secret_id       = data.aws_secretsmanager_secret.main.id
-  secret_map      = local.all_secrets_map
 }
 
 locals {
@@ -155,7 +150,7 @@ module "ecs_container_definition" {
     }
   ]
   readonly_root_filesystem = false
-  secrets = [for key, value in local.all_secrets_map: {name = key, valueFrom = "${data.aws_secretsmanager_secret.main.arn}:${key}::"}]
+  secrets = [for key, value in module.secret_version.secret_map: {name = key, valueFrom = "${data.aws_secretsmanager_secret.main.arn}:${key}::"}]
 }
 
 module "ecs_task_definition" {
