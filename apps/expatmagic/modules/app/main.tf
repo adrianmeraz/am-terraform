@@ -42,7 +42,7 @@ module "alb_http" {
   source = "../../../../modules/alb_http"
 
   environment = var.environment
-  name_prefix = local.name_prefix
+  name_prefix = local.app_name
 
   private_subnet_ids = local.private_subnet_ids
   security_group_ids = [module.network.security_group_id]
