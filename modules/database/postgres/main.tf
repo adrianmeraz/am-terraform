@@ -3,7 +3,7 @@ locals {
 }
 
 resource "aws_db_subnet_group" "main" {
-  name = "${var.identifier}_sg"
+  name = "${var.identifier}-sg"
   description = "DB Subnet for Postgres DB Instance"
   subnet_ids = var.private_subnet_ids
 }

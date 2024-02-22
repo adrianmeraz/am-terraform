@@ -1,5 +1,5 @@
 resource "aws_apigatewayv2_vpc_link" "private" {
-  name               = "${var.name_prefix}_api_vpc_link"
+  name               = "${var.name_prefix}-api-vpc-link"
   security_group_ids = []
   subnet_ids         = var.private_subnet_ids
 
@@ -7,7 +7,7 @@ resource "aws_apigatewayv2_vpc_link" "private" {
 }
 
 resource "aws_apigatewayv2_api" "http" {
-  name          = "${var.name_prefix}_api"
+  name          = "${var.name_prefix}-api"
   protocol_type = "HTTP"
 
   tags = var.tags
@@ -38,7 +38,7 @@ resource "aws_apigatewayv2_route" "any" {
 # Set a default stage
 resource "aws_apigatewayv2_stage" "default" {
   api_id = local.api_id
-  name   = "${var.name_prefix}_stage"
+  name   = "${var.name_prefix}-stage"
   auto_deploy = true
 
   tags = var.tags

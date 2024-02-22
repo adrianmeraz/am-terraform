@@ -1,7 +1,3 @@
-locals {
-  name_prefix = "${var.name_prefix}-${var.environment}"
-}
-
 resource "aws_lb" "main" {
   name = "${var.name_prefix}-lb"
   load_balancer_type = "application"
@@ -13,7 +9,7 @@ resource "aws_lb" "main" {
 }
 
 resource "aws_lb_target_group" "main" {
-  name = "${local.name_prefix}-lb-tg"
+  name = "${var.name_prefix}-lb-tg"
   port        = 80
   protocol    = "HTTP"
   target_type = "ip"

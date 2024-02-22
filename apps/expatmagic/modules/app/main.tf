@@ -11,7 +11,7 @@ locals {
 
   app_name = "expatmagic"
   environment = var.environment
-  name_prefix = "${local.app_name}_${local.environment}"
+  name_prefix = "${local.app_name}-${local.environment}"
   ecr = {
     image_tag: "latest"
   }

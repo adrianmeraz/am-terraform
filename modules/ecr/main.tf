@@ -1,7 +1,7 @@
 data "aws_ecr_authorization_token" "token" {}
 
 resource  "aws_ecr_repository" "main" {
-  name = "${var.name_prefix}_ecr"
+  name = "${var.name_prefix}-ecr"
 
   force_delete = var.force_delete
   image_tag_mutability = var.image_tag_mutability
