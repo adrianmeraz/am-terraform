@@ -165,11 +165,6 @@ module "ecs_task_definition" {
   launch_type           = local.ecs.launch_type
 }
 
-data "aws_ecr_image" "main" {
-  repository_name = module.ecr.name
-  most_recent     = true
-}
-
 module "ecs_cluster" {
   source = "../../../../modules/ecs_cluster"
 
