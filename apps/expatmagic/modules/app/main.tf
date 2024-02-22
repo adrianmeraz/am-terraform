@@ -175,7 +175,6 @@ module "ecs_cluster" {
 
   name_prefix         = "${local.name_prefix}_cluster"
   desired_count       = 1
-  latest_image_hash   = data.aws_ecr_image.main.image_digest
   launch_type         = local.ecs.launch_type
   task_definition_arn = module.ecs_task_definition.arn
   vpc_id              = module.network.vpc.id
