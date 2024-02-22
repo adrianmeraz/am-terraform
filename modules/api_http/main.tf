@@ -20,6 +20,7 @@ locals {
 resource "aws_apigatewayv2_integration" "main" {
   api_id                 = local.api_id
   connection_type        = "VPC_LINK"
+  connection_id          = aws_apigatewayv2_vpc_link.private.id
   integration_method     = "ANY"
   integration_type       = "HTTP_PROXY"
   integration_uri        = var.aws_lb_listener_arn
