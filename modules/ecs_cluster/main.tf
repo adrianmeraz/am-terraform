@@ -19,7 +19,8 @@ resource "aws_ecs_service" "main" {
   load_balancer {
     target_group_arn = var.lb_target_group_arn
     container_name   = var.container_name
-    container_port   = 80
+    # container_port   = 80
+    container_port   = 5000
   }
   network_configuration {
     assign_public_ip = var.network_configuration.assign_public_ip
