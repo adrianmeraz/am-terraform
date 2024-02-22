@@ -120,7 +120,7 @@ module "secret_version" {
   # Only creates secrets if the secret string has changed
   source          = "../../../../modules/secret_version"
 
-  create_resource = true
+  create_resource = jsonencode(local.all_secrets_map) != data.aws_secretsmanager_secret_version.main.secret_string
   secret_id       = data.aws_secretsmanager_secret.main.id
   secret_map      = local.all_secrets_map
 }
