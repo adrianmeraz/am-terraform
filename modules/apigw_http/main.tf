@@ -37,9 +37,13 @@ resource "aws_apigatewayv2_route" "any" {
 
 # Set a default stage
 resource "aws_apigatewayv2_stage" "default" {
+  auto_deploy = true
   api_id = local.api_id
   name   = "${var.name_prefix}-stage"
-  auto_deploy = true
+  access_log_settings {
+    destination_arn = var.cloudwatch_log_group_arn
+    format          = "JSON"
+  }
 
   tags = var.tags
 }

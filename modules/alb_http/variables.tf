@@ -9,6 +9,11 @@ variable "environment" {
   type = string
 }
 
+variable "health_check_path" {
+  description = "Health check path"
+  type        = string
+}
+
 variable "name_prefix" {
   description = "Name to prefix all API resources"
   type        = string

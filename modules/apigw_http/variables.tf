@@ -14,6 +14,11 @@ variable "aws_lb_listener_arn" {
   type        = string
 }
 
+variable "cloudwatch_log_group_arn" {
+  description = "Cloudwatch Log Group ARN"
+  type        = string
+}
+
 variable "name_prefix" {
   description = "Name to prefix all API resources"
   type        = string

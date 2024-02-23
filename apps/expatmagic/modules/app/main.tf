@@ -44,6 +44,7 @@ module "alb_http" {
   environment = var.environment
   name_prefix = local.app_name
 
+  health_check_path = "/actuator"
   private_subnet_ids = local.private_subnet_ids
   security_group_ids = [module.network.security_group_id]
   vpc_id = module.network.vpc.id
@@ -51,13 +52,23 @@ module "alb_http" {
   tags       = local.base_tags
 }
 
-module "api_http" {
-  source = "../../../../modules/api_http"
+module "apigw_logs" {
+  source            = "../../../../modules/logs"
+
+  name              = "/${local.app_name}/${local.environment}/apigw"
+  retention_in_days = 14
+
+  tags              = local.base_tags
+}
+
+module "apigw_http" {
+  source = "../../../../modules/apigw_http"
 
   environment = var.environment
   name_prefix = local.name_prefix
 
   aws_lb_listener_arn = module.alb_http.aws_lb_listener_arn
+  cloudwatch_log_group_arn = module.apigw_logs.cloudwatch_log_group_arn
   private_subnet_ids = local.private_subnet_ids
 
   tags       = local.base_tags
@@ -136,7 +147,7 @@ module "ecs_container_definition" {
   log_configuration         = {
     logDriver = "awslogs"
     options   = {
-      awslogs-group         = module.ecs_logs.log_group.name
+      awslogs-group         = module.ecs_logs.cloudwatch_log_group.name
       awslogs-region        = var.aws_region # Get Region from data block
       awslogs-stream-prefix = local.name_prefix
     }
