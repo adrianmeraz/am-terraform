@@ -67,7 +67,7 @@ module "apigw_http" {
   environment = var.environment
   name_prefix = local.name_prefix
 
-  aws_lb_listener_arn = module.alb_http.aws_lb_listener_arn
+  aws_lb_listener_arn = module.alb_http.aws_lb_http_listener_arn
   cloudwatch_log_group_arn = module.apigw_logs.cloudwatch_log_group_arn
   private_subnet_ids = local.private_subnet_ids
 

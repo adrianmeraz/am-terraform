@@ -8,7 +8,7 @@ resource "aws_lb" "main" {
   tags               = var.tags
 }
 
-resource "aws_lb_target_group" "main" {
+resource "aws_lb_target_group" "tomcat" {
   name = "${var.name_prefix}-lb-tg"
   # port        = 80
   port        = 8080
@@ -23,14 +23,27 @@ resource "aws_lb_target_group" "main" {
   tags = var.tags
 }
 
-# Create the ALB listener with the target group.
-resource "aws_lb_listener" "main" {
+# Create the ALB HTTP listener with the target group.
+resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.main.arn
   port              = 80
   protocol          = "HTTP"
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.main.arn
+    target_group_arn = aws_lb_target_group.tomcat.arn
+  }
+
+  tags = var.tags
+}
+
+# Create the ALB HTTPS listener with the target group.
+resource "aws_lb_listener" "https" {
+  load_balancer_arn = aws_lb.main.arn
+  port              = 443
+  protocol          = "HTTP"
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.tomcat.arn
   }
 
   tags = var.tags

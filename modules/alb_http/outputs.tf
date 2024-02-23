@@ -1,6 +1,11 @@
-output "aws_lb_listener_arn" {
-  value = aws_lb_listener.main.arn
-  description = "LB Listener ARN"
+output "aws_lb_http_listener_arn" {
+  value = aws_lb_listener.http.arn
+  description = "LB HTTP Listener ARN"
+}
+
+output "aws_lb_https_listener_arn" {
+  value = aws_lb_listener.http.arn
+  description = "LB HTTPS Listener ARN"
 }
 
 output "aws_lb_target_group_arn" {
