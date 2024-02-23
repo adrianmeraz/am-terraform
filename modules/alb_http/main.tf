@@ -8,10 +8,9 @@ resource "aws_lb" "main" {
   tags               = var.tags
 }
 
-resource "aws_lb_target_group" "tomcat" {
+resource "aws_lb_target_group" "app" {
   name = "${var.name_prefix}-lb-tg"
-  # port        = 80
-  port        = 8080
+  port        = var.app_container_port
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = var.vpc_id
@@ -30,7 +29,7 @@ resource "aws_lb_listener" "http" {
   protocol          = "HTTP"
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.tomcat.arn
+    target_group_arn = aws_lb_target_group.app.arn
   }
 
   tags = var.tags
@@ -43,7 +42,7 @@ resource "aws_lb_listener" "https" {
   protocol          = "HTTP"
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.tomcat.arn
+    target_group_arn = aws_lb_target_group.app.arn
   }
 
   tags = var.tags

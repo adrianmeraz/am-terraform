@@ -9,6 +9,11 @@ variable "environment" {
   type = string
 }
 
+variable "app_container_port" {
+  description = "App Container Port"
+  type        = number
+}
+
 variable "health_check_path" {
   description = "Health check path"
   type        = string

@@ -39,7 +39,7 @@ resource "aws_apigatewayv2_route" "any" {
 resource "aws_apigatewayv2_stage" "default" {
   auto_deploy = true
   api_id = local.api_id
-  name   = "${var.name_prefix}-stage"
+  name   = "$default"
   access_log_settings {
     destination_arn = var.cloudwatch_log_group_arn
     # Format taken from here: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html
