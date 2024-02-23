@@ -88,15 +88,6 @@ module "ecr" {
   tags = local.base_tags
 }
 
-module "logs" {
-  source            = "../../../../modules/logs"
-
-  name_prefix       = local.name_prefix
-  retention_in_days = 14
-
-  tags              = local.base_tags
-}
-
 module "iam" {
   source = "../../modules/iam/"
 
@@ -120,6 +111,15 @@ module "secret_version" {
   )
 }
 
+module "ecs_logs" {
+  source            = "../../../../modules/logs"
+
+  name              = "/${local.app_name}/${local.environment}/ecs"
+  retention_in_days = 14
+
+  tags              = local.base_tags
+}
+
 locals {
   container_name = "${local.name_prefix}-container"
 }
@@ -136,7 +136,7 @@ module "ecs_container_definition" {
   log_configuration         = {
     logDriver = "awslogs"
     options   = {
-      awslogs-group         = module.logs.log_group.name
+      awslogs-group         = module.ecs_logs.log_group.name
       awslogs-region        = var.aws_region # Get Region from data block
       awslogs-stream-prefix = local.name_prefix
     }
