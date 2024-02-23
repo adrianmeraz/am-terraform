@@ -10,7 +10,12 @@ resource "aws_lb" "main" {
 
 resource "aws_lb_target_group" "main" {
   name = "${var.name_prefix}-lb-tg"
-  port        = 80
+  # port        = 80
+  health_check {
+    enabled = all
+    path = "/actuator"
+  }
+  port        = 8080  # TODO Testing
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = var.vpc_id
