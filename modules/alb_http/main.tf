@@ -12,7 +12,7 @@ resource "aws_lb_target_group" "main" {
   name = "${var.name_prefix}-lb-tg"
   # port        = 80
   health_check {
-    enabled = all
+    enabled = true
     path = "/actuator"
   }
   port        = 8080  # TODO Testing
