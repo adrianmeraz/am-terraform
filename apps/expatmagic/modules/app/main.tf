@@ -156,7 +156,7 @@ module "ecs_container_definition" {
 module "ecs_task_definition" {
   source = "../../../../modules/ecs_task_definition"
 
-  name_prefix           = "${local.name_prefix}-task"
+  name_prefix           = local.name_prefix
   container_definitions = <<EOF
     ${module.ecs_container_definition.json_map_encoded_list}
   EOF
@@ -167,7 +167,7 @@ module "ecs_task_definition" {
 module "ecs_cluster_public" {
   source = "../../../../modules/ecs_cluster_public"
 
-  name_prefix         = "${local.name_prefix}-cluster"
+  name_prefix         = local.name_prefix
   container_name      = local.container_name
   desired_count       = 1
   launch_type         = local.ecs.launch_type
