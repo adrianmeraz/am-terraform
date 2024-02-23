@@ -42,7 +42,8 @@ resource "aws_apigatewayv2_stage" "default" {
   name   = "${var.name_prefix}-stage"
   access_log_settings {
     destination_arn = var.cloudwatch_log_group_arn
-    format          = "JSON"
+    # Format taken from here: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html
+    format          = "{'requestId':'$context.requestId','extendedRequestId':'$context.extendedRequestId','ip':'$context.identity.sourceIp','caller':'$context.identity.caller','user':'$context.identity.user','requestTime':'$context.requestTime','httpMethod':'$context.httpMethod','resourcePath':'$context.resourcePath','status':'$context.status','protocol':'$context.protocol','responseLength':'$context.responseLength'}"
   }
 
   tags = var.tags
