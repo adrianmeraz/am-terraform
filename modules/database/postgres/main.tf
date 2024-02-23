@@ -3,13 +3,13 @@ locals {
 }
 
 resource "aws_db_subnet_group" "main" {
-  name = "${var.identifier}-sng"
+  name = "${var.identifier}-postgres-sng"
   description = "DB Subnet for postgres DB"
   subnet_ids = var.private_subnet_ids
 }
 
 resource "aws_security_group" "main" {
-  name        = "${var.identifier}-sg"
+  name        = "${var.identifier}-postgres-sg"
   description = "Allow incoming postgres traffic"
   vpc_id      = var.vpc_id
 
@@ -36,7 +36,7 @@ resource "aws_db_instance" "postgres_db" {
   engine                    = "postgres"
   engine_version            = "14.5"
   final_snapshot_identifier = "${var.identifier}-${time_static.main.unix}-final"
-  identifier                = "${var.identifier}-db"
+  identifier                = "${var.identifier}-postgres-db"
   instance_class            = var.instance_class
   password                  = var.password
   publicly_accessible       = false
