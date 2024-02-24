@@ -17,6 +17,7 @@ resource "aws_lb_target_group" "app" {
   health_check {
     enabled = true
     path = var.health_check_path
+    port = var.app_container_port
   }
 
   tags = var.tags
