@@ -4,8 +4,18 @@ variable "tags" {
   default     = {}
 }
 
-variable "name" {
-  description = "Cloudwatch name"
+variable "app_name" {
+  description = "App Name"
+  type        = string
+}
+
+variable "environment" {
+  description = "Environment name"
+  type        = string
+}
+
+variable "service_name" {
+  description = "Abbreviation of service name"
   type        = string
 }
 

@@ -64,8 +64,10 @@ module "alb_http" {
 module "apigw_logs" {
   source            = "../../../../modules/logs"
 
-  name              = "/${local.app_name}/${local.environment}/apigw"
-  tags              = local.base_tags
+  app_name     = local.app_name
+  environment  = local.environment
+  service_name = "apigw"
+  tags         = local.base_tags
 }
 
 module "apigw_http" {
@@ -132,8 +134,10 @@ module "secret_version" {
 module "ecs_logs" {
   source            = "../../../../modules/logs"
 
-  name              = "/${local.app_name}/${local.environment}/ecs"
-  tags              = local.base_tags
+  app_name     = local.app_name
+  environment  = local.environment
+  service_name = "ecs"
+  tags         = local.base_tags
 }
 
 locals {
