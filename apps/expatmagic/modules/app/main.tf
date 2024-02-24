@@ -65,8 +65,6 @@ module "apigw_logs" {
   source            = "../../../../modules/logs"
 
   name              = "/${local.app_name}/${local.environment}/apigw"
-  retention_in_days = 14
-
   tags              = local.base_tags
 }
 
@@ -135,8 +133,6 @@ module "ecs_logs" {
   source            = "../../../../modules/logs"
 
   name              = "/${local.app_name}/${local.environment}/ecs"
-  retention_in_days = 14
-
   tags              = local.base_tags
 }
 
