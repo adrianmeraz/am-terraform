@@ -14,9 +14,27 @@ variable "app_container_port" {
   type        = number
 }
 
-variable "health_check_path" {
-  description = "Health check path"
-  type        = string
+variable "alb_tg_health_check" {
+  description = "alb target group health check config"
+  type = object({
+    interval            = number
+    enabled             = bool
+    path                = string
+    port                = number
+    protocol            = string
+    healthy_threshold   = number
+    unhealthy_threshold = number
+  })
+
+  default = {
+    interval            = 60
+    enabled             = true
+    path                = "/"
+    port                = 8080
+    protocol            = "HTTP"
+    healthy_threshold   = 3
+    unhealthy_threshold = 3
+  }
 }
 
 variable "name_prefix" {

@@ -15,9 +15,13 @@ resource "aws_lb_target_group" "app" {
   target_type = "ip"
   vpc_id      = var.vpc_id
   health_check {
-    enabled = true
-    path = var.health_check_path
-    port = var.app_container_port
+    interval            = var.alb_tg_health_check.interval
+    enabled             = var.alb_tg_health_check.enabled
+    path                = var.alb_tg_health_check.path
+    port                = var.alb_tg_health_check.port
+    protocol            = var.alb_tg_health_check.protocol
+    healthy_threshold   = var.alb_tg_health_check.healthy_threshold
+    unhealthy_threshold = var.alb_tg_health_check.unhealthy_threshold
   }
 
   tags = var.tags

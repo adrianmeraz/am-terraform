@@ -45,7 +45,15 @@ module "alb_http" {
   name_prefix = local.app_name
 
   app_container_port = 8080
-  health_check_path  = "/actuator/health"
+  alb_tg_health_check = {
+    interval            = 60
+    enabled             = true
+    path                = "/actuator/health"
+    port                = 8080
+    protocol            = "HTTP"
+    healthy_threshold   = 3
+    unhealthy_threshold = 3
+  }
   private_subnet_ids = local.private_subnet_ids
   security_group_ids = [module.network.security_group_id]
   vpc_id = module.network.vpc.id

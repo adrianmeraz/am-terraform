@@ -26,9 +26,9 @@ variable "ecs" {
     vcpu        = number
   })
   default = {
-    launch_type: "FARGATE"
-    memory_mb:   512
-    vcpu:        256
+    launch_type = "FARGATE"
+    memory_mb   = 512
+    vcpu        = 256
   }
 }
 
