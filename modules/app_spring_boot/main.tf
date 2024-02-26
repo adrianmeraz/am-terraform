@@ -74,7 +74,7 @@ module "apigw_logs" {
 }
 
 module "apigw_ecs_http" {
-  source = "../apigw_ecs_http"
+  source = "../apigwv2_ecs_http"
 
   environment              = var.environment
   name_prefix              = local.name_prefix
@@ -87,7 +87,7 @@ module "apigw_ecs_http" {
 }
 
 module "postgres_db" {
-  source      = "../database/postgres"
+  source      = "../rds_postgres"
 
   allocated_storage      = 20
   db_name                = "${local.app_name}${local.environment}"

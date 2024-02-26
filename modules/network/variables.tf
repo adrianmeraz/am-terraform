@@ -12,29 +12,13 @@ variable "cidr_block" {
 
 variable "subnet_counts" {
   description = "Number of subnets"
-  type = map(number)
+  type        = map(number)
+  validation {
+    condition = (var.subnet_counts.public > 0) && (var.subnet_counts.private > 1)
+    error_message = "There must be at least 2 private and 1 public subnets."
+  }
   default = {
     public  = 1,
     private = 2
   }
-}
-
-variable "public_subnet_blocks" {
-  type = list(string)
-  default = [
-    "10.0.1.0/24",
-    "10.0.2.0/24",
-    "10.0.3.0/24",
-    "10.0.4.0/24"
-  ]
-}
-
-variable "private_subnet_blocks" {
-  type = list(string)
-  default = [
-    "10.0.101.0/24",
-    "10.0.102.0/24",
-    "10.0.103.0/24",
-    "10.0.104.0/24"
-  ]
 }

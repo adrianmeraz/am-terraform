@@ -1,12 +1,4 @@
-resource "aws_apigatewayv2_vpc_link" "private" {
-  name               = "${var.name_prefix}-api-vpc-link"
-  security_group_ids = []
-  subnet_ids         = var.private_subnet_ids
-
-  tags = var.tags
-}
-
-resource "aws_apigatewayv2_api" "http" {
+resource "aws_api_gateway_rest_api" "http" {
   name          = "${var.name_prefix}-api"
   protocol_type = "HTTP"
 
@@ -15,6 +7,12 @@ resource "aws_apigatewayv2_api" "http" {
 
 locals {
   api_id = aws_apigatewayv2_api.http.id
+}
+
+resource "aws_api_gateway_resource" "root" {
+  rest_api_id = local.api_id
+  parent_id = aws_api_gateway_rest_api.my_api.root_resource_id
+  path_part = "mypath"
 }
 
 resource "aws_apigatewayv2_integration" "main" {

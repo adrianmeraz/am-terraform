@@ -58,7 +58,7 @@ module "apigw_lambda_http" {
 }
 
 module "postgres_db" {
-  source      = "../database/postgres"
+  source      = "../postgres"
 
   allocated_storage      = 20
   db_name                = "${local.app_name}${local.environment}"
@@ -82,8 +82,8 @@ module "ecr" {
   tags         = data.aws_default_tags.main.tags
 }
 
-module "iam_ecs" {
-  source = "../iam_ecs"
+module "iam_lambda" {
+  source = "../iam_lambda"
 
   name_prefix = local.name_prefix
 

@@ -1,3 +1,8 @@
+locals {
+  public_subnet_blocks  = [for index in range(var.subnet_counts.public): cidrsubnet(var.cidr_block, 8, index+1)]
+  private_subnet_blocks = [for index in range(var.subnet_counts.private): cidrsubnet(var.cidr_block, 8, index+101)]
+}
+
 resource "aws_vpc" "main" {
   cidr_block = var.cidr_block
   enable_dns_support = true
@@ -20,7 +25,7 @@ resource "aws_subnet" "private" {
   count = var.subnet_counts.private
 
   availability_zone = data.aws_availability_zones.available.names[count.index]
-  cidr_block = var.private_subnet_blocks[count.index]
+  cidr_block = local.private_subnet_blocks[count.index]
   map_public_ip_on_launch = false
   vpc_id = aws_vpc.main.id
 
@@ -45,14 +50,14 @@ resource "aws_subnet" "public" {
   count = var.subnet_counts.public
 
   availability_zone = data.aws_availability_zones.available.names[count.index]
-  cidr_block = var.public_subnet_blocks[count.index]
+  cidr_block = local.public_subnet_blocks[count.index]
   map_public_ip_on_launch = true
   vpc_id = aws_vpc.main.id
 
   tags = var.tags
 }
 
-resource "aws_route_table" "public" {
+resource "aws_route_table" "public_allow_all" {
   vpc_id = aws_vpc.main.id
   route {
     cidr_block = "0.0.0.0/0"
@@ -65,6 +70,6 @@ resource "aws_route_table" "public" {
 resource "aws_route_table_association" "public" {
   count = var.subnet_counts.public
 
-  route_table_id = aws_route_table.public.id
+  route_table_id = aws_route_table.public_allow_all.id
   subnet_id      = aws_subnet.public[count.index].id
 }

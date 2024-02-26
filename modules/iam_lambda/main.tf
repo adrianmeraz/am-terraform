@@ -53,3 +53,26 @@ resource "aws_iam_role_policy_attachment" "ssm" {
   role       = aws_iam_role.lambda.name
   policy_arn = aws_iam_policy.ssm.arn
 }
+
+data "aws_iam_policy_document" "logs" {
+  statement {
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    effect  = "Allow"
+    resources = [
+      "arn:aws:logs:*:*:*"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "logs" {
+  policy = data.aws_iam_policy_document.logs.json
+}
+
+resource "aws_iam_role_policy_attachment" "logs" {
+  role       = aws_iam_role.lambda.name
+  policy_arn = aws_iam_policy.logs.arn
+}
