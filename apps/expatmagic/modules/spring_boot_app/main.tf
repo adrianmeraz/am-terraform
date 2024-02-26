@@ -112,7 +112,7 @@ module "ecr" {
 }
 
 module "iam" {
-  source = "../../modules/iam/"
+  source = "../../../../modules/iam_ecs/"
 
   name_prefix = local.name_prefix
 

@@ -2,7 +2,7 @@ locals {
   app_name    = "expatmagic"
   environment = "dev"
 }
-module "app" {
+module "spring_boot_app" {
   source = "../../modules/spring_boot_app"
 
   app_name                       = local.app_name
