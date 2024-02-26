@@ -1,8 +1,3 @@
-variable "app_name" {
-  description = "App Name"
-  type = string
-}
-
 variable "aws_access_key" {
   description = "AWS Access Key ID"
   type = string
@@ -20,10 +15,5 @@ variable "aws_secret_key" {
 
 variable "aws_secretsmanager_secret_name" {
   description = "AWS Secret Name"
-  type = string
-}
-
-variable "environment" {
-  description = "App Environment"
   type = string
 }
