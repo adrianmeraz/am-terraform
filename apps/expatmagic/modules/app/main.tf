@@ -170,7 +170,6 @@ module "ecs_container_definition" {
   readonly_root_filesystem = false
   secrets = [for key, value in module.secret_version.secret_map: {name = key, valueFrom = "${data.aws_secretsmanager_secret.main.arn}:${key}::"}]
 }
-
 module "ecs_task_definition" {
   source = "../../../../modules/ecs_task_definition"
 
