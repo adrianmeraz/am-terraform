@@ -24,6 +24,11 @@ locals {
   }
 }
 
+resource "aws_ce_cost_allocation_tag" "example" {
+  tag_key = "app_name"
+  status  = "Active"
+}
+
 module "network" {
   source = "../../../../modules/network"
 
