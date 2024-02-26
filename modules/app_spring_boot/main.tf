@@ -73,7 +73,7 @@ module "apigw_logs" {
   tags         = data.aws_default_tags.main.tags
 }
 
-module "apigw_http" {
+module "apigw_ecs_http" {
   source = "../apigw_ecs_http"
 
   environment              = var.environment

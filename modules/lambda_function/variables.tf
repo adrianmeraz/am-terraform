@@ -12,7 +12,6 @@ variable "function_name" {
 variable "handler" {
   description = "Function entrypoint in your code."
   type        = string
-  default     = null
 }
 
 variable "memory_size" {
@@ -39,5 +38,10 @@ variable "role" {
 variable "runtime" {
   description = "Identifier of the function's runtime."
   type        = string
-  default     = null
+}
+
+variable "source_code_hash" {
+  description = "Identifier of the function's runtime."
+  type        = string
+  default     = ""
 }
