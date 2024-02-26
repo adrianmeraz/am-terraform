@@ -2,8 +2,8 @@ locals {
   app_name    = "expatmagic"
   environment = "dev"
 }
-module "spring_boot_app" {
-  source = "../../modules/spring_boot_app"
+module "app_spring_boot" {
+  source = "../../../../modules/app_spring_boot"
 
   app_name                       = local.app_name
   aws_access_key                 = var.aws_access_key

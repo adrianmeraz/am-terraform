@@ -30,7 +30,7 @@ resource "aws_ce_cost_allocation_tag" "example" {
 }
 
 module "network" {
-  source = "../../../../modules/network"
+  source = "../network"
 
   cidr_block = "10.0.0.0/16"
 
@@ -42,7 +42,7 @@ locals {
 }
 
 module "alb_http" {
-  source = "../../../../modules/alb_http"
+  source = "../alb_http"
 
   environment = var.environment
   name_prefix = local.app_name
@@ -65,7 +65,7 @@ module "alb_http" {
 }
 
 module "apigw_logs" {
-  source            = "../../../../modules/logs"
+  source            = "../logs"
 
   app_name     = local.app_name
   environment  = local.environment
@@ -74,7 +74,7 @@ module "apigw_logs" {
 }
 
 module "apigw_http" {
-  source = "../../../../modules/apigw_http"
+  source = "../apigw_ecs_http"
 
   environment              = var.environment
   name_prefix              = local.name_prefix
@@ -87,7 +87,7 @@ module "apigw_http" {
 }
 
 module "postgres_db" {
-  source      = "../../../../modules/database/postgres"
+  source      = "../database/postgres"
 
   allocated_storage      = 20
   db_name                = "${local.app_name}${local.environment}"
@@ -103,7 +103,7 @@ module "postgres_db" {
 }
 
 module "ecr" {
-  source = "../../../../modules/ecr"
+  source = "../ecr"
 
   name_prefix  = local.name_prefix
   force_delete = true
@@ -111,8 +111,8 @@ module "ecr" {
   tags         = data.aws_default_tags.main.tags
 }
 
-module "iam" {
-  source = "../../../../modules/iam_ecs/"
+module "iam_ecs" {
+  source = "../iam_ecs"
 
   name_prefix = local.name_prefix
 
@@ -121,7 +121,7 @@ module "iam" {
 # Merging secrets from created resources with prior secrets map
 module "secret_version" {
   # Only creates secrets if the secret string has changed
-  source          = "../../../../modules/secret_version"
+  source          = "../secret_version"
 
   secret_id       = data.aws_secretsmanager_secret.main.id
   secret_map      = merge(
@@ -135,7 +135,7 @@ module "secret_version" {
 }
 
 module "ecs_logs" {
-  source            = "../../../../modules/logs"
+  source            = "../logs"
 
   app_name     = local.app_name
   environment  = local.environment
@@ -175,20 +175,21 @@ module "ecs_container_definition" {
   readonly_root_filesystem = false
   secrets = [for key, value in module.secret_version.secret_map: {name = key, valueFrom = "${data.aws_secretsmanager_secret.main.arn}:${key}::"}]
 }
+
 module "ecs_task_definition" {
-  source = "../../../../modules/ecs_task_definition"
+  source = "../ecs_task_definition"
 
   name_prefix           = local.name_prefix
   container_definitions = <<EOF
     ${module.ecs_container_definition.json_map_encoded_list}
   EOF
-  execution_role_arn    = module.iam.role_arn
+  execution_role_arn    = module.iam_ecs.role_arn
   launch_type           = local.ecs.launch_type
   tags                  = data.aws_default_tags.main.tags
 }
 
 module "ecs_cluster_public" {
-  source = "../../../../modules/ecs_cluster_public"
+  source = "../ecs_cluster_public"
 
   name_prefix         = local.name_prefix
   container_name      = local.container_name
