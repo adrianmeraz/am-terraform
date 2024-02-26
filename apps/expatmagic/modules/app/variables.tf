@@ -1,3 +1,8 @@
+variable "app_name" {
+  description = "App Name"
+  type = string
+}
+
 variable "aws_access_key" {
   description = "AWS Access Key ID"
   type = string
