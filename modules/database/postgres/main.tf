@@ -34,7 +34,7 @@ resource "aws_db_instance" "postgres_db" {
   db_name                   = var.db_name
   db_subnet_group_name      = aws_db_subnet_group.main.name
   engine                    = "postgres"
-  engine_version            = "14.5"
+  engine_version            = "14.10"
   final_snapshot_identifier = "${var.identifier}-${time_static.main.unix}-final"
   identifier                = "${var.identifier}-postgres-db"
   instance_class            = var.instance_class
