@@ -4,6 +4,11 @@ variable "tags" {
   default     = {}
 }
 
+variable "http_method" {
+  description = "HTTP Method (GET, POST, PUT, DELETE, HEAD, OPTIONS, ANY)"
+  type        = string
+}
+
 variable "rest_api_id" {
   description = "ID of the associated REST API"
   type        = string

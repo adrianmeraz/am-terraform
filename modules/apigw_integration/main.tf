@@ -7,7 +7,7 @@ resource "aws_api_gateway_resource" "root" {
 resource "aws_api_gateway_method" "main" {
   rest_api_id = var.rest_api_id
   resource_id = var.resource_id
-  http_method = "POST"
+  http_method = var.http_method
   authorization = "NONE"
 #  authorization = "COGNITO_USER_POOLS"
 #  authorizer_id = var.authorizer_id
@@ -101,7 +101,7 @@ resource "aws_api_gateway_integration_response" "options_integration_response" {
 
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT'",
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,PATCH,POST,PUT'",
     "method.response.header.Access-Control-Allow-Origin"  = "'*'"
   }
 
