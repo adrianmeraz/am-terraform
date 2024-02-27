@@ -9,12 +9,18 @@ variable "db_name" {
   type        = string
 }
 
+variable "deletion_protection" {
+  description = "If the DB cluster should have deletion protection enabled."
+  type        = bool
+  default     = false
+}
+
 variable "identifier" {
   description = "The name of the RDS instance, if omitted, Terraform will assign a random, unique identifier"
   type        = string
 }
 
-variable "password" {
+variable "master_password" {
   description = "Password for the master DB user"
   type        = string
 }
@@ -30,7 +36,16 @@ variable "preferred_backup_window" {
   default     = "03:00-05:00"
 }
 
-variable "username" {
+variable "serverless_capacity" {
+  description = "Serverless scaling range in ACUs (increments of 0.5)"
+  type        = map(number)
+  default = {
+    min = 0.5,
+    max = 2.0
+  }
+}
+
+variable "master_username" {
   description = "Username for the master DB user."
   type        = string
 }
