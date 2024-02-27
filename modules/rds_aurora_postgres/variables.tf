@@ -40,8 +40,8 @@ variable "serverless_capacity" {
   description = "Serverless scaling range in ACUs (increments of 0.5)"
   type        = map(number)
   default = {
-    min = 0.5,
-    max = 2.0
+    min = 2,
+    max = 4
   }
 }
 

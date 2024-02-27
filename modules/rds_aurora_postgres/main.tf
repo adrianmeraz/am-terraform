@@ -41,16 +41,25 @@ resource "aws_rds_cluster" "postgresql" {
   db_subnet_group_name      = aws_db_subnet_group.main.name
   deletion_protection       = var.deletion_protection
   engine                    = "aurora-postgresql"
-  engine_mode               = "serverless"
   final_snapshot_identifier = "${var.identifier}-${time_static.main.unix}-final"
   master_username           = var.master_username
   master_password           = var.master_password
   preferred_backup_window   = var.preferred_backup_window
   vpc_security_group_ids    = [aws_security_group.main.id]
-  serverlessv2_scaling_configuration {
+
+  // To enable serverless
+  engine_mode    = "serverless"
+  scaling_configuration {
     auto_pause               = true
     min_capacity             = var.serverless_capacity.min
-    max_capacity             = var.serverless_capacity.max
+    max_capacity             = var.serverless_capacity.min
     seconds_until_auto_pause = 300
   }
+}
+
+resource "aws_rds_cluster_instance" "postgresql" {
+  cluster_identifier = aws_rds_cluster.postgresql.id
+  instance_class     = "db.serverless"
+  engine             = aws_rds_cluster.postgresql.engine
+  engine_version     = aws_rds_cluster.postgresql.engine_version
 }

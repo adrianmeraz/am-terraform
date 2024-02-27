@@ -17,6 +17,7 @@ locals {
   ecr = {
     image_tag: "latest"
   }
+  default_tags = data.aws_default_tags.main.tags
 }
 
 resource "aws_ce_cost_allocation_tag" "example" {
@@ -29,7 +30,7 @@ module "network" {
 
   cidr_block = "10.0.0.0/16"
 
-  tags       = data.aws_default_tags.main.tags
+  tags       = local.default_tags
 }
 
 locals {
@@ -42,7 +43,7 @@ module "apigw_logs" {
   app_name     = local.app_name
   environment  = local.environment
   service_name = "apigw"
-  tags         = data.aws_default_tags.main.tags
+  tags         = local.default_tags
 }
 
 module "apigw_lambda_http" {
@@ -54,23 +55,7 @@ module "apigw_lambda_http" {
   cloudwatch_log_group_arn = module.apigw_logs.cloudwatch_log_group_arn
   private_subnet_ids       = local.private_subnet_ids
 
-  tags                     = data.aws_default_tags.main.tags
-}
-
-module "postgres_db" {
-  source      = "../postgres"
-
-  allocated_storage      = 20
-  db_name                = "${local.app_name}${local.environment}"
-  identifier             = local.name_prefix
-  instance_class         = "db.t3.micro"
-  password               = local.secrets_map["DB_PASSWORD"]
-  private_subnet_ids     = local.private_subnet_ids
-  username               = local.secrets_map["DB_USERNAME"]
-  vpc_id                 = module.network.vpc.id
-  vpc_security_group_ids = [module.network.security_group_id]
-
-  tags                   = data.aws_default_tags.main.tags
+  tags                     = local.default_tags
 }
 
 module "ecr" {
@@ -79,15 +64,15 @@ module "ecr" {
   name_prefix  = local.name_prefix
   force_delete = true
 
-  tags         = data.aws_default_tags.main.tags
+  tags         = local.default_tags
 }
 
 module "iam_lambda" {
-  source = "../iam_lambda"
+  source = "../iam_lambda_dynamo"
 
   name_prefix = local.name_prefix
 
-  tags         = data.aws_default_tags.main.tags
+  tags         = local.default_tags
 }
 # Merging secrets from created resources with prior secrets map
 module "secret_version" {
@@ -100,7 +85,6 @@ module "secret_version" {
     {
       "AWS_ECR_REGISTRY_NAME": module.ecr.name
       "AWS_ECR_REPOSITORY_URL": module.ecr.repository_url
-      "DB_URL": module.postgres_db.jdbc_url
     }
   )
 }

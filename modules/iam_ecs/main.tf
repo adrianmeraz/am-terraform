@@ -23,26 +23,26 @@ resource "aws_iam_role" "ecs" {
 }
 
 data "aws_iam_policy_document" "ssm" {
-    statement {
-      actions = [
-        "ssm:GetParameters"
-      ]
-      effect  = "Allow"
-      resources = [
-        "*"
-      ]
-    }
+  statement {
+    actions = [
+      "ssm:GetParameters"
+    ]
+    effect  = "Allow"
+    resources = [
+      "arn:aws:ssm:*:*:*"
+    ]
+  }
 
-    statement {
-      actions = [
-        "secretsmanager:DescribeSecret",
-        "secretsmanager:GetSecretValue",
-      ]
-      effect  = "Allow"
-      resources = [
-        "*"
-      ]
-    }
+  statement {
+    actions = [
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:GetSecretValue",
+    ]
+    effect  = "Allow"
+    resources = [
+      "arn:aws:secretsmanager:*:*:*"
+    ]
+  }
 }
 
 resource "aws_iam_policy" "ssm" {

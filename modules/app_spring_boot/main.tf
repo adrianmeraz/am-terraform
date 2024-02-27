@@ -86,31 +86,16 @@ module "apigw_ecs_http" {
   tags                     = data.aws_default_tags.main.tags
 }
 
-#module "postgres_db" {
-#  source      = "../rds_postgres"
-#
-#  allocated_storage      = 20
-#  db_name                = "${local.app_name}${local.environment}"
-#  identifier             = local.name_prefix
-#  instance_class         = "db.t3.micro"
-#  password               = local.secrets_map["DB_PASSWORD"]
-#  private_subnet_ids     = local.private_subnet_ids
-#  username               = local.secrets_map["DB_USERNAME"]
-#  vpc_id                 = module.network.vpc.id
-#  vpc_security_group_ids = [module.network.security_group_id]
-#
-#  tags                   = data.aws_default_tags.main.tags
-#}
-
-module "rds_aurora_postgres" {
-  source      = "../rds_aurora_postgres"
+module "postgres_db" {
+  source      = "../rds_postgres"
 
   allocated_storage      = 20
   db_name                = "${local.app_name}${local.environment}"
   identifier             = local.name_prefix
-  master_password        = local.secrets_map["DB_PASSWORD"]
+  instance_class         = "db.t3.micro"
+  password               = local.secrets_map["DB_PASSWORD"]
   private_subnet_ids     = local.private_subnet_ids
-  master_username               = local.secrets_map["DB_USERNAME"]
+  username               = local.secrets_map["DB_USERNAME"]
   vpc_id                 = module.network.vpc.id
   vpc_security_group_ids = [module.network.security_group_id]
 
