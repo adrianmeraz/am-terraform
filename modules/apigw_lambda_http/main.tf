@@ -6,7 +6,7 @@ resource "aws_api_gateway_rest_api" "http" {
 }
 
 locals {
-  api_id = aws_api_gateway_rest_api.http.id
+  rest_api_id = aws_api_gateway_rest_api.http.id
 }
 
 //Add in later
@@ -17,16 +17,10 @@ locals {
 #  provider_arns = [aws_cognito_user_pool.pool.arn]
 #}
 
-resource "aws_api_gateway_resource" "root" {
-  rest_api_id = local.api_id
-  parent_id = aws_api_gateway_rest_api.http.root_resource_id
-  path_part = var.environment
-}
-
 # Set a default stage
 resource "aws_apigatewayv2_stage" "default" {
   auto_deploy = true
-  api_id      = local.api_id
+  api_id      = local.rest_api_id
   name        = "$default"
   access_log_settings {
     destination_arn = var.cloudwatch_log_group_arn
@@ -49,4 +43,10 @@ resource "aws_apigatewayv2_stage" "default" {
   }
 
   tags = var.tags
+}
+
+resource "aws_api_gateway_resource" "root" {
+  rest_api_id = local.rest_api_id
+  parent_id   = aws_api_gateway_rest_api.http.root_resource_id
+  path_part   = var.environment
 }

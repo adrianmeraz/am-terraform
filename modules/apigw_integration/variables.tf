@@ -9,6 +9,16 @@ variable "rest_api_id" {
   type        = string
 }
 
+variable "parent_rest_api_id" {
+  description = "ID of the associated Parent REST API"
+  type        = string
+}
+
+variable "path_part" {
+  description = "Last path segment of this API resource"
+  type        = string
+}
+
 variable "resource_id" {
   description = "API resource ID"
   type        = string
