@@ -9,6 +9,14 @@ locals {
   api_id = aws_api_gateway_rest_api.http.id
 }
 
+//Add in later
+#resource "aws_api_gateway_authorizer" "main" {
+#  name          = "${var.name_prefix}-authorizer"
+#  rest_api_id   = local.api_id
+#  type          = "COGNITO_USER_POOLS"
+#  provider_arns = [aws_cognito_user_pool.pool.arn]
+#}
+
 resource "aws_api_gateway_resource" "root" {
   rest_api_id = local.api_id
   parent_id = aws_api_gateway_rest_api.http.root_resource_id

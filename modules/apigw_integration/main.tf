@@ -3,6 +3,8 @@ resource "aws_api_gateway_method" "proxy" {
   resource_id = var.resource_id
   http_method = "POST"
   authorization = "NONE"
+#  authorization = "COGNITO_USER_POOLS"
+#  authorizer_id = var.authorizer_id
 }
 
 locals {
