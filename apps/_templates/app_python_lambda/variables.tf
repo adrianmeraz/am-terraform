@@ -18,11 +18,6 @@ variable "aws_secret_key" {
   type = string
 }
 
-variable "aws_secretsmanager_secret_name" {
-  description = "AWS Secret Name"
-  type = string
-}
-
 variable "ecs" {
   description = "ECS task parameters"
   type = object({
