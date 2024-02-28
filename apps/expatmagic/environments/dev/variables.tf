@@ -16,4 +16,5 @@ variable "aws_secret_key" {
 variable "secret_map" {
   description = "Map of secrets"
   type        = map(string)
+  default = {}
 }
