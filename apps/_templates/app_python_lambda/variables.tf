@@ -41,3 +41,9 @@ variable "environment" {
   description = "App Environment"
   type = string
 }
+
+variable "secret_map" {
+  description = "Map of secrets"
+  type        = map(string)
+  default     = {}
+}

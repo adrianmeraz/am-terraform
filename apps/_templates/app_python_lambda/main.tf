@@ -1,15 +1,15 @@
-data "aws_secretsmanager_secret" "main" {
-  name = var.aws_secretsmanager_secret_name
-}
+module "secrets" {
+  source = "../../../modules/secrets"
 
-data "aws_secretsmanager_secret_version" "main" {
-  secret_id = data.aws_secretsmanager_secret.main.id
+  name_prefix             = local.name_prefix
+  recovery_window_in_days = 0 # Allows for instant deletes
+  secret_map              = var.secret_map
 }
 
 data "aws_default_tags" "main" {}
 
 locals {
-  secrets_map = jsondecode(data.aws_secretsmanager_secret_version.main.secret_string)
+  secrets_map = module.secrets.secret_map
 
   app_name    = var.app_name
   environment = var.environment
@@ -79,7 +79,7 @@ module "secret_version" {
   # Only creates secrets if the secret string has changed
   source          = "../../../modules/secret_version"
 
-  secret_id       = data.aws_secretsmanager_secret.main.id
+  secret_id       = module.secrets.secretsmanager_secret_id
   secret_map      = merge(
     local.secrets_map,
     {
