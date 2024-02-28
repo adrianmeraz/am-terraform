@@ -2,9 +2,9 @@ terraform {
   required_version = "1.7.1"
 
   backend "s3" {
-    bucket = "traveler-service-tfstate-dev"
+    bucket = "traveler-service-secrets-dev-tfstate"
     region = "us-west-2"
-    key    = "traveler-service-secret-dev/terraform.tfstate"
+    key    = "traveler-service-secrets-dev/terraform.tfstate"
   }
 
   required_providers {
