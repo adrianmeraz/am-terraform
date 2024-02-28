@@ -5,7 +5,8 @@ resource "aws_secretsmanager_secret" "main" {
   tags = var.tags
 }
 
-# Must have duplicate, mutually exclusive resources to allow for forcefully redeploying secret version
+# Must have duplicate, mutually exclusive resources to allow for forcefully redeploying secret version.
+# Only different is the lifecycle block
 # See https://stackoverflow.com/questions/62427931/terraform-conditionally-apply-lifecycle-block
 
 resource "aws_secretsmanager_secret_version" "overwrite_false" {
