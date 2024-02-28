@@ -21,10 +21,14 @@ data "aws_availability_zones" "available" {
   state = "available"
 }
 
+locals {
+  availability_zones = data.aws_availability_zones.available.names
+}
+
 resource "aws_subnet" "private" {
   count = var.subnet_counts.private
 
-  availability_zone = data.aws_availability_zones.available.names[count.index]
+  availability_zone = availability_zones[count.index % length(availability_zones)]
   cidr_block = local.private_subnet_blocks[count.index]
   map_public_ip_on_launch = false
   vpc_id = aws_vpc.main.id
@@ -49,7 +53,7 @@ resource "aws_route_table_association" "private" {
 resource "aws_subnet" "public" {
   count = var.subnet_counts.public
 
-  availability_zone = data.aws_availability_zones.available.names[count.index]
+  availability_zone = availability_zones[count.index % length(availability_zones)]
   cidr_block = local.public_subnet_blocks[count.index]
   map_public_ip_on_launch = true
   vpc_id = aws_vpc.main.id
