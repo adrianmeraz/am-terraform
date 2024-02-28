@@ -3,6 +3,11 @@ variable "app_name" {
   type = string
 }
 
+variable "environment" {
+  description = "App Environment"
+  type = string
+}
+
 variable "aws_access_key" {
   description = "AWS Access Key ID"
   type = string
@@ -32,9 +37,10 @@ variable "ecs" {
   }
 }
 
-variable "environment" {
-  description = "App Environment"
-  type = string
+variable "force_overwrite_secrets" {
+  description = "Allows for forcing updates of secrets. Useful when new secrets are added"
+  type        = bool
+  default     = false
 }
 
 variable "secret_map" {

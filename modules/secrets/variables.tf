@@ -9,6 +9,12 @@ variable "name_prefix" {
   type        = string
 }
 
+variable "force_overwrite_secrets" {
+  description = "Allows for forcing updates of secrets. Useful when new secrets are added"
+  type        = bool
+  default     = false
+}
+
 variable "recovery_window_in_days" {
   description = "Number of days that AWS Secrets Manager waits before it can delete the secret (0 is instant delete)"
   type        = number
