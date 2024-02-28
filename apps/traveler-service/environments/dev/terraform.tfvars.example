@@ -2,9 +2,10 @@
 Copy this file to a terraform.tfvars in this directory and set the values
 ########################################################################
 
-aws_access_key = "CHANGE_ME"
-aws_region     = "CHANGE_ME"
-aws_secret_key = "CHANGE_ME"
+aws_access_key          = "CHANGE_ME"
+aws_region              = "CHANGE_ME"
+aws_secret_key          = "CHANGE_ME"
+force_overwrite_secrets = false
 
 secret_map = {
   "AWS_ECR_REGISTRY_NAME":  "CHANGE_ME"

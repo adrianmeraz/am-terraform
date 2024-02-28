@@ -45,3 +45,18 @@ variable "source_code_hash" {
   type        = string
   default     = ""
 }
+
+variable "subnet_ids" {
+  description = "subnet ids"
+  type        = list(string)
+}
+
+variable "security_group_ids" {
+  description = "Security group ids"
+  type        = list(string)
+}
+
+variable "vpc_id" {
+  description = "Id of VPC"
+  type        = string
+}

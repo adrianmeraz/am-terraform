@@ -18,6 +18,12 @@ variable "aws_secret_key" {
   type = string
 }
 
+variable "environment" {
+  description = "App Environment"
+  type = string
+}
+
+
 variable "ecs" {
   description = "ECS task parameters"
   type = object({
@@ -32,13 +38,32 @@ variable "ecs" {
   }
 }
 
-variable "environment" {
-  description = "App Environment"
-  type = string
+variable "force_overwrite_secrets" {
+  description = "Allows for forcing updates of secrets. Useful when new secrets are added"
+  type        = bool
+  default     = false
+}
+
+variable "memory_size_mb" {
+  description = "Amount of memory in MB your Lambda Function can use at runtime"
+  type        = bool
+  default     = false
+}
+
+variable "runtime" {
+  description = "Identifier of the function's runtime"
+  type        = bool
+  default     = false
 }
 
 variable "secret_map" {
   description = "Map of secrets"
+  type        = map(string)
+  default     = {}
+}
+
+variable "security_group_ids" {
+  description = "VPC Security Groups"
   type        = map(string)
   default     = {}
 }

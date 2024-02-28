@@ -9,7 +9,7 @@ resource "aws_db_subnet_group" "main" {
 }
 
 resource "aws_security_group" "main" {
-  name        = "${var.identifier}-postgres-sg"
+  name        = "${var.identifier}-aurora-sg"
   description = "Allow incoming postgres traffic"
   vpc_id      = var.vpc_id
 

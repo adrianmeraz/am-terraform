@@ -1,9 +1,10 @@
 module "secrets" {
   source = "../../../modules/secrets"
 
-  name_prefix             = local.name_prefix
-  recovery_window_in_days = 0 # Allows for instant deletes
-  secret_map              = var.secret_map
+  name_prefix               = local.name_prefix
+  recovery_window_in_days   = 0 # Allows for instant deletes
+  secret_map                = var.secret_map
+  force_overwrite_secrets   = var.force_overwrite_secrets
 }
 
 data "aws_default_tags" "main" {}
@@ -33,8 +34,18 @@ module "network" {
   tags       = local.default_tags
 }
 
+module "ecr" {
+  source = "../../../modules/ecr"
+
+  name_prefix  = local.name_prefix
+  force_delete = true
+
+  tags         = local.default_tags
+}
+
 locals {
   private_subnet_ids = [for subnet in module.network.private_subnets: subnet.id]
+  public_subnet_ids = [for subnet in module.network.public_subnets: subnet.id]
 }
 
 module "apigw_logs" {
@@ -58,22 +69,31 @@ module "apigw_lambda_http" {
   tags                     = local.default_tags
 }
 
-module "ecr" {
-  source = "../../../modules/ecr"
-
-  name_prefix  = local.name_prefix
-  force_delete = true
-
-  tags         = local.default_tags
-}
-
 module "iam_lambda" {
   source = "../../../modules/iam_lambda_dynamo"
 
   name_prefix = local.name_prefix
 
-  tags         = local.default_tags
+  tags        = local.default_tags
 }
+
+module "lambda_function" {
+  source = "../../../modules/lambda_function"
+
+  name_prefix        = local.name_prefix
+  handler            = "aws_handler/add_traveler_api.py"
+  function_name      = "add_traveler_api"
+  image_uri          = "${module.ecr.repository_url}:${local.ecr.image_tag}"
+  memory_size        = 128
+  package_type       = "Image"
+  role               = module.iam_lambda.role_arn
+  runtime            = "python3.12"
+  security_group_ids = [module.network.security_group_id]
+  subnet_ids         = local.public_subnet_ids
+
+  tags        = local.default_tags
+}
+
 # Merging secrets from created resources with prior secrets map
 module "secret_version" {
   # Only creates secrets if the secret string has changed
