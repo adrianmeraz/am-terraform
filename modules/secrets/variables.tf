@@ -10,7 +10,7 @@ variable "name_prefix" {
 }
 
 variable "recovery_window_in_days" {
-  description = "Number of days that AWS Secrets Manager waits before it can delete the secret"
+  description = "Number of days that AWS Secrets Manager waits before it can delete the secret (0 is instant delete)"
   type        = number
   default     = 30
 }

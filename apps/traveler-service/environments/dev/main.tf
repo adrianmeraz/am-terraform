@@ -1,19 +1,15 @@
 locals {
-  app_name    = "expatmagic"
+  app_name    = "traveler-service"
   environment = "dev"
 }
-module "app_spring_boot" {
-  source = "../../../_templates/app_spring_boot"
+
+module "app_python_lambda" {
+  source = "../../../_templates/app_python_lambda"
 
   app_name                       = local.app_name
   aws_access_key                 = var.aws_access_key
   aws_region                     = var.aws_region
   aws_secret_key                 = var.aws_access_key
+  aws_secretsmanager_secret_name = var.aws_secretsmanager_secret_name
   environment                    = local.environment
-  secret_map                     = var.secret_map
-  ecs = {
-    launch_type: "FARGATE"
-    memory_mb:   512
-    vcpu:        256
-  }
 }

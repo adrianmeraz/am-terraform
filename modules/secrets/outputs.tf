@@ -1,5 +1,10 @@
+output "secretsmanager_secret_id" {
+  description = "id of the secrets manager"
+  value       = aws_secretsmanager_secret.main.id
+}
+
 output "arn" {
-  description = "arn of the secrets managers"
+  description = "arn of the secrets manager"
   value       = aws_secretsmanager_secret.main.arn
 }
 

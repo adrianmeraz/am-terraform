@@ -26,7 +26,7 @@ resource "aws_ce_cost_allocation_tag" "example" {
 }
 
 module "network" {
-  source = "../network"
+  source = "../../../modules/network"
 
   cidr_block = "10.0.0.0/16"
 
@@ -38,7 +38,7 @@ locals {
 }
 
 module "apigw_logs" {
-  source            = "../logs"
+  source            = "../../../modules/logs"
 
   app_name     = local.app_name
   environment  = local.environment
@@ -47,7 +47,7 @@ module "apigw_logs" {
 }
 
 module "apigw_lambda_http" {
-  source = "../apigw_lambda_http"
+  source = "../../../modules/apigw_lambda_http"
 
   environment              = var.environment
   name_prefix              = local.name_prefix
@@ -59,7 +59,7 @@ module "apigw_lambda_http" {
 }
 
 module "ecr" {
-  source = "../ecr"
+  source = "../../../modules/ecr"
 
   name_prefix  = local.name_prefix
   force_delete = true
@@ -68,7 +68,7 @@ module "ecr" {
 }
 
 module "iam_lambda" {
-  source = "../iam_lambda_dynamo"
+  source = "../../../modules/iam_lambda_dynamo"
 
   name_prefix = local.name_prefix
 
@@ -77,7 +77,7 @@ module "iam_lambda" {
 # Merging secrets from created resources with prior secrets map
 module "secret_version" {
   # Only creates secrets if the secret string has changed
-  source          = "../secret_version"
+  source          = "../../../modules/secret_version"
 
   secret_id       = data.aws_secretsmanager_secret.main.id
   secret_map      = merge(

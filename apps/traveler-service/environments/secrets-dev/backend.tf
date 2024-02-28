@@ -1,25 +1,12 @@
 terraform {
   required_version = "1.7.1"
 
-  backend "s3" {
-    bucket = "expatmagic-secret-tfstate-dev"
-    region = "us-west-2"
-    key    = "expatmagic-secret/terraform.tfstate"
-#    encrypt        = true
-  }
+  backend "s3" {}
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = "5.32.1"
-    }
-    hcp = {
-      source  = "hashicorp/hcp"
-      version = "0.63.0"
-    }
-    time = {
-      source  = "hashicorp/time"
-      version = "0.10.0"
     }
   }
 }

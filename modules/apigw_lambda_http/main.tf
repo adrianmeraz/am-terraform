@@ -17,11 +17,20 @@ locals {
 #  provider_arns = [aws_cognito_user_pool.pool.arn]
 #}
 
+resource "aws_api_gateway_deployment" "main" {
+  rest_api_id = local.rest_api_id
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
 # Set a default stage
-resource "aws_apigatewayv2_stage" "default" {
+resource "aws_api_gateway_stage" "default" {
   auto_deploy = true
-  api_id      = local.rest_api_id
-  name        = "$default"
+  deployment_id = aws_api_gateway_deployment.main.id
+  rest_api_id = local.rest_api_id
+  stage_name = "$default"
   access_log_settings {
     destination_arn = var.cloudwatch_log_group_arn
     # Format taken from here: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html

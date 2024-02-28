@@ -2,9 +2,9 @@ terraform {
   required_version = "1.7.1"
 
   backend "s3" {
-    bucket = "expatmagic-tfstate-dev"
+    bucket = "traveler-service-tfstate-dev"
     region = "us-west-2"
-    key    = "expatmagic/terraform.tfstate"
+    key    = "traveler-service-secret-dev/terraform.tfstate"
   }
 
   required_providers {
