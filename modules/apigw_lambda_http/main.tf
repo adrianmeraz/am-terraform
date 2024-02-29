@@ -1,6 +1,8 @@
 resource "aws_api_gateway_rest_api" "http" {
   name          = "${var.name_prefix}-api"
-  protocol_type = "HTTP"
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
 
   tags = var.tags
 }

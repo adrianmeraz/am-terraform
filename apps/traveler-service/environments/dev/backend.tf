@@ -2,19 +2,15 @@ terraform {
   required_version = "1.7.1"
 
   backend "s3" {
-    bucket = "traveler-service-secrets-dev-tfstate"
+    bucket = "traveler-service-dev-tfstate"
     region = "us-west-2"
-    key    = "traveler-service-secrets-dev/terraform.tfstate"
+    key    = "traveler-service-dev/terraform.tfstate"
   }
 
   required_providers {
     aws = {
       source = "hashicorp/aws"
       version = "5.32.1"
-    }
-    hcp = {
-      source = "hashicorp/hcp"
-      version = "0.63.0"
     }
     time = {
       source = "hashicorp/time"

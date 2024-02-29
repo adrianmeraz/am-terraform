@@ -1,7 +1,7 @@
 # Creating S3 Buckets for tfstate files
 
 ```
-aws s3api create-bucket --bucket CHANGE_ME --region us-east-1
+aws s3api create-bucket --bucket CHANGE_ME --create-bucket-configuration LocationConstraint=us-west-2
 ```
 
 # Initializing Terraform
