@@ -9,11 +9,6 @@ variable "function_name" {
   type        = string
 }
 
-variable "handler" {
-  description = "Function entrypoint in your code."
-  type        = string
-}
-
 variable "memory_size" {
   description = "Amount of memory in MB your Lambda Function can use at runtime"
   type        = number
@@ -32,11 +27,6 @@ variable "image_uri" {
 
 variable "role" {
   description = "Amazon Resource Name (ARN) of the function's execution role."
-  type        = string
-}
-
-variable "runtime" {
-  description = "Identifier of the function's runtime."
   type        = string
 }
 

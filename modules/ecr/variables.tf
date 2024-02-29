@@ -23,9 +23,15 @@ variable "force_delete" {
 # Lifecycle Policy
 ################################################################################
 
-## Images
+
 variable "image_tag_mutability" {
   description = "Determines whether a lifecycle policy will be created"
   type        = string
   default     = "MUTABLE"
+}
+
+variable "image_tag" {
+  description = "Image tag used to push dummy image"
+  type        = string
+  default     = "latest"
 }

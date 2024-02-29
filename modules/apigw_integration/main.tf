@@ -1,9 +1,3 @@
-resource "aws_api_gateway_resource" "root" {
-  rest_api_id = var.rest_api_id
-  parent_id   = var.parent_rest_api_id
-  path_part   = var.path_part
-}
-
 resource "aws_api_gateway_method" "main" {
   rest_api_id = var.rest_api_id
   resource_id = var.resource_id
@@ -60,9 +54,9 @@ resource "aws_api_gateway_integration_response" "proxy" {
 
 //options
 resource "aws_api_gateway_method" "options" {
-  rest_api_id = var.rest_api_id
-  resource_id = var.resource_id
-  http_method = "OPTIONS"
+  rest_api_id   = var.rest_api_id
+  resource_id   = var.resource_id
+  http_method   = "OPTIONS"
   authorization = "NONE"
 
 #  authorization = "COGNITO_USER_POOLS"

@@ -48,7 +48,11 @@ data "aws_iam_policy_document" "main" {
     actions = [
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
-      "logs:PutLogEvents"
+      "logs:DescribeLogGroups",
+      "logs:DescribeLogStreams",
+      "logs:PutLogEvents",
+      "logs:GetLogEvents",
+      "logs:FilterLogEvents"
     ]
     effect  = "Allow"
     resources = [

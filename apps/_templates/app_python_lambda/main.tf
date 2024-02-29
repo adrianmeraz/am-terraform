@@ -21,7 +21,6 @@ locals {
   }
   lambda = {
     memory_size_mb = 128
-    runtime        = "python3.12"
   }
 }
 
@@ -69,6 +68,7 @@ module "apigw_lambda_http" {
   cloudwatch_log_group_arn = module.apigw_logs.cloudwatch_log_group_arn
 
   tags                     = local.default_tags
+  depends_on = [module.ecr]
 }
 
 module "iam_lambda" {
@@ -83,12 +83,10 @@ module "lambda_function" {
   source = "../../../modules/lambda_function"
 
   function_name      = "${local.name_prefix}-add-traveler-api"
-  handler            = "aws_handler/add_traveler_api.py"
   image_uri          = "${module.ecr.repository_url}:${local.ecr.image_tag}"
   memory_size        = local.lambda.memory_size_mb
   package_type       = "Image"
   role               = module.iam_lambda.role_arn
-  runtime            = local.lambda.runtime
   subnet_ids         = local.public_subnet_ids
   vpc_id             = module.network.vpc.id
 
