@@ -29,7 +29,6 @@ resource "aws_api_gateway_deployment" "main" {
 
 # Set a default stage
 resource "aws_api_gateway_stage" "default" {
-  auto_deploy = true
   deployment_id = aws_api_gateway_deployment.main.id
   rest_api_id = local.rest_api_id
   stage_name = "$default"

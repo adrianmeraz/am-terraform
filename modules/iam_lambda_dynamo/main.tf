@@ -75,3 +75,8 @@ resource "aws_iam_role_policy_attachment" "main" {
   role       = aws_iam_role.lambda.name
   policy_arn = aws_iam_policy.main.arn
 }
+
+resource "aws_iam_role_policy_attachment" "lambda_handler_policy" {
+  role       = aws_iam_role.lambda.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
