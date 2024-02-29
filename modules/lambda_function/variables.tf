@@ -25,7 +25,7 @@ variable "image_uri" {
   type        = string
 }
 
-variable "role" {
+variable "role_arn" {
   description = "Amazon Resource Name (ARN) of the function's execution role."
   type        = string
 }

@@ -76,7 +76,7 @@ resource "aws_lambda_function" "main" {
   function_name    = var.function_name
   image_uri        = var.image_uri
   package_type     = var.package_type
-  role             = var.role
+  role             = var.role_arn
   source_code_hash = var.source_code_hash
   vpc_config {
     security_group_ids = [aws_security_group.lambda.id]

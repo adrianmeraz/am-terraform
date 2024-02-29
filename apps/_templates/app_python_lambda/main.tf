@@ -71,7 +71,7 @@ module "apigw_lambda_http" {
   depends_on = [module.ecr]
 }
 
-module "iam_lambda" {
+module "iam_lambda_dynamo" {
   source = "../../../modules/iam_lambda_dynamo"
 
   name_prefix = local.name_prefix
@@ -86,7 +86,7 @@ module "lambda_function" {
   image_uri          = "${module.ecr.repository_url}:${local.ecr.image_tag}"
   memory_size        = local.lambda.memory_size_mb
   package_type       = "Image"
-  role               = module.iam_lambda.role_arn
+  role_arn           = module.iam_lambda_dynamo.role_arn
   subnet_ids         = local.public_subnet_ids
   vpc_id             = module.network.vpc.id
 

@@ -48,25 +48,25 @@ resource "aws_api_gateway_stage" "default" {
   deployment_id = aws_api_gateway_deployment.main.id
   rest_api_id = local.rest_api_id
   stage_name = var.environment
-  access_log_settings {
-    destination_arn = var.cloudwatch_log_group_arn
-    # Format taken from here: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html
-    format          = jsonencode(
-      {
-        requestId         = "$context.requestId"
-        extendedRequestId = "$context.extendedRequestId"
-        caller            = "$context.identity.caller"
-        httpMethod        = "$context.httpMethod"
-        ip                = "$context.identity.sourceIp"
-        protocol          = "$context.protocol"
-        requestTime       = "$context.requestTime"
-        resourcePath      = "$context.resourcePath"
-        responseLength    = "$context.responseLength"
-        status            = "$context.status"
-        user              = "$context.identity.user"
-      }
-    )
-  }
+#  access_log_settings {
+#    destination_arn = var.cloudwatch_log_group_arn
+#    # Format taken from here: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html
+#    format          = jsonencode(
+#      {
+#        requestId         = "$context.requestId"
+#        extendedRequestId = "$context.extendedRequestId"
+#        caller            = "$context.identity.caller"
+#        httpMethod        = "$context.httpMethod"
+#        ip                = "$context.identity.sourceIp"
+#        protocol          = "$context.protocol"
+#        requestTime       = "$context.requestTime"
+#        resourcePath      = "$context.resourcePath"
+#        responseLength    = "$context.responseLength"
+#        status            = "$context.status"
+#        user              = "$context.identity.user"
+#      }
+#    )
+#  }
 
   tags = var.tags
 }
