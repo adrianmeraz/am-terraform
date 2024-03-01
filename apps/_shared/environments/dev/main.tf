@@ -1,11 +1,3 @@
-#data "aws_secretsmanager_secret" "main" {
-#  name = var.aws_secretsmanager_secret_name
-#}
-#
-#data "aws_secretsmanager_secret_version" "main" {
-#  secret_id = data.aws_secretsmanager_secret.main.id
-#}
-#
 #data "aws_default_tags" "main" {}
 #
 #locals {

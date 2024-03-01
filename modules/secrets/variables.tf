@@ -4,9 +4,14 @@ variable "tags" {
   default     = {}
 }
 
-variable "name_prefix" {
-  description = "Name of secrets manager"
-  type        = string
+variable "app_name" {
+  description = "App Name"
+  type = string
+}
+
+variable "environment" {
+  description = "App Environment"
+  type = string
 }
 
 variable "force_overwrite_secrets" {

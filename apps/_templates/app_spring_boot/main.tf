@@ -3,7 +3,8 @@ data "aws_default_tags" "main" {}
 module "secrets" {
   source = "../../../modules/secrets"
 
-  name_prefix                    = local.name_prefix
+  app_name = var.app_name
+  environment                    = var.environment
   recovery_window_in_days        = 0 # Allows for instant deletes
   secret_map                     = var.secret_map
   force_overwrite_secrets        = var.force_overwrite_secrets
