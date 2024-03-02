@@ -83,16 +83,31 @@ module "iam_lambda_dynamo" {
 module "lambda_function" {
   source = "../../../modules/lambda_function"
 
-  function_name      = "${local.name_prefix}-add-traveler-api"
-  handler            = "add_traveler_api.lambda_handler"
-  image_uri          = "${module.ecr.repository_url}:${local.ecr.image_tag}"
-  memory_size        = local.lambda.memory_size_mb
-  package_type       = "Image"
-  role_arn           = module.iam_lambda_dynamo.role_arn
-  subnet_ids         = local.public_subnet_ids
-  vpc_id             = module.network.vpc.id
+  function_name        = "${local.app_name}-add-traveler-api-${local.environment}"
+  image_config_command = "add_traveler_api.lambda_handler"
+  image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
+  memory_size          = local.lambda.memory_size_mb
+  package_type         = "Image"
+  role_arn             = module.iam_lambda_dynamo.role_arn
+  subnet_ids           = local.public_subnet_ids
+  vpc_id               = module.network.vpc.id
 
-  tags               = local.default_tags
+  tags                 = local.default_tags
+}
+
+module "lambda_function" {
+  source = "../../../modules/lambda_function"
+
+  function_name        = "${local.app_name}-add-traveler-api-${local.environment}"
+  image_config_command = "delete_traveler_api.lambda_handler"
+  image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
+  memory_size          = local.lambda.memory_size_mb
+  package_type         = "Image"
+  role_arn             = module.iam_lambda_dynamo.role_arn
+  subnet_ids           = local.public_subnet_ids
+  vpc_id               = module.network.vpc.id
+
+  tags                 = local.default_tags
 }
 
 # Merging secrets from created resources with prior secrets map

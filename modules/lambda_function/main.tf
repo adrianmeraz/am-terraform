@@ -74,11 +74,14 @@ resource "aws_vpc_security_group_egress_rule" "allow_outgoing_traffic_ipv6" {
 
 resource "aws_lambda_function" "main" {
   function_name    = var.function_name
-  handler          = var.handler
   image_uri        = var.image_uri
   package_type     = var.package_type
   role             = var.role_arn
   source_code_hash = var.source_code_hash
+  image_config {
+    # command = ["add_traveler_api.lambda_handler"] # TODO Parameterize after testing
+    command = [var.image_config_command]
+  }
   vpc_config {
     security_group_ids = [aws_security_group.lambda.id]
     subnet_ids         = var.subnet_ids

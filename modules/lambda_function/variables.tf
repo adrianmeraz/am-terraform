@@ -9,8 +9,8 @@ variable "function_name" {
   type        = string
 }
 
-variable "handler" {
-  description = "Function entrypoint in your code"
+variable "image_config_command" {
+  description = "Command for image"
   type        = string
 }
 
