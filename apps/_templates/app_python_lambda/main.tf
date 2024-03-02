@@ -80,7 +80,7 @@ module "iam_lambda_dynamo" {
   tags        = local.default_tags
 }
 
-module "lambda_function" {
+module "lambda_add_traveler_api" {
   source = "../../../modules/lambda_function"
 
   function_name        = "${local.app_name}-add-traveler-api-${local.environment}"
@@ -95,10 +95,10 @@ module "lambda_function" {
   tags                 = local.default_tags
 }
 
-module "lambda_function" {
+module "lambda_delete_traveler_api" {
   source = "../../../modules/lambda_function"
 
-  function_name        = "${local.app_name}-add-traveler-api-${local.environment}"
+  function_name        = "${local.app_name}-delete-traveler-api-${local.environment}"
   image_config_command = "delete_traveler_api.lambda_handler"
   image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
   memory_size          = local.lambda.memory_size_mb
