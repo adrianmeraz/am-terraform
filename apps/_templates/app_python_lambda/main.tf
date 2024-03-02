@@ -84,6 +84,7 @@ module "lambda_function" {
   source = "../../../modules/lambda_function"
 
   function_name      = "${local.name_prefix}-add-traveler-api"
+  handler            = "add_traveler_api.lambda_handler"
   image_uri          = "${module.ecr.repository_url}:${local.ecr.image_tag}"
   memory_size        = local.lambda.memory_size_mb
   package_type       = "Image"

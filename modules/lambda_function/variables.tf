@@ -5,7 +5,12 @@ variable "tags" {
 }
 
 variable "function_name" {
-  description = "Unique name for your Lambda Function."
+  description = "Unique name for your Lambda Function"
+  type        = string
+}
+
+variable "handler" {
+  description = "Function entrypoint in your code"
   type        = string
 }
 
