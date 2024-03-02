@@ -79,7 +79,6 @@ resource "aws_lambda_function" "main" {
   role             = var.role_arn
   source_code_hash = var.source_code_hash
   image_config {
-    # command = ["add_traveler_api.lambda_handler"] # TODO Parameterize after testing
     command = [var.image_config_command]
   }
   vpc_config {
