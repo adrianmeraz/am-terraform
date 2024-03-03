@@ -1,17 +1,13 @@
 resource "aws_api_gateway_rest_api" "http" {
-  name          = "${var.name_prefix}-api"
+  name = "${var.name_prefix}-api"
   endpoint_configuration {
     types = ["REGIONAL"]
   }
   tags = var.tags
 }
 
-locals {
-  rest_api_id = aws_api_gateway_rest_api.http.id
-}
-
 resource "aws_api_gateway_resource" "root" {
-  rest_api_id = local.rest_api_id
+  rest_api_id = aws_api_gateway_rest_api.http.id
   parent_id   = aws_api_gateway_rest_api.http.root_resource_id
   path_part   = var.environment
 }
@@ -21,10 +17,9 @@ module "apigw_integration" {
 
   http_method        = "POST"
   name_prefix        = var.name_prefix
-  parent_rest_api_id = local.rest_api_id
   path_part          = "traveler"
   resource_id        = aws_api_gateway_resource.root.id
-  rest_api_id        = local.rest_api_id
+  rest_api_id        = aws_api_gateway_rest_api.http.id
 }
 
 //Add in later
@@ -36,18 +31,19 @@ module "apigw_integration" {
 #}
 
 resource "aws_api_gateway_deployment" "main" {
-  rest_api_id = local.rest_api_id
+  rest_api_id = aws_api_gateway_rest_api.http.id
+  stage_name  = var.environment
 
-  lifecycle {
-    create_before_destroy = true
-  }
+  depends_on = [
+    module.apigw_integration
+  ]
 }
 
 # Set a default stage
-resource "aws_api_gateway_stage" "default" {
-  deployment_id = aws_api_gateway_deployment.main.id
-  rest_api_id = local.rest_api_id
-  stage_name = var.environment
+#resource "aws_api_gateway_stage" "default" {
+#  deployment_id = aws_api_gateway_deployment.main.id
+#  rest_api_id   = aws_api_gateway_rest_api.http.id
+#  stage_name    = var.environment
 #  access_log_settings {
 #    destination_arn = var.cloudwatch_log_group_arn
 #    # Format taken from here: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html
@@ -67,6 +63,6 @@ resource "aws_api_gateway_stage" "default" {
 #      }
 #    )
 #  }
-
-  tags = var.tags
-}
+#
+#  tags = var.tags
+#}
