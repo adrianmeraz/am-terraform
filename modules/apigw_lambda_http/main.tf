@@ -1,25 +1,24 @@
 resource "aws_api_gateway_rest_api" "http" {
-  name = "${var.name_prefix}-api"
+  name = "${var.name_prefix}-apigw"
   endpoint_configuration {
     types = ["REGIONAL"]
   }
   tags = var.tags
 }
 
-resource "aws_api_gateway_resource" "root" {
-  rest_api_id = aws_api_gateway_rest_api.http.id
-  parent_id   = aws_api_gateway_rest_api.http.root_resource_id
-  path_part   = var.environment
-}
-
 module "apigw_integration" {
-  source = "../apigw_integration"
+  source = "../apigw_lambda_integration"
 
-  http_method        = "POST"
-  name_prefix        = var.name_prefix
-  path_part          = "traveler"
-  resource_id        = aws_api_gateway_resource.root.id
-  rest_api_id        = aws_api_gateway_rest_api.http.id
+  for_each                   = {for index, cfg in var.lambda_configs: cfg.invoke_arn => cfg}
+
+  http_method                = each.value.http_method
+  name_prefix                = var.name_prefix
+  lambda_function_invoke_arn = each.value.invoke_arn
+  lambda_function_name       = each.value.function_name
+  path_part                  = each.value.path_part
+  rest_api_execution_arn     = aws_api_gateway_rest_api.http.execution_arn
+  rest_api_id                = aws_api_gateway_rest_api.http.id
+  root_resource_id           = aws_api_gateway_rest_api.http.root_resource_id
 }
 
 //Add in later

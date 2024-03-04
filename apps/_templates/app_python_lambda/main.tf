@@ -52,26 +52,6 @@ locals {
   public_subnet_ids = [for subnet in module.network.public_subnets: subnet.id]
 }
 
-module "apigw_logs" {
-  source            = "../../../modules/logs"
-
-  app_name     = local.app_name
-  environment  = local.environment
-  service_name = "apigw"
-  tags         = local.default_tags
-}
-
-module "apigw_lambda_http" {
-  source = "../../../modules/apigw_lambda_http"
-
-  environment              = var.environment
-  name_prefix              = local.name_prefix
-  cloudwatch_log_group_arn = module.apigw_logs.cloudwatch_log_group_arn
-
-  tags                     = local.default_tags
-  depends_on = [module.ecr]
-}
-
 module "iam_lambda_dynamo" {
   source = "../../../modules/iam_lambda_dynamo"
 
@@ -108,6 +88,42 @@ module "lambda_delete_traveler_api" {
   vpc_id               = module.network.vpc.id
 
   tags                 = local.default_tags
+}
+
+module "apigw_logs" {
+  source            = "../../../modules/logs"
+
+  app_name     = local.app_name
+  environment  = local.environment
+  service_name = "apigw"
+  tags         = local.default_tags
+}
+
+module "apigw_lambda_http" {
+  source = "../../../modules/apigw_lambda_http"
+
+  environment              = var.environment
+  name_prefix              = local.name_prefix
+  cloudwatch_log_group_arn = module.apigw_logs.cloudwatch_log_group_arn
+  lambda_configs           = [
+    {
+      function_name = module.lambda_add_traveler_api.function_name
+      http_method   = "POST"
+      invoke_arn    = module.lambda_add_traveler_api.invoke_arn
+      path_part     = "add-traveler"
+    },
+    {
+      function_name = module.lambda_delete_traveler_api.function_name
+      http_method   = "DELETE"
+      invoke_arn    = module.lambda_delete_traveler_api.invoke_arn
+      path_part     = "delete-traveler"
+    }
+  ]
+
+  tags                     = local.default_tags
+  depends_on = [
+    module.ecr
+  ]
 }
 
 # Merging secrets from created resources with prior secrets map
