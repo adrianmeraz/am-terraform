@@ -10,8 +10,8 @@ resource "aws_api_gateway_method" "proxy" {
   #  authorizer_id = var.authorizer_id
   http_method    = var.http_method
   operation_name = "${aws_api_gateway_resource.main.path_part}-${var.http_method}"
-  rest_api_id    = var.rest_api_id
   resource_id    = aws_api_gateway_resource.main.id
+  rest_api_id    = var.rest_api_id
 }
 
 resource "aws_api_gateway_method_response" "proxy" {

@@ -3,7 +3,7 @@ locals {
   environment = "dev"
 }
 module "app_spring_boot" {
-  source = "../../../_templates/app_spring_boot"
+  source = "../../../_templates/app_spring_boot_ecs"
 
   app_name                       = local.app_name
   aws_access_key                 = var.aws_access_key
