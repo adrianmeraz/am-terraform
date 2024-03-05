@@ -32,15 +32,15 @@ resource "aws_api_gateway_integration" "lambda" {
   rest_api_id             = var.rest_api_id
   resource_id             = aws_api_gateway_resource.main.id
   http_method             = aws_api_gateway_method.proxy.http_method
-  integration_http_method = "POST"
+  integration_http_method = "POST" # Must always be POST for lambda integrations
   type                    = "AWS"
   uri                     = var.lambda_function_invoke_arn
 }
 
 resource "aws_api_gateway_integration_response" "proxy" {
-  rest_api_id = var.rest_api_id
-  resource_id = aws_api_gateway_resource.main.id
   http_method = aws_api_gateway_method.proxy.http_method
+  resource_id = aws_api_gateway_resource.main.id
+  rest_api_id = var.rest_api_id
   status_code = aws_api_gateway_method_response.proxy.status_code
 
   //cors
@@ -61,19 +61,19 @@ resource "aws_api_gateway_integration_response" "proxy" {
 ##############################################
 
 resource "aws_api_gateway_method" "options" {
+  authorization  = "NONE"
+  #  authorization = "COGNITO_USER_POOLS"
+  #  authorizer_id = aws_api_gateway_authorizer.demo.id
   http_method    = "OPTIONS"
   operation_name = "${aws_api_gateway_resource.main.path_part}-${var.http_method}"
-  rest_api_id    = var.rest_api_id
   resource_id    = aws_api_gateway_resource.main.id
-  authorization  = "NONE"
-#  authorization = "COGNITO_USER_POOLS"
-#  authorizer_id = aws_api_gateway_authorizer.demo.id
+  rest_api_id    = var.rest_api_id
 }
 
 resource "aws_api_gateway_method_response" "options" {
-  rest_api_id = var.rest_api_id
-  resource_id = aws_api_gateway_resource.main.id
   http_method = aws_api_gateway_method.options.http_method
+  resource_id = aws_api_gateway_resource.main.id
+  rest_api_id = var.rest_api_id
   status_code = "200"
 
   response_parameters = {
@@ -84,10 +84,10 @@ resource "aws_api_gateway_method_response" "options" {
 }
 
 resource "aws_api_gateway_integration" "options" {
-  rest_api_id             = var.rest_api_id
-  resource_id             = aws_api_gateway_resource.main.id
   http_method             = aws_api_gateway_method.options.http_method
   integration_http_method = "OPTIONS"
+  resource_id             = aws_api_gateway_resource.main.id
+  rest_api_id             = var.rest_api_id
   type                    = "MOCK"
   request_templates = {
     "application/json" = "{\"statusCode\": 200}"
@@ -95,14 +95,14 @@ resource "aws_api_gateway_integration" "options" {
 }
 
 resource "aws_api_gateway_integration_response" "options" {
-  rest_api_id = var.rest_api_id
-  resource_id = aws_api_gateway_resource.main.id
   http_method = aws_api_gateway_method.options.http_method
+  resource_id = aws_api_gateway_resource.main.id
+  rest_api_id = var.rest_api_id
   status_code = aws_api_gateway_method_response.options.status_code
 
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-    "method.response.header.Access-Control-Allow-Methods" = "'DELETE,GET,OPTIONS,PATCH,POST,PUT'",
+    "method.response.header.Access-Control-Allow-Methods" = "'DELETE,GET,OPTIONS,POST,PUT'",
     "method.response.header.Access-Control-Allow-Origin"  = "'*'"
   }
 
@@ -113,10 +113,10 @@ resource "aws_api_gateway_integration_response" "options" {
 }
 
 resource "aws_lambda_permission" "apigw_lambda" {
-  statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
   function_name = var.lambda_function_name
   principal     = "apigateway.amazonaws.com"
+  statement_id  = "AllowExecutionFromAPIGateway"
 
   source_arn    = "${var.rest_api_execution_arn}/*/*/*"
 }
