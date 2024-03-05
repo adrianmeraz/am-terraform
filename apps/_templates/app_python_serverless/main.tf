@@ -60,6 +60,14 @@ module "iam_lambda_dynamo" {
   tags        = local.default_tags
 }
 
+# TODO Create a way to create lambdas \
+# using a list of maps with the following:
+# function_name        = "${local.app_name}-delete-traveler-api-${local.environment}"
+# http_method   		 = "POST"
+# image_config_command = "delete_traveler_api.lambda_handler"
+# path_part            = "delete-traveler"
+
+
 module "lambda_add_traveler_api" {
   source = "../../../modules/lambda_function"
 
