@@ -16,8 +16,8 @@ resource "aws_api_gateway_method" "proxy" {
 
 resource "aws_api_gateway_method_response" "proxy" {
   http_method = aws_api_gateway_method.proxy.http_method
-  rest_api_id = var.rest_api_id
   resource_id = aws_api_gateway_resource.main.id
+  rest_api_id = var.rest_api_id
   status_code = "200"
 
   //cors section
@@ -29,10 +29,10 @@ resource "aws_api_gateway_method_response" "proxy" {
 }
 
 resource "aws_api_gateway_integration" "lambda" {
-  rest_api_id             = var.rest_api_id
-  resource_id             = aws_api_gateway_resource.main.id
   http_method             = aws_api_gateway_method.proxy.http_method
   integration_http_method = "POST" # Must always be POST for lambda integrations
+  resource_id             = aws_api_gateway_resource.main.id
+  rest_api_id             = var.rest_api_id
   type                    = "AWS"
   uri                     = var.lambda_function_invoke_arn
 }
