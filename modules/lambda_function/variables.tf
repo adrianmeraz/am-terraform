@@ -4,9 +4,28 @@ variable "tags" {
   default     = {}
 }
 
-variable "function_name" {
-  description = "Unique name for your Lambda Function"
+variable "app_name" {
+  description = "App Name"
+  type = string
+}
+
+variable "environment" {
+  description = "App Environment"
+  type = string
+}
+
+variable "base_function_name" {
+  description = "Base unique name for Lambda Function"
   type        = string
+}
+
+variable "http_method" {
+  description = "Http Method for Lambda"
+  type        = string
+  validation {
+    condition     = contains(["DELETE", "GET", "POST", "UPDATE"], var.http_method)
+    error_message = "Valid values for var: http_method are (DELETE, GET, POST, UPDATE)."
+  }
 }
 
 variable "image_config_command" {

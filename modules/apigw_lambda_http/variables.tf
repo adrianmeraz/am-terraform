@@ -18,8 +18,8 @@ variable "lambda_configs" {
   description = "List of lambda configs to setup integrations"
   type          = list(object({
     function_name = string
-    invoke_arn    = string
     http_method   = string
+    invoke_arn    = string
     path_part     = string
   }))
 }

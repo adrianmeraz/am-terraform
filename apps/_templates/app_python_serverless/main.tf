@@ -60,43 +60,63 @@ module "iam_lambda_dynamo" {
   tags        = local.default_tags
 }
 
-# TODO Create a way to create lambdas \
-# using a list of maps with the following:
-# function_name        = "${local.app_name}-delete-traveler-api-${local.environment}"
-# http_method   		 = "POST"
+# TODO Create a way to create lambdas using a list of maps with the following:
+# base_function_name   = "delete-traveler-api"
+# http_method   	   = "POST"
 # image_config_command = "delete_traveler_api.lambda_handler"
 # path_part            = "delete-traveler"
 
 
-module "lambda_add_traveler_api" {
-  source = "../../../modules/lambda_function"
+#module "lambda_add_traveler_api" {
+#  source = "../../../modules/lambda_function"
+#
+#  app_name             = local.app_name
+#  base_function_name   = "add-traveler-api"
+#  environment          = local.environment
+#  image_config_command = "add_traveler_api.lambda_handler"
+#  image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
+#  memory_size          = local.lambda.memory_size_mb
+#  package_type         = "Image"
+#  role_arn             = module.iam_lambda_dynamo.role_arn
+#  subnet_ids           = local.public_subnet_ids
+#  vpc_id               = module.network.vpc.id
+#
+#  tags                 = local.default_tags
+#}
 
-  function_name        = "${local.app_name}-add-traveler-api-${local.environment}"
-  image_config_command = "add_traveler_api.lambda_handler"
-  image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
-  memory_size          = local.lambda.memory_size_mb
-  package_type         = "Image"
-  role_arn             = module.iam_lambda_dynamo.role_arn
-  subnet_ids           = local.public_subnet_ids
-  vpc_id               = module.network.vpc.id
+#module "lambda_delete_traveler_api" {
+#  source = "../../../modules/lambda_function"
+#
+#  app_name             = var.app_name
+#  environment          = var.environment
+#  function_name        = "${local.app_name}-delete-traveler-api-${local.environment}"
+#  image_config_command = "delete_traveler_api.lambda_handler"
+#  image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
+#  memory_size          = local.lambda.memory_size_mb
+#  package_type         = "Image"
+#  role_arn             = module.iam_lambda_dynamo.role_arn
+#  subnet_ids           = local.public_subnet_ids
+#  vpc_id               = module.network.vpc.id
+#
+#  tags                 = local.default_tags
+#}
 
-  tags                 = local.default_tags
-}
-
-module "lambda_delete_traveler_api" {
-  source = "../../../modules/lambda_function"
-
-  function_name        = "${local.app_name}-delete-traveler-api-${local.environment}"
-  image_config_command = "delete_traveler_api.lambda_handler"
-  image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
-  memory_size          = local.lambda.memory_size_mb
-  package_type         = "Image"
-  role_arn             = module.iam_lambda_dynamo.role_arn
-  subnet_ids           = local.public_subnet_ids
-  vpc_id               = module.network.vpc.id
-
-  tags                 = local.default_tags
-}
+#module "apigw_lambda" {
+#  source = "../../../modules/lambda_function"
+#
+#  app_name             = var.app_name
+#  environment          = var.environment
+#  base_function_name   = "${local.app_name}-delete-traveler-api-${local.environment}"
+#  image_config_command = "delete_traveler_api.lambda_handler"
+#  image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
+#  memory_size          = local.lambda.memory_size_mb
+#  package_type         = "Image"
+#  role_arn             = module.iam_lambda_dynamo.role_arn
+#  subnet_ids           = local.public_subnet_ids
+#  vpc_id               = module.network.vpc.id
+#
+#  tags                 = local.default_tags
+#}
 
 module "apigw_logs" {
   source            = "../../../modules/logs"
@@ -107,31 +127,61 @@ module "apigw_logs" {
   tags         = local.default_tags
 }
 
+locals {
+  lambda_configs = [
+    {
+      base_function_name   = "add-traveler-api"
+      http_method          = "POST"
+      image_config_command = "add_traveler_api.lambda_handler"
+    },
+    {
+      base_function_name   = "delete-traveler-api"
+      http_method          = "DELETE"
+      image_config_command = "delete_traveler_api.lambda_handler"
+    }
+  ]
+}
+
+module "lambdas" {
+  source = "../../../modules/lambda_function"
+
+  for_each             = {for index, cfg in local.lambda_configs: cfg.base_function_name => cfg}
+
+  app_name             = local.app_name
+  base_function_name   = each.value.base_function_name
+  environment          = local.environment
+  http_method          = each.value.http_method
+  image_config_command = each.value.image_config_command
+  image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
+  memory_size          = local.lambda.memory_size_mb
+  package_type         = "Image"
+  role_arn             = module.iam_lambda_dynamo.role_arn
+  subnet_ids           = local.public_subnet_ids
+  vpc_id               = module.network.vpc.id
+
+  tags                 = local.default_tags
+}
+
 module "apigw_lambda_http" {
   source = "../../../modules/apigw_lambda_http"
 
   environment              = var.environment
   name_prefix              = local.name_prefix
   cloudwatch_log_group_arn = module.apigw_logs.cloudwatch_log_group_arn
-  lambda_configs           = [
-    {
-      function_name = module.lambda_add_traveler_api.function_name
-      http_method   = "POST"
-      invoke_arn    = module.lambda_add_traveler_api.invoke_arn
-      path_part     = "add-traveler"
-    },
-    {
-      function_name = module.lambda_delete_traveler_api.function_name
-      http_method   = "DELETE"
-      invoke_arn    = module.lambda_delete_traveler_api.invoke_arn
-      path_part     = "delete-traveler"
+  lambda_configs = [
+    for idx, lambda in module.lambdas : {
+      function_name = lambda.function_name
+      http_method   = lambda.http_method
+      invoke_arn    = lambda.invoke_arn
+      path_part     = lambda.function_name
     }
   ]
 
-  tags                     = local.default_tags
   depends_on = [
-    module.ecr
+    module.ecr,
+    module.lambdas
   ]
+  tags = local.default_tags
 }
 
 # Merging secrets from created resources with prior secrets map
