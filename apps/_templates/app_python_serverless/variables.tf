@@ -44,6 +44,15 @@ variable "force_overwrite_secrets" {
   default     = false
 }
 
+variable "lambda_configs" {
+  description = "List of lambda configs to setup integrations"
+  type          = list(object({
+    base_function_name   = string
+    http_method          = string
+    image_config_command = string
+  }))
+}
+
 variable "memory_size_mb" {
   description = "Amount of memory in MB your Lambda Function can use at runtime"
   type        = bool

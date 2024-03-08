@@ -7,19 +7,6 @@ aws_region                     = "CHANGE_ME"
 aws_secret_key                 = "CHANGE_ME"
 force_overwrite_replica_secret = false
 
-lambda_configs = [
-  {
-    base_function_name   = "test1-api"
-    http_method          = "POST"
-    image_config_command = "test1_traveler_api.lambda_handler"
-  },
-  {
-    base_function_name   = "test2-api"
-    http_method          = "DELETE"
-    image_config_command = "test2_traveler_api.lambda_handler"
-  }
-]
-
 secret_map = {
   "AWS_ECR_REGISTRY_NAME":  "CHANGE_ME"
   "AWS_ECR_REPOSITORY_URL": "CHANGE_ME"

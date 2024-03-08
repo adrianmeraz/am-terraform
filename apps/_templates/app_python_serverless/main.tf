@@ -69,25 +69,25 @@ module "apigw_logs" {
   tags         = local.default_tags
 }
 
-locals {
-  lambda_configs = [
-    {
-      base_function_name   = "add-traveler-api"
-      http_method          = "POST"
-      image_config_command = "add_traveler_api.lambda_handler"
-    },
-    {
-      base_function_name   = "delete-traveler-api"
-      http_method          = "DELETE"
-      image_config_command = "delete_traveler_api.lambda_handler"
-    }
-  ]
-}
+#locals {
+#  lambda_configs = [
+#    {
+#      base_function_name   = "add-traveler-api"
+#      http_method          = "POST"
+#      image_config_command = "add_traveler_api.lambda_handler"
+#    },
+#    {
+#      base_function_name   = "delete-traveler-api"
+#      http_method          = "DELETE"
+#      image_config_command = "delete_traveler_api.lambda_handler"
+#    }
+#  ]
+#}
 
 module "lambdas" {
   source = "../../../modules/lambda_function"
 
-  for_each             = {for index, cfg in local.lambda_configs: cfg.base_function_name => cfg}
+  for_each             = {for index, cfg in var.lambda_configs: cfg.base_function_name => cfg}
 
   app_name             = local.app_name
   base_function_name   = each.value.base_function_name
