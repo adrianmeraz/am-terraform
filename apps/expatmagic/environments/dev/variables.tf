@@ -13,6 +13,15 @@ variable "aws_secret_key" {
   type        = string
 }
 
+variable "lambda_configs" {
+  description = "List of lambda configs to setup integrations"
+  type          = list(object({
+    base_function_name   = string
+    http_method          = string
+    image_config_command = string
+  }))
+}
+
 variable "force_overwrite_secrets" {
   description = "Allows for forcing updates of secrets. Useful when new secrets are added"
   type        = bool

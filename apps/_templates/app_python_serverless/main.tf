@@ -60,64 +60,6 @@ module "iam_lambda_dynamo" {
   tags        = local.default_tags
 }
 
-# TODO Create a way to create lambdas using a list of maps with the following:
-# base_function_name   = "delete-traveler-api"
-# http_method   	   = "POST"
-# image_config_command = "delete_traveler_api.lambda_handler"
-# path_part            = "delete-traveler"
-
-
-#module "lambda_add_traveler_api" {
-#  source = "../../../modules/lambda_function"
-#
-#  app_name             = local.app_name
-#  base_function_name   = "add-traveler-api"
-#  environment          = local.environment
-#  image_config_command = "add_traveler_api.lambda_handler"
-#  image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
-#  memory_size          = local.lambda.memory_size_mb
-#  package_type         = "Image"
-#  role_arn             = module.iam_lambda_dynamo.role_arn
-#  subnet_ids           = local.public_subnet_ids
-#  vpc_id               = module.network.vpc.id
-#
-#  tags                 = local.default_tags
-#}
-
-#module "lambda_delete_traveler_api" {
-#  source = "../../../modules/lambda_function"
-#
-#  app_name             = var.app_name
-#  environment          = var.environment
-#  function_name        = "${local.app_name}-delete-traveler-api-${local.environment}"
-#  image_config_command = "delete_traveler_api.lambda_handler"
-#  image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
-#  memory_size          = local.lambda.memory_size_mb
-#  package_type         = "Image"
-#  role_arn             = module.iam_lambda_dynamo.role_arn
-#  subnet_ids           = local.public_subnet_ids
-#  vpc_id               = module.network.vpc.id
-#
-#  tags                 = local.default_tags
-#}
-
-#module "apigw_lambda" {
-#  source = "../../../modules/lambda_function"
-#
-#  app_name             = var.app_name
-#  environment          = var.environment
-#  base_function_name   = "${local.app_name}-delete-traveler-api-${local.environment}"
-#  image_config_command = "delete_traveler_api.lambda_handler"
-#  image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
-#  memory_size          = local.lambda.memory_size_mb
-#  package_type         = "Image"
-#  role_arn             = module.iam_lambda_dynamo.role_arn
-#  subnet_ids           = local.public_subnet_ids
-#  vpc_id               = module.network.vpc.id
-#
-#  tags                 = local.default_tags
-#}
-
 module "apigw_logs" {
   source            = "../../../modules/logs"
 
