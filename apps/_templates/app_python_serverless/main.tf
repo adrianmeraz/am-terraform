@@ -71,7 +71,7 @@ module "apigw_logs" {
 }
 
 module "lambdas" {
-  source = "../../../modules/lambda_function"
+  source = "../../../modules/lambda_function_public"
 
   for_each             = {for index, cfg in var.lambda_configs: cfg.base_function_name => cfg}
 
@@ -84,8 +84,6 @@ module "lambdas" {
   memory_size          = local.lambda.memory_size_mb
   package_type         = "Image"
   role_arn             = module.iam_lambda_dynamo.role_arn
-  subnet_ids           = local.public_subnet_ids
-  vpc_id               = module.network.vpc.id
 
   tags                 = local.default_tags
 }

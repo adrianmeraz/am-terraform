@@ -5,7 +5,7 @@ locals {
 
 resource "aws_security_group" "lambda" {
   name        = "${var.base_function_name}-lambda-sg"
-  description = "Allow incoming postgres traffic"
+  description = "Security group for lambda"
   vpc_id      = var.vpc_id
 
   tags = var.tags
