@@ -11,7 +11,7 @@ resource "aws_vpc" "main" {
   tags = merge(
     {
       Name = "${var.name_prefix}-vpc"
-    }
+    },
     var.tags
   )
 }
