@@ -10,7 +10,6 @@ resource "aws_api_gateway_rest_api" "http" {
 module "apigw_integration" {
   source = "../apigw_lambda_integration"
 
-  # for_each                   = {for index, cfg in var.lambda_configs: cfg.invoke_arn => cfg}
   for_each                   = {for cfg in var.lambda_configs: cfg.invoke_arn => cfg}
 
   http_method                = each.value.http_method
