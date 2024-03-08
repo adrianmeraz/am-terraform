@@ -34,6 +34,7 @@ module "network" {
   source = "../../../modules/network"
 
   cidr_block = "10.0.0.0/16"
+  name_prefix = local.name_prefix
 
   tags       = local.default_tags
 }
