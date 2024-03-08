@@ -99,7 +99,7 @@ module "apigw_lambda_http" {
       function_name = lambda.function_name
       http_method   = lambda.http_method
       invoke_arn    = lambda.invoke_arn
-      path_part     = lambda.function_name
+      path_part     = lambda.base_function_name
     }
   ]
 

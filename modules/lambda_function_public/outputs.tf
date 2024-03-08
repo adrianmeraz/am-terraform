@@ -1,3 +1,8 @@
+output "base_function_name" {
+  description = "Base unique name for Lambda Function"
+  value       = var.base_function_name
+}
+
 output "function_name" {
   description = "lambda function name"
   value       = aws_lambda_function.main.function_name
