@@ -86,6 +86,9 @@ module "lambdas" {
   role_arn             = module.iam_lambda_dynamo.role_arn
 
   tags                 = local.default_tags
+  depends_on = [
+    module.ecr
+  ]
 }
 
 module "apigw_lambda_http" {
@@ -123,4 +126,8 @@ module "secret_version" {
       "AWS_ECR_REPOSITORY_URL": module.ecr.repository_url
     }
   )
+
+  depends_on = [
+    module.ecr
+  ]
 }

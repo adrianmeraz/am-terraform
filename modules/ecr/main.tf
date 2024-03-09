@@ -18,7 +18,7 @@ resource  "aws_ecr_repository" "main" {
   provisioner "local-exec" {
     interpreter = ["PowerShell", "-Command"]
     command = <<-EOT
-      docker login ${data.aws_ecr_authorization_token.token.proxy_endpoint} -u AWS -p ${data.aws_ecr_authorization_token.token.password}
+      docker login ${data.aws_ecr_authorization_token.token.proxy_endpoint} -u AWS --password-stdin ${data.aws_ecr_authorization_token.token.password}
       docker pull hello-world
       docker tag hello-world:${var.image_tag} ${self.repository_url}:${var.image_tag}
       docker push ${self.repository_url}:${var.image_tag}

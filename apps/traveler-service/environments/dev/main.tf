@@ -13,12 +13,12 @@ module "app_python_lambda" {
   environment                    = local.environment
   lambda_configs = [
     {
-      base_function_name   = "add-traveler-api"
+      base_function_name   = "add-traveler"
       http_method          = "POST"
       image_config_command = "add_traveler_api.lambda_handler"
     },
     {
-      base_function_name   = "delete-traveler-api"
+      base_function_name   = "delete-traveler"
       http_method          = "DELETE"
       image_config_command = "delete_traveler_api.lambda_handler"
     }
