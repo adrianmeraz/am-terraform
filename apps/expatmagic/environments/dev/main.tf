@@ -2,6 +2,7 @@ locals {
   app_name    = "expatmagic"
   environment = "dev"
 }
+
 module "app_spring_boot" {
   source = "../../../_templates/app_spring_boot_ecs"
 

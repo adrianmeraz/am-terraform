@@ -18,6 +18,11 @@ variable "aws_secret_key" {
   type = string
 }
 
+variable "dynamo_db_table_name" {
+  description = "Dynamo DB Table Name"
+  type = string
+}
+
 variable "environment" {
   description = "App Environment"
   type = string

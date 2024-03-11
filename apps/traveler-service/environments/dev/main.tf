@@ -1,6 +1,13 @@
 locals {
   app_name    = "traveler-service"
   environment = "dev"
+  name_prefix = "${local.app_name}-${local.environment}"
+}
+
+module "dynamo_db" {
+  source = "../../modules/dynamo_db"
+
+  name_prefix = local.name_prefix
 }
 
 module "app_python_lambda" {
@@ -10,6 +17,7 @@ module "app_python_lambda" {
   aws_access_key                 = var.aws_access_key
   aws_region                     = var.aws_region
   aws_secret_key                 = var.aws_access_key
+  dynamo_db_table_name           = module.dynamo_db.table_name
   environment                    = local.environment
   lambda_configs = [
     {
