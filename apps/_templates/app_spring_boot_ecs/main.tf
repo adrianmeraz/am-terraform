@@ -69,10 +69,10 @@ module "alb_http" {
 module "apigw_logs" {
   source            = "../../../modules/logs"
 
-  app_name     = local.app_name
-  environment  = local.environment
+  app_name         = local.app_name
+  environment      = local.environment
   aws_service_name = "apigw"
-  tags         = data.aws_default_tags.main.tags
+  tags             = data.aws_default_tags.main.tags
 }
 
 module "apigw_ecs_http" {
