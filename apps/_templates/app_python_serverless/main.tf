@@ -66,7 +66,7 @@ module "apigw_logs" {
 
   app_name     = local.app_name
   environment  = local.environment
-  service_name = "apigw"
+  aws_service_name = "apigw"
   tags         = local.default_tags
 }
 

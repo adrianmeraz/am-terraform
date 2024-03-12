@@ -71,7 +71,7 @@ module "apigw_logs" {
 
   app_name     = local.app_name
   environment  = local.environment
-  service_name = "apigw"
+  aws_service_name = "apigw"
   tags         = data.aws_default_tags.main.tags
 }
 
@@ -141,7 +141,7 @@ module "ecs_logs" {
 
   app_name     = local.app_name
   environment  = local.environment
-  service_name = "ecs"
+  aws_service_name = "ecs"
   tags         = data.aws_default_tags.main.tags
 }
 

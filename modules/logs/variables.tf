@@ -14,7 +14,7 @@ variable "environment" {
   type        = string
 }
 
-variable "service_name" {
+variable "aws_service_name" {
   description = "Abbreviation of service name"
   type        = string
 }
