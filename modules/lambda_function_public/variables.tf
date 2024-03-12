@@ -55,7 +55,6 @@ variable "role_arn" {
 }
 
 variable "source_code_hash" {
-  description = "Identifier of the function's runtime."
+  description = "Used to trigger updates. Must be set to a base64-encoded SHA256 hash"
   type        = string
-  default     = ""
 }

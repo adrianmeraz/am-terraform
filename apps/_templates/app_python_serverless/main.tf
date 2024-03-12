@@ -70,6 +70,11 @@ module "apigw_logs" {
   tags         = local.default_tags
 }
 
+data "aws_ecr_image" "latest" {
+  repository_name = module.ecr.name
+  most_recent       = true
+}
+
 module "lambdas" {
   source = "../../../modules/lambda_function_public"
 
@@ -84,6 +89,7 @@ module "lambdas" {
   memory_size          = local.lambda.memory_size_mb
   package_type         = "Image"
   role_arn             = module.iam_lambda_dynamo.role_arn
+  source_code_hash     = data.aws_ecr_image.latest.image_digest
 
   tags                 = local.default_tags
   depends_on = [
