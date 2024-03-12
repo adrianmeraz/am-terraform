@@ -21,6 +21,11 @@ module "app_python_lambda" {
   environment                    = local.environment
   lambda_configs = [
     {
+      base_function_name   = "add-organization"
+      http_method          = "POST"
+      image_config_command = "add_organization_api.lambda_handler"
+    },
+    {
       base_function_name   = "add-traveler"
       http_method          = "POST"
       image_config_command = "add_traveler_api.lambda_handler"
