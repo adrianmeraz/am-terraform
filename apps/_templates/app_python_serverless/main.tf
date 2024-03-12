@@ -89,7 +89,7 @@ module "lambdas" {
   memory_size          = local.lambda.memory_size_mb
   package_type         = "Image"
   role_arn             = module.iam_lambda_dynamo.role_arn
-  source_code_hash     = split(":", data.aws_ecr_image.latest.image_digest)[1]
+  source_code_hash     = split(":", data.aws_ecr_image.latest.image_digest)[1] # Use only hash without sha256: prefix
 
   tags                 = local.default_tags
   depends_on = [

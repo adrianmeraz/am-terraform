@@ -85,7 +85,7 @@ resource "aws_api_gateway_method_response" "options" {
 
 resource "aws_api_gateway_integration" "options" {
   http_method             = aws_api_gateway_method.options.http_method
-  integration_http_method = "OPTIONS"
+  # integration_http_method = "OPTIONS" # Removed per https://github.com/hashicorp/terraform-provider-aws/issues/11810
   resource_id             = aws_api_gateway_resource.main.id
   rest_api_id             = var.rest_api_id
   type                    = "MOCK"
