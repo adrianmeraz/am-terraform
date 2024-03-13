@@ -8,6 +8,7 @@ data "aws_iam_policy_document" "lambda" {
     principals {
       type        = "Service"
       identifiers = [
+        "apigateway.amazonaws.com",
         "lambda.amazonaws.com",
         "secretsmanager.amazonaws.com"
       ]

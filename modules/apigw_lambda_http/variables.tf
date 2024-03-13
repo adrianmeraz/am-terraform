@@ -14,6 +14,11 @@ variable "cloudwatch_log_group_arn" {
   type        = string
 }
 
+variable "cloudwatch_role_arn" {
+  description = "Cloudwatch Role ARN"
+  type        = string
+}
+
 variable "lambda_configs" {
   description = "List of lambda configs to setup integrations"
   type          = list(object({

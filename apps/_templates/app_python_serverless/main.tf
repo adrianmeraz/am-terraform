@@ -65,9 +65,13 @@ module "apigw_logs" {
   source            = "../../../modules/logs"
 
   app_name         = local.app_name
-  environment      = local.environment
   aws_service_name = "apigw"
+  environment      = local.environment
   tags             = local.default_tags
+
+  depends_on = [
+    module.iam_lambda_dynamo
+  ]
 }
 
 data "aws_ecr_image" "latest" {
@@ -103,6 +107,7 @@ module "apigw_lambda_http" {
   environment              = var.environment
   name_prefix              = local.name_prefix
   cloudwatch_log_group_arn = module.apigw_logs.cloudwatch_log_group_arn
+  cloudwatch_role_arn      = module.iam_lambda_dynamo.role_arn
   lambda_configs = [
     for idx, lambda in module.lambdas : {
       function_name = lambda.function_name

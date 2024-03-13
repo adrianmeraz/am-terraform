@@ -34,9 +34,10 @@ resource "aws_ce_cost_allocation_tag" "example" {
 module "network" {
   source = "../../../modules/network"
 
-  cidr_block = "10.0.0.0/16"
+  cidr_block  = "10.0.0.0/16"
+  name_prefix = local.name_prefix
 
-  tags       = data.aws_default_tags.main.tags
+  tags        = data.aws_default_tags.main.tags
 }
 
 locals {
@@ -139,10 +140,10 @@ module "secret_version" {
 module "ecs_logs" {
   source            = "../../../modules/logs"
 
-  app_name     = local.app_name
-  environment  = local.environment
+  app_name         = local.app_name
+  environment      = local.environment
   aws_service_name = "ecs"
-  tags         = data.aws_default_tags.main.tags
+  tags             = data.aws_default_tags.main.tags
 }
 
 locals {
