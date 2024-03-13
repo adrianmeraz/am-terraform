@@ -17,7 +17,7 @@ data "aws_iam_policy_document" "lambda" {
 }
 
 resource "aws_iam_role" "lambda" {
-  name_prefix        = var.name_prefix
+  name               = "${var.name_prefix}-role"
   assume_role_policy = data.aws_iam_policy_document.lambda.json
 
   tags = var.tags
@@ -71,6 +71,7 @@ data "aws_iam_policy_document" "main" {
 }
 
 resource "aws_iam_policy" "main" {
+  name = "${var.name_prefix}-policy"
   policy = data.aws_iam_policy_document.main.json
 }
 
