@@ -63,15 +63,15 @@ module "iam_lambda_dynamo" {
 
 module "apigw_logs" {
   source            = "../../../modules/logs"
+  depends_on = [
+    module.iam_lambda_dynamo
+  ]
 
   app_name         = local.app_name
   aws_service_name = "apigw"
   environment      = local.environment
-  tags             = local.default_tags
 
-  depends_on = [
-    module.iam_lambda_dynamo
-  ]
+  tags             = local.default_tags
 }
 
 data "aws_ecr_image" "latest" {
@@ -81,6 +81,9 @@ data "aws_ecr_image" "latest" {
 
 module "lambdas" {
   source = "../../../modules/lambda_function_public"
+  depends_on = [
+    module.ecr
+  ]
 
   for_each             = {for index, cfg in var.lambda_configs: cfg.base_function_name => cfg}
 
@@ -96,13 +99,14 @@ module "lambdas" {
   source_code_hash     = split(":", data.aws_ecr_image.latest.image_digest)[1] # Use only hash without sha256: prefix
 
   tags                 = local.default_tags
-  depends_on = [
-    module.ecr
-  ]
 }
 
 module "apigw_lambda_http" {
   source = "../../../modules/apigw_lambda_http"
+  depends_on = [
+    module.ecr,
+    module.lambdas
+  ]
 
   environment              = var.environment
   name_prefix              = local.name_prefix
@@ -117,10 +121,6 @@ module "apigw_lambda_http" {
     }
   ]
 
-  depends_on = [
-    module.ecr,
-    module.lambdas
-  ]
   tags = local.default_tags
 }
 
@@ -128,6 +128,9 @@ module "apigw_lambda_http" {
 module "secret_version" {
   # Only creates secrets if the secret string has changed
   source          = "../../../modules/secret_version"
+  depends_on = [
+    module.ecr
+  ]
 
   secret_id       = module.secrets.secretsmanager_secret_id
   secret_map      = merge(
@@ -138,8 +141,4 @@ module "secret_version" {
       "AWS_ECR_REPOSITORY_URL": module.ecr.repository_url
     }
   )
-
-  depends_on = [
-    module.ecr
-  ]
 }

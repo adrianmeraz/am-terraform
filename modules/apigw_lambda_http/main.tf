@@ -35,12 +35,12 @@ module "apigw_integration" {
 #}
 
 resource "aws_api_gateway_deployment" "main" {
-  rest_api_id = aws_api_gateway_rest_api.http.id
-  stage_name  = var.environment
-
   depends_on = [
     module.apigw_integration
   ]
+
+  rest_api_id = aws_api_gateway_rest_api.http.id
+  stage_name  = var.environment
 }
 
 # Set a default stage

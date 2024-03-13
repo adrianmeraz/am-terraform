@@ -38,6 +38,11 @@ resource "aws_api_gateway_integration" "lambda" {
 }
 
 resource "aws_api_gateway_integration_response" "proxy" {
+  depends_on = [
+    aws_api_gateway_method.proxy,
+    aws_api_gateway_integration.lambda
+  ]
+
   http_method = aws_api_gateway_method.proxy.http_method
   resource_id = aws_api_gateway_resource.main.id
   rest_api_id = var.rest_api_id
@@ -49,11 +54,6 @@ resource "aws_api_gateway_integration_response" "proxy" {
     "method.response.header.Access-Control-Allow-Methods" = "'DELETE,GET,OPTIONS,POST,PUT'",
     "method.response.header.Access-Control-Allow-Origin"  = "'*'"
   }
-
-  depends_on = [
-    aws_api_gateway_method.proxy,
-    aws_api_gateway_integration.lambda
-  ]
 }
 
 ##############################################
@@ -96,6 +96,11 @@ resource "aws_api_gateway_integration" "options" {
 }
 
 resource "aws_api_gateway_integration_response" "options" {
+  depends_on = [
+    aws_api_gateway_method.options,
+    aws_api_gateway_integration.options,
+  ]
+
   http_method = aws_api_gateway_method.options.http_method
   resource_id = aws_api_gateway_resource.main.id
   rest_api_id = var.rest_api_id
@@ -106,11 +111,6 @@ resource "aws_api_gateway_integration_response" "options" {
     "method.response.header.Access-Control-Allow-Methods" = "'DELETE,GET,OPTIONS,POST,PUT'",
     "method.response.header.Access-Control-Allow-Origin"  = "'*'"
   }
-
-  depends_on = [
-    aws_api_gateway_method.options,
-    aws_api_gateway_integration.options,
-  ]
 }
 
 resource "aws_lambda_permission" "apigw_lambda" {

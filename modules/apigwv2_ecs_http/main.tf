@@ -28,11 +28,14 @@ resource "aws_apigatewayv2_integration" "main" {
 }
 
 resource "aws_apigatewayv2_route" "any" {
+  depends_on = [
+    aws_apigatewayv2_integration.main
+  ]
+
   api_id     = local.api_id
   # route_key  = "ANY /${var.environment}/{proxy+}"
   route_key  = "ANY /{proxy+}"
   target     = "integrations/${aws_apigatewayv2_integration.main.id}"
-  depends_on = [aws_apigatewayv2_integration.main]
 }
 
 # Set a default stage
