@@ -61,9 +61,9 @@ resource "aws_api_gateway_integration_response" "proxy" {
 ##############################################
 
 resource "aws_api_gateway_method" "options" {
-  authorization  = "NONE"
-  #  authorization = "COGNITO_USER_POOLS"
-  #  authorizer_id = aws_api_gateway_authorizer.demo.id
+  # authorization  = "NONE"
+  authorization  = "COGNITO_USER_POOLS"
+  authorizer_id  = var.cognito_authorizer_id
   http_method    = "OPTIONS"
   operation_name = "${aws_api_gateway_resource.main.path_part}-${var.http_method}"
   resource_id    = aws_api_gateway_resource.main.id

@@ -10,8 +10,7 @@ resource "aws_cognito_user_pool_client" "main" {
   allowed_oauth_scopes                 = var.allowed_oauth_scopes
   explicit_auth_flows                  = var.explicit_auth_flows
   supported_identity_providers         = var.supported_identity_providers
+  user_pool_id                         = aws_cognito_user_pool.main.id
   callback_urls                        = var.callback_urls
   logout_urls                          = var.logout_urls
-
-  user_pool_id                         = aws_cognito_user_pool.main.id
 }
