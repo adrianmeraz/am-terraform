@@ -39,6 +39,7 @@ variable "explicit_auth_flows" {
   type        = list(string)
   default = [
     "ALLOW_ADMIN_USER_PASSWORD_AUTH",
+    "ALLOW_REFRESH_TOKEN_AUTH",
     "ALLOW_USER_PASSWORD_AUTH"
   ]
 }
