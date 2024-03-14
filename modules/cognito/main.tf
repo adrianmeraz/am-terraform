@@ -12,7 +12,8 @@ resource "aws_cognito_user_pool_domain" "main" {
 resource "aws_cognito_user_pool_client" "main" {
   name                                 = "${var.name_prefix}-client"
   allowed_oauth_flows_user_pool_client = true
-  generate_secret                      = true
+  generate_secret                      = false
+  prevent_user_existence_errors        = "ENABLED"
   allowed_oauth_flows                  = var.allowed_oauth_flows
   allowed_oauth_scopes                 = var.allowed_oauth_scopes
   explicit_auth_flows                  = var.explicit_auth_flows
