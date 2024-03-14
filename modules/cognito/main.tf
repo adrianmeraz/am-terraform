@@ -2,8 +2,10 @@ resource "aws_cognito_user_pool" "main" {
   name = "${var.name_prefix}-pool"
 }
 
+data "aws_caller_identity" "current" {}
+
 resource "aws_cognito_user_pool_domain" "main" {
-  domain       = "${var.name_prefix}-${aws_cognito_user_pool.main.id}"
+  domain       = "${var.name_prefix}-${data.aws_caller_identity.current.account_id}"
   user_pool_id = aws_cognito_user_pool.main.id
 }
 
