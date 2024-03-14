@@ -39,9 +39,9 @@ resource "aws_api_gateway_deployment" "main" {
     module.apigw_integration
   ]
 
-  stage_description = md5(file("main.tf")) # Forces redeployment of stage upon any change to THIS file per https://github.com/hashicorp/terraform/issues/6613#issuecomment-322264393
-  rest_api_id = aws_api_gateway_rest_api.http.id
-  stage_name  = var.environment
+  stage_description = md5(file("main.tf")) # Forces redeployment of stage upon any change to apigw per https://github.com/hashicorp/terraform/issues/6613#issuecomment-322264393
+  rest_api_id       = aws_api_gateway_rest_api.http.id
+  stage_name        = var.environment
 }
 
 # Set a default stage
