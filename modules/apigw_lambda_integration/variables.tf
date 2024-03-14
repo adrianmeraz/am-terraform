@@ -4,6 +4,11 @@ variable "tags" {
   default     = {}
 }
 
+variable "cognito_authorizer_id" {
+  description = "Cognito Authorizer"
+  type        = string
+}
+
 variable "http_method" {
   description = "HTTP Method (GET, POST, PUT, DELETE, HEAD, OPTIONS, ANY)"
   type        = string

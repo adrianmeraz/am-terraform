@@ -101,8 +101,17 @@ module "lambdas" {
   tags                 = local.default_tags
 }
 
+module "cognito" {
+  source = "../../../modules/cognito"
+
+  environment   = var.environment
+  name_prefix   = local.name_prefix
+  callback_urls = ["https://www.example.com/dev/cognito/callback"]
+  logout_urls   = ["https://www.example.com/dev/cognito/logout"]
+}
+
 module "apigw_lambda_http" {
-  source = "../../../modules/apigw_lambda_http"
+  source = "../../../modules/apigw_lambda_with_auth"
   depends_on = [
     module.ecr,
     module.lambdas
@@ -112,6 +121,7 @@ module "apigw_lambda_http" {
   name_prefix              = local.name_prefix
   cloudwatch_log_group_arn = module.apigw_logs.cloudwatch_log_group_arn
   cloudwatch_role_arn      = module.iam_lambda_dynamo.role_arn
+  cognito_pool_arn         = module.cognito.pool_arn
   lambda_configs = [
     for idx, lambda in module.lambdas : {
       function_name = lambda.function_name

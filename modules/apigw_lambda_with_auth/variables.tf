@@ -19,6 +19,11 @@ variable "cloudwatch_role_arn" {
   type        = string
 }
 
+variable "cognito_pool_arn" {
+  description = "Cognito Pool ARN"
+  type        = string
+}
+
 variable "lambda_configs" {
   description = "List of lambda configs to setup integrations"
   type          = list(object({

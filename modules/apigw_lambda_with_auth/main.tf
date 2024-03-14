@@ -11,11 +11,20 @@ resource "aws_api_gateway_rest_api" "http" {
 
 }
 
+//Add in later
+resource "aws_api_gateway_authorizer" "cognito" {
+  name          = "${var.name_prefix}-au  thorizer"
+  rest_api_id   = aws_api_gateway_rest_api.http.id
+  type          = "COGNITO_USER_POOLS"
+  provider_arns = [var.cognito_pool_arn]
+}
+
 module "apigw_integration" {
   source = "../apigw_lambda_integration"
 
   for_each                   = {for cfg in var.lambda_configs: cfg.function_name => cfg}
 
+  cognito_authorizer_id      = aws_api_gateway_authorizer.cognito.id
   http_method                = each.value.http_method
   name_prefix                = var.name_prefix
   lambda_function_invoke_arn = each.value.invoke_arn
@@ -25,14 +34,6 @@ module "apigw_integration" {
   rest_api_id                = aws_api_gateway_rest_api.http.id
   root_resource_id           = aws_api_gateway_rest_api.http.root_resource_id
 }
-
-//Add in later
-#resource "aws_api_gateway_authorizer" "main" {
-#  name          = "${var.name_prefix}-authorizer"
-#  rest_api_id   = local.api_id
-#  type          = "COGNITO_USER_POOLS"
-#  provider_arns = [aws_cognito_user_pool.pool.arn]
-#}
 
 resource "aws_api_gateway_deployment" "main" {
   depends_on = [
@@ -69,4 +70,15 @@ resource "aws_api_gateway_stage" "default" {
   }
 
   tags = var.tags
+}
+
+resource "aws_api_gateway_method_settings" "main" {
+  rest_api_id = aws_api_gateway_rest_api.http.id
+  stage_name  = aws_api_gateway_stage.default.stage_name
+  method_path = "*/*"
+  settings {
+    logging_level = "INFO"
+    data_trace_enabled = true
+    metrics_enabled = true
+  }
 }
