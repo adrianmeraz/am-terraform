@@ -2,6 +2,11 @@ resource "aws_cognito_user_pool" "main" {
   name = "${var.name_prefix}-pool"
 }
 
+resource "aws_cognito_user_pool_domain" "main" {
+  domain       = "${var.name_prefix}-${aws_cognito_user_pool.main.id}"
+  user_pool_id = aws_cognito_user_pool.main.id
+}
+
 resource "aws_cognito_user_pool_client" "main" {
   name                                 = "${var.name_prefix}-client"
   allowed_oauth_flows_user_pool_client = true
