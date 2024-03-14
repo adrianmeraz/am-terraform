@@ -7,8 +7,8 @@ resource "aws_api_gateway_rest_api" "http" {
   endpoint_configuration {
     types = ["REGIONAL"]
   }
-  tags = var.tags
 
+  tags = var.tags
 }
 
 resource "aws_api_gateway_authorizer" "cognito" {

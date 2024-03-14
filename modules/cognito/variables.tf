@@ -38,8 +38,8 @@ variable "explicit_auth_flows" {
   description = "List of authentication flows"
   type        = list(string)
   default = [
-    "ADMIN_NO_SRP_AUTH",
-    "USER_PASSWORD_AUTH"
+    "ALLOW_ADMIN_USER_PASSWORD_AUTH",
+    "ALLOW_USER_PASSWORD_AUTH"
   ]
 }
 
@@ -52,11 +52,11 @@ variable "supported_identity_providers" {
 }
 
 variable "callback_urls" {
-  description = " List of allowed callback URLs for the identity providers"
+  description = " List of allowed callback URLs for the identity providers. Where the user lands after a successful login."
   type        = list(string)
 }
 
 variable "logout_urls" {
-  description = "List of allowed logout URLs for the identity providers"
+  description = "List of allowed logout URLs for the identity providers. Where the user lands after a successful logout."
   type        = list(string)
 }
