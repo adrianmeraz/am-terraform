@@ -2,9 +2,10 @@ terraform {
   required_version = "1.7.1"
 
   backend "s3" {
-    bucket = "emcore-dev-tfstate"
-    region = "us-west-2"
-    key    = "emcore-dev/terraform.tfstate"
+    profile = "expatmagic"
+    bucket  = "em-dev-tfstate"
+    region  = "us-west-2"
+    key     = "emcore-dev/terraform.tfstate"
   }
 
   required_providers {

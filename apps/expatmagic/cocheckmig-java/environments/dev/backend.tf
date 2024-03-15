@@ -2,9 +2,10 @@ terraform {
   required_version = "1.7.1"
 
   backend "s3" {
-    bucket = "cocheckmig-java-dev-tfstate"
-    region = "us-west-2"
-    key    = "cocheckmig-java/terraform.tfstate"
+    profile = "expatmagic"
+    bucket  = "em-dev-tfstate"
+    region  = "us-west-2"
+    key     = "cocheckmig-java/terraform.tfstate"
   }
 
   required_providers {
