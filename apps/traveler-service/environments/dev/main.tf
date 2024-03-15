@@ -26,9 +26,19 @@ module "app_python_lambda" {
       image_config_command = "add_organization_api.lambda_handler"
     },
     {
+      base_function_name   = "get-organization"
+      http_method          = "GET"
+      image_config_command = "get_organization_api.lambda_handler"
+    },
+    {
       base_function_name   = "add-traveler"
       http_method          = "POST"
       image_config_command = "add_traveler_api.lambda_handler"
+    },
+    {
+      base_function_name   = "add-user"
+      http_method          = "POST"
+      image_config_command = "add_user_api.lambda_handler"
     },
     {
       base_function_name   = "delete-traveler"
