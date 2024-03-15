@@ -1,7 +1,3 @@
-locals {
-  cidr_ipv4 = "0.0.0.0/0"
-}
-
 resource "aws_dynamodb_table" "main" {
   name             = "${var.name_prefix}-table"
   hash_key         = "PK"
@@ -11,7 +7,7 @@ resource "aws_dynamodb_table" "main" {
   stream_view_type = "NEW_AND_OLD_IMAGES"
 
   replica {
-    region_name = "us-east-2"
+    region_name = var.replica_region_name
   }
 
   attribute {

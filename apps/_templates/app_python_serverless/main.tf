@@ -101,15 +101,6 @@ module "lambdas" {
   tags                 = local.default_tags
 }
 
-module "cognito" {
-  source = "../../../modules/cognito"
-
-  environment   = var.environment
-  name_prefix   = local.name_prefix
-  callback_urls = ["https://www.example.com/dev/cognito/callback"]
-  logout_urls   = ["https://www.example.com/dev/cognito/logout"]
-}
-
 module "apigw_lambda_http" {
   source = "../../../modules/apigw_lambda_with_auth"
   depends_on = [
