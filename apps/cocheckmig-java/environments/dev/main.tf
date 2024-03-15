@@ -1,5 +1,5 @@
 locals {
-  app_name    = "expatmagic"
+  app_name    = "cocheckmig-java"
   environment = "dev"
 }
 
