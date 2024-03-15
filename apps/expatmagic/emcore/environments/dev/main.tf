@@ -1,5 +1,5 @@
 locals {
-  app_name    = "traveler-service"
+  app_name    = "emcore"
   environment = "dev"
   name_prefix = "${local.app_name}-${local.environment}"
 }
@@ -11,7 +11,7 @@ module "dynamo_db" {
 }
 
 module "app_python_lambda" {
-  source = "../../../_templates/app_python_serverless"
+  source = "../../../../_templates/app_python_serverless"
 
   app_name                       = local.app_name
   aws_access_key                 = var.aws_access_key

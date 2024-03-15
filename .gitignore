@@ -7,7 +7,7 @@ build/
 
 ### Environment Variables ###
 */.env
-apps/cocheckmig-java/environments/dev/.env
+apps/expatmagic/cocheckmig-java/environments/dev/.env
 
 ### STS ###
 .apt_generated
