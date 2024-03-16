@@ -28,6 +28,10 @@ variable "environment" {
   type = string
 }
 
+variable "cognito_pool_arn" {
+  description = "Shared cognito pool arn for apigw authenticator"
+  type        = string
+}
 
 variable "ecs" {
   description = "ECS task parameters"

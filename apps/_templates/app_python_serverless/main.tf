@@ -1,11 +1,10 @@
 module "secrets" {
   source = "../../../modules/secrets"
 
-  app_name                  = var.app_name
-  environment               = var.environment
-  recovery_window_in_days   = 0 # Allows for instant deletes
-  secret_map                = var.secret_map
-  force_overwrite_secrets   = var.force_overwrite_secrets
+  recovery_window_in_days = 0 # Allows for instant deletes
+  secret_map              = var.secret_map
+  secret_name_prefix      = "${var.app_name}/${var.environment}"
+  force_overwrite_secrets = var.force_overwrite_secrets
 }
 
 data "aws_default_tags" "main" {}
@@ -112,7 +111,7 @@ module "apigw_lambda_http" {
   name_prefix              = local.name_prefix
   cloudwatch_log_group_arn = module.apigw_logs.cloudwatch_log_group_arn
   cloudwatch_role_arn      = module.iam_lambda_dynamo.role_arn
-  cognito_pool_arn         = module.cognito.pool_arn
+  cognito_pool_arn         = var.cognito_pool_arn
   lambda_configs = [
     for idx, lambda in module.lambdas : {
       function_name = lambda.function_name

@@ -4,16 +4,6 @@ variable "tags" {
   default     = {}
 }
 
-variable "app_name" {
-  description = "App Name"
-  type = string
-}
-
-variable "environment" {
-  description = "App Environment"
-  type = string
-}
-
 variable "force_overwrite_secrets" {
   description = "Allows for forcing updates of secrets. Useful when new secrets are added"
   type        = bool
@@ -30,4 +20,9 @@ variable "secret_map" {
   description = "A map of secret keys and values"
   type        = map(string)
   default     = {}
+}
+
+variable "secret_name_prefix" {
+  description = "Secret name prefix i.e. 'appname/dev'"
+  type        = string
 }

@@ -4,10 +4,24 @@ locals {
   name_prefix = "${local.app_name}-${local.environment}"
 }
 
+data "aws_secretsmanager_secret_version" "shared" {
+  secret_id = "expatmagic/dev/shared/secret"
+}
+
+locals  {
+  secret_map = jsondecode(data.aws_secretsmanager_secret_version.shared.secret_string)
+}
+
+data "aws_cognito_user_pools" "shared" {
+  id   = local.secret_map["COGNITO_POOL_ID"]
+  name = local.secret_map["COGNITO_POOL_NAME"]
+}
+
 module "dynamo_db" {
   source = "../../modules/dynamo_db"
 
   name_prefix = local.name_prefix
+  replica_region_name = var.aws_region
 }
 
 module "app_python_lambda" {
@@ -17,6 +31,7 @@ module "app_python_lambda" {
   aws_access_key                 = var.aws_access_key
   aws_region                     = var.aws_region
   aws_secret_key                 = var.aws_access_key
+  cognito_pool_arn               = tolist(data.aws_cognito_user_pools.shared.ids)[0]
   dynamo_db_table_name           = module.dynamo_db.table_name
   environment                    = local.environment
   lambda_configs = [
