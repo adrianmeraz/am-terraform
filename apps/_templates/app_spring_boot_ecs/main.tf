@@ -34,6 +34,14 @@ module "network" {
   tags        = data.aws_default_tags.main.tags
 }
 
+resource "aws_ce_cost_allocation_tag" "main" {
+  tag_key = "app_name"
+  status  = "Active"
+  depends_on = [
+    module.network
+  ]
+}
+
 locals {
   private_subnet_ids = [for subnet in module.network.private_subnets: subnet.id]
 }
@@ -201,9 +209,4 @@ module "ecs_cluster_public" {
     subnets          = [for subnet in module.network.public_subnets: subnet.id]
   }
   tags               = data.aws_default_tags.main.tags
-}
-
-resource "aws_ce_cost_allocation_tag" "main" {
-  tag_key = "app_name"
-  status  = "Active"
 }

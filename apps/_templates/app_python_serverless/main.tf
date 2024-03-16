@@ -33,6 +33,14 @@ module "network" {
   tags       = local.default_tags
 }
 
+resource "aws_ce_cost_allocation_tag" "main" {
+  tag_key = "app_name"
+  status  = "Active"
+  depends_on = [
+    module.network
+  ]
+}
+
 module "ecr" {
   source = "../../../modules/ecr"
 
@@ -137,9 +145,4 @@ module "secret_version" {
       "AWS_ECR_REPOSITORY_URL": module.ecr.repository_url
     }
   )
-}
-
-resource "aws_ce_cost_allocation_tag" "main" {
-  tag_key = "app_name"
-  status  = "Active"
 }
