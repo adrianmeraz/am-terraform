@@ -6,8 +6,7 @@ aws_access_key          = "CHANGE_ME"
 aws_region              = "CHANGE_ME"
 aws_secret_key          = "CHANGE_ME"
 force_overwrite_secrets = false
-
-shared_secret_id = "CHANGE_ME/dev/shared/secret"
+shared_secret_id        = "CHANGE_ME/dev/shared/secret"
 secret_map = {
   "AWS_ECR_REGISTRY_NAME":  "CHANGE_ME"
   "AWS_ECR_REPOSITORY_URL": "CHANGE_ME"
