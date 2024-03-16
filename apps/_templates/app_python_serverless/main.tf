@@ -24,11 +24,6 @@ locals {
   }
 }
 
-resource "aws_ce_cost_allocation_tag" "example" {
-  tag_key = "app_name"
-  status  = "Active"
-}
-
 module "network" {
   source = "../../../modules/network"
 
@@ -142,4 +137,9 @@ module "secret_version" {
       "AWS_ECR_REPOSITORY_URL": module.ecr.repository_url
     }
   )
+}
+
+resource "aws_ce_cost_allocation_tag" "main" {
+  tag_key = "app_name"
+  status  = "Active"
 }

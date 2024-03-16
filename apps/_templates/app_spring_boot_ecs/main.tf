@@ -25,11 +25,6 @@ locals {
   }
 }
 
-resource "aws_ce_cost_allocation_tag" "example" {
-  tag_key = "app_name"
-  status  = "Active"
-}
-
 module "network" {
   source = "../../../modules/network"
 
@@ -206,4 +201,9 @@ module "ecs_cluster_public" {
     subnets          = [for subnet in module.network.public_subnets: subnet.id]
   }
   tags               = data.aws_default_tags.main.tags
+}
+
+resource "aws_ce_cost_allocation_tag" "main" {
+  tag_key = "app_name"
+  status  = "Active"
 }
