@@ -18,3 +18,8 @@ variable "secret_map" {
   type = map(string)
   default = {}
 }
+
+variable "shared_secret_id" {
+  description = "ID of shared secrets"
+  type = string
+}

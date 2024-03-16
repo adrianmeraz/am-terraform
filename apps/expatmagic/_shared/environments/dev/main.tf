@@ -15,8 +15,9 @@ module "shared_cognito" {
 
 locals {
   secret_map = {
-    "COGNITO_POOL_ID":  module.shared_cognito.pool_id
-    "COGNITO_POOL_ARN": module.shared_cognito.pool_arn
+    "COGNITO_POOL_ARN":  module.shared_cognito.pool_arn
+    "COGNITO_POOL_ID":   module.shared_cognito.pool_id
+    "COGNITO_POOL_NAME": module.shared_cognito.pool_name
   }
 }
 
@@ -26,5 +27,5 @@ module "shared_secrets" {
   recovery_window_in_days   = 0 # Allows for instant deletes
   secret_map                = local.secret_map
   secret_name_prefix        = "${local.app_name}/${local.environment}/shared"
-  force_overwrite_secrets   = false
+  force_overwrite_secrets   = true
 }

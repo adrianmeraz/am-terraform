@@ -5,7 +5,7 @@ locals {
 }
 
 data "aws_secretsmanager_secret_version" "shared" {
-  secret_id = "expatmagic/dev/shared/secret"
+  secret_id = var.shared_secret_id
 }
 
 locals  {
@@ -13,7 +13,6 @@ locals  {
 }
 
 data "aws_cognito_user_pools" "shared" {
-  id   = local.secret_map["COGNITO_POOL_ID"]
   name = local.secret_map["COGNITO_POOL_NAME"]
 }
 
