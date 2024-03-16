@@ -6,10 +6,6 @@ resource "aws_dynamodb_table" "main" {
   stream_enabled   = true
   stream_view_type = "NEW_AND_OLD_IMAGES"
 
-  replica {
-    region_name = var.replica_region_name
-  }
-
   attribute {
     name = "PK"
     type = "S"

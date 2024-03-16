@@ -14,8 +14,3 @@ variable "billing_mode" {
   type        = string
   default     = "PAY_PER_REQUEST"
 }
-
-variable "replica_region_name" {
-  description = "Configuration block(s) with DynamoDB Global Tables V2 (version 2019.11.21) replication configurations"
-  type        = string
-}

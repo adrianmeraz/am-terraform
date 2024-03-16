@@ -20,7 +20,6 @@ module "dynamo_db" {
   source = "../../modules/dynamo_db"
 
   name_prefix = local.name_prefix
-  replica_region_name = var.aws_region
 }
 
 module "app_python_lambda" {
