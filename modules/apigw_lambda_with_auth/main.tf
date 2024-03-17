@@ -44,6 +44,7 @@ resource "aws_api_gateway_deployment" "main" {
 
 # Set a default stage
 resource "aws_api_gateway_stage" "default" {
+  depends_on    = [aws_api_gateway_deployment.main]
   deployment_id = aws_api_gateway_deployment.main.id
   rest_api_id   = aws_api_gateway_rest_api.http.id
   stage_name    = var.environment
