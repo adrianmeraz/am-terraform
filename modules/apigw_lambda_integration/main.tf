@@ -33,7 +33,8 @@ resource "aws_api_gateway_integration" "lambda" {
   integration_http_method = "POST" # Must always be POST for lambda integrations
   resource_id             = aws_api_gateway_resource.main.id
   rest_api_id             = var.rest_api_id
-  type                    = "AWS"
+  # Difference between types: https://stackoverflow.com/questions/62164162/what-is-the-difference-between-aws-and-aws-proxy-in-cloudformationapigateway
+  type                    = "AWS_PROXY"
   uri                     = var.lambda_function_invoke_arn
 }
 
