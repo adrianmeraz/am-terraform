@@ -144,7 +144,6 @@ module "secret_version" {
       "AWS_ECR_REGISTRY_NAME":    module.ecr.name
       "AWS_ECR_REPOSITORY_URL":   module.ecr.repository_url
       "ENVIRONMENT":              var.environment
-      "TF_APP_MODULE_PATH":       var.app_module_path
     }
   )
 }
