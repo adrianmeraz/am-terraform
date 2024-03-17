@@ -1,15 +1,12 @@
-locals {
-  app_name    = "emcore"
-  environment = "dev"
-  name_prefix = "${local.app_name}-${local.environment}"
-}
-
 data "aws_secretsmanager_secret_version" "shared" {
   secret_id = var.shared_secret_id
 }
 
 locals  {
-  secret_map = jsondecode(data.aws_secretsmanager_secret_version.shared.secret_string)
+  app_name           = "emcore"
+  environment        = "dev"
+  name_prefix        = "${local.app_name}-${local.environment}"
+  secret_map         = jsondecode(data.aws_secretsmanager_secret_version.shared.secret_string)
 }
 
 data "aws_cognito_user_pools" "shared" {
@@ -22,7 +19,7 @@ module "dynamo_db" {
   name_prefix = local.name_prefix
 }
 
-module "app_python_lambda" {
+module "app_python_serverless" {
   source = "../../../../_templates/app_python_serverless"
 
   app_name                       = local.app_name
