@@ -24,7 +24,7 @@ resource "aws_apigatewayv2_integration" "main" {
   integration_method     = "ANY"
   integration_type       = "HTTP_PROXY"
   integration_uri        = var.aws_lb_listener_arn
-  payload_format_version = "1.0"
+  payload_format_version = "2.0"
 }
 
 resource "aws_apigatewayv2_route" "any" {
