@@ -3,6 +3,11 @@ output "secretsmanager_secret_id" {
   value       = aws_secretsmanager_secret.main.id
 }
 
+output "secretsmanager_secret_name" {
+  description = "name of the secrets manager"
+  value       = aws_secretsmanager_secret.main.name
+}
+
 output "arn" {
   description = "arn of the secrets manager"
   value       = aws_secretsmanager_secret.main.arn

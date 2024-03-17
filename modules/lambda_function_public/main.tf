@@ -7,6 +7,11 @@ resource "aws_lambda_function" "main" {
   image_config {
     command = [var.image_config_command]
   }
+  environment {
+    variables = {
+      AWS_SECRET_NAME = var.aws_secret_name
+    }
+  }
 
   tags = var.tags
 }

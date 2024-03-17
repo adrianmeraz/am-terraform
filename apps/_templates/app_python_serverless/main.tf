@@ -91,6 +91,7 @@ module "lambdas" {
   for_each             = {for index, cfg in var.lambda_configs: cfg.base_function_name => cfg}
 
   app_name             = local.app_name
+  aws_secret_name      = module.secrets.secretsmanager_secret_name
   base_function_name   = each.value.base_function_name
   environment          = local.environment
   http_method          = each.value.http_method

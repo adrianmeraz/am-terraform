@@ -54,6 +54,11 @@ variable "role_arn" {
   type        = string
 }
 
+variable "aws_secret_name" {
+  description = "SSM Secret Name"
+  type = string
+}
+
 variable "source_code_hash" {
   description = "Used to trigger updates. Must be set to a base64-encoded SHA256 hash"
   type        = string
