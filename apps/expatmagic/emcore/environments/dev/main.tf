@@ -19,6 +19,10 @@ module "dynamo_db" {
   name_prefix = local.name_prefix
 }
 
+locals {
+  lambda_cmd_prefix = "src.lambdas"
+}
+
 module "app_python_serverless" {
   source = "../../../../_templates/app_python_serverless"
 
@@ -33,27 +37,27 @@ module "app_python_serverless" {
     {
       base_function_name   = "add-organization"
       http_method          = "POST"
-      image_config_command = "add_organization_api.lambda_handler"
+      image_config_command = "${local.lambda_cmd_prefix}.add_organization_api.lambda_handler"
     },
     {
       base_function_name   = "get-organization"
       http_method          = "GET"
-      image_config_command = "get_organization_api.lambda_handler"
+      image_config_command = "${local.lambda_cmd_prefix}.get_organization_api.lambda_handler"
     },
     {
       base_function_name   = "add-traveler"
       http_method          = "POST"
-      image_config_command = "add_traveler_api.lambda_handler"
+      image_config_command = "${local.lambda_cmd_prefix}.add_traveler_api.lambda_handler"
     },
     {
       base_function_name   = "add-user"
       http_method          = "POST"
-      image_config_command = "add_user_api.lambda_handler"
+      image_config_command = "${local.lambda_cmd_prefix}.add_user_api.lambda_handler"
     },
     {
       base_function_name   = "delete-traveler"
       http_method          = "DELETE"
-      image_config_command = "delete_traveler_api.lambda_handler"
+      image_config_command = "${local.lambda_cmd_prefix}.delete_traveler_api.lambda_handler"
     }
   ]
 }
