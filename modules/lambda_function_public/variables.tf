@@ -63,3 +63,9 @@ variable "source_code_hash" {
   description = "Used to trigger updates. Must be set to a base64-encoded SHA256 hash"
   type        = string
 }
+
+variable "timeout_seconds" {
+  description = "Amount of time your Lambda Function has to run in seconds."
+  type        = number
+  default     = 3
+}

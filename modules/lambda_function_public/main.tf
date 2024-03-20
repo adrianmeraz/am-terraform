@@ -4,6 +4,7 @@ resource "aws_lambda_function" "main" {
   package_type     = var.package_type
   role             = var.role_arn
   source_code_hash = var.source_code_hash
+  timeout          = var.timeout_seconds
   image_config {
     command = [var.image_config_command]
   }

@@ -101,6 +101,7 @@ module "lambdas" {
   package_type         = "Image"
   role_arn             = module.iam_lambda_dynamo.role_arn
   source_code_hash     = split(":", data.aws_ecr_image.latest.image_digest)[1] # Use only hash without sha256: prefix
+  timeout_seconds      = each.value.timeout_seconds
 
   tags                 = local.default_tags
 }

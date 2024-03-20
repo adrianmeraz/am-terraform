@@ -59,6 +59,7 @@ variable "lambda_configs" {
     base_function_name   = string
     http_method          = string
     image_config_command = string
+    timeout_seconds      = number
   }))
 }
 

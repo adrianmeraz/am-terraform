@@ -5,6 +5,7 @@ data "aws_secretsmanager_secret_version" "shared" {
 locals  {
   app_name           = "emcore"
   environment        = "dev"
+  lambda_timeout     = 5
   name_prefix        = "${local.app_name}-${local.environment}"
   secret_map         = jsondecode(data.aws_secretsmanager_secret_version.shared.secret_string)
 }
@@ -38,26 +39,31 @@ module "app_python_serverless" {
       base_function_name   = "add-organization"
       http_method          = "POST"
       image_config_command = "${local.lambda_cmd_prefix}.add_organization_api.lambda_handler"
+      timeout_seconds      = 5
     },
     {
       base_function_name   = "get-organization"
       http_method          = "GET"
       image_config_command = "${local.lambda_cmd_prefix}.get_organization_api.lambda_handler"
+      timeout_seconds      = 5
     },
     {
       base_function_name   = "add-traveler"
       http_method          = "POST"
       image_config_command = "${local.lambda_cmd_prefix}.add_traveler_api.lambda_handler"
+      timeout_seconds      = 5
     },
     {
       base_function_name   = "add-user"
       http_method          = "POST"
       image_config_command = "${local.lambda_cmd_prefix}.add_user_api.lambda_handler"
+      timeout_seconds      = 5
     },
     {
       base_function_name   = "delete-traveler"
       http_method          = "DELETE"
       image_config_command = "${local.lambda_cmd_prefix}.delete_traveler_api.lambda_handler"
+      timeout_seconds      = 5
     }
   ]
 }
