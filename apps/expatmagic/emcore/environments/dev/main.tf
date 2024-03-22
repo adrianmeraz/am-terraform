@@ -48,12 +48,6 @@ module "app_python_serverless" {
       timeout_seconds      = 5
     },
     {
-      base_function_name   = "add-traveler"
-      http_method          = "POST"
-      image_config_command = "${local.lambda_cmd_prefix}.add_traveler_api.lambda_handler"
-      timeout_seconds      = 5
-    },
-    {
       base_function_name   = "add-user"
       http_method          = "POST"
       image_config_command = "${local.lambda_cmd_prefix}.add_user_api.lambda_handler"
@@ -63,6 +57,12 @@ module "app_python_serverless" {
       base_function_name   = "get-user"
       http_method          = "GET"
       image_config_command = "${local.lambda_cmd_prefix}.get_user_api.lambda_handler"
+      timeout_seconds      = 5
+    },
+    {
+      base_function_name   = "add-traveler"
+      http_method          = "POST"
+      image_config_command = "${local.lambda_cmd_prefix}.add_traveler_api.lambda_handler"
       timeout_seconds      = 5
     },
     {
