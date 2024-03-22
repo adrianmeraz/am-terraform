@@ -60,6 +60,12 @@ module "app_python_serverless" {
       timeout_seconds      = 5
     },
     {
+      base_function_name   = "get-user"
+      http_method          = "GET"
+      image_config_command = "${local.lambda_cmd_prefix}.get_user_api.lambda_handler"
+      timeout_seconds      = 5
+    },
+    {
       base_function_name   = "delete-traveler"
       http_method          = "DELETE"
       image_config_command = "${local.lambda_cmd_prefix}.delete_traveler_api.lambda_handler"
