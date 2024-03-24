@@ -48,9 +48,21 @@ module "app_python_serverless" {
       timeout_seconds      = 5
     },
     {
-      base_function_name   = "add-user"
+      base_function_name   = "add-member-user"
       http_method          = "POST"
-      image_config_command = "${local.lambda_cmd_prefix}.add_user_api.lambda_handler"
+      image_config_command = "${local.lambda_cmd_prefix}.add_member_user_api.lambda_handler"
+      timeout_seconds      = 5
+    },
+    {
+      base_function_name   = "add-staff-user"
+      http_method          = "POST"
+      image_config_command = "${local.lambda_cmd_prefix}.add_staff_user_api.lambda_handler"
+      timeout_seconds      = 5
+    },
+    {
+      base_function_name   = "add-superuser-user"
+      http_method          = "POST"
+      image_config_command = "${local.lambda_cmd_prefix}.add_superuser_user_api.lambda_handler"
       timeout_seconds      = 5
     },
     {
