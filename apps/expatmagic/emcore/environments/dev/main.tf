@@ -36,6 +36,12 @@ module "app_python_serverless" {
   environment                    = local.environment
   lambda_configs = [
     {
+      base_function_name   = "add-organization"
+      http_method          = "POST"
+      image_config_command = "${local.lambda_cmd_prefix}.add_organization_api.lambda_handler"
+      timeout_seconds      = 5
+    },
+    {
       base_function_name   = "add-org-and-superuser"
       http_method          = "POST"
       image_config_command = "${local.lambda_cmd_prefix}.add_org_and_superuser_api.lambda_handler"
