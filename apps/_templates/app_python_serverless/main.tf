@@ -145,6 +145,7 @@ module "secret_version" {
       "AWS_DYNAMO_DB_TABLE_NAME": var.dynamo_db_table_name
       "AWS_ECR_REGISTRY_NAME":    module.ecr.name
       "AWS_ECR_REPOSITORY_URL":   module.ecr.repository_url
+      "AWS_COGNITO_POOL_ID":      var.cognito_pool_id
       "ENVIRONMENT":              var.environment
     }
   )

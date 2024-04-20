@@ -33,6 +33,11 @@ variable "cognito_pool_arn" {
   type        = string
 }
 
+variable "cognito_pool_id" {
+  description = "Shared cognito pool id for apigw authenticator"
+  type        = string
+}
+
 variable "ecs" {
   description = "ECS task parameters"
   type = object({
