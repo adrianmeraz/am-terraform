@@ -1,5 +1,28 @@
 resource "aws_cognito_user_pool" "main" {
   name = "${var.name_prefix}-pool"
+  schema {
+    name                     = "roles"
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    required                 = true
+    string_attribute_constraints {
+      min_length = 0
+      max_length = 512
+    }
+  }
+
+  schema {
+    name                     = "group"
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    required                 = true
+    string_attribute_constraints {
+      min_length = 0
+      max_length = 512
+    }
+  }
 }
 
 data "aws_caller_identity" "current" {}
