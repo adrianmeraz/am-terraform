@@ -32,6 +32,7 @@ module "app_python_serverless" {
   aws_region                     = var.aws_region
   aws_secret_key                 = var.aws_access_key
   cognito_pool_arn               = tolist(data.aws_cognito_user_pools.shared.arns)[0]
+  cognito_pool_id                = tolist(data.aws_cognito_user_pools.shared.ids)[0]
   dynamo_db_table_name           = module.dynamo_db.table_name
   environment                    = local.environment
   lambda_configs = [
