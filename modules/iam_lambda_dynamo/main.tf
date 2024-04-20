@@ -9,6 +9,7 @@ data "aws_iam_policy_document" "lambda" {
       type        = "Service"
       identifiers = [
         "apigateway.amazonaws.com",
+        "cognito-idp.amazonaws.com",
         "lambda.amazonaws.com",
         "secretsmanager.amazonaws.com"
       ]
@@ -24,6 +25,17 @@ resource "aws_iam_role" "lambda" {
 }
 
 data "aws_iam_policy_document" "main" {
+  statement {
+    actions = [
+      "cognito-idp:AdminCreateUser"
+    ]
+    effect  = "Allow"
+    resources = [
+      "arn:aws:cognito-idp:*:*:*"
+    ]
+  }
+
+
   statement {
     actions = [
       "ssm:GetParameters"
