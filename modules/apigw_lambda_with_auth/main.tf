@@ -25,6 +25,7 @@ module "apigw_integration" {
 
   cognito_authorizer_id      = aws_api_gateway_authorizer.cognito.id
   http_method                = each.value.http_method
+  is_protected               = each.value.is_protected
   name_prefix                = var.name_prefix
   lambda_function_invoke_arn = each.value.invoke_arn
   lambda_function_name       = each.value.function_name

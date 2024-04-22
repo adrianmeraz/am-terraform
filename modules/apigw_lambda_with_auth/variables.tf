@@ -30,6 +30,7 @@ variable "lambda_configs" {
     function_name = string
     http_method   = string
     invoke_arn    = string
+    is_protected  = bool
     path_part     = string
   }))
 }

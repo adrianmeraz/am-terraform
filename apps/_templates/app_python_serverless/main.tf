@@ -97,6 +97,7 @@ module "lambdas" {
   http_method          = each.value.http_method
   image_config_command = each.value.image_config_command
   image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
+  is_protected         = each.value.is_protected
   memory_size          = local.lambda.memory_size_mb
   package_type         = "Image"
   role_arn             = module.iam_lambda_dynamo.role_arn
@@ -123,6 +124,7 @@ module "apigw_lambda_http" {
       function_name = lambda.function_name
       http_method   = lambda.http_method
       invoke_arn    = lambda.invoke_arn
+      is_protected  = lambda.is_protected
       path_part     = lambda.base_function_name
     }
   ]

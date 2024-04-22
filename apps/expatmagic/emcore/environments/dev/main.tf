@@ -15,7 +15,7 @@ data "aws_cognito_user_pools" "shared" {
 }
 
 module "dynamo_db" {
-  source = "../../modules/dynamo_db"
+  source = "../../../../../modules/dynamo_db"
 
   name_prefix = local.name_prefix
 }
@@ -40,48 +40,56 @@ module "app_python_serverless" {
       base_function_name   = "add-org-and-superuser"
       http_method          = "POST"
       image_config_command = "${local.lambda_cmd_prefix}.add_org_and_superuser_api.lambda_handler"
+      is_protected         = false
       timeout_seconds      = 10
     },
     {
       base_function_name   = "get-organization"
       http_method          = "GET"
       image_config_command = "${local.lambda_cmd_prefix}.get_organization_api.lambda_handler"
+      is_protected         = true
       timeout_seconds      = 10
     },
     {
       base_function_name   = "add-member-user"
       http_method          = "POST"
       image_config_command = "${local.lambda_cmd_prefix}.add_member_user_api.lambda_handler"
+      is_protected         = true
       timeout_seconds      = 10
     },
     {
       base_function_name   = "add-staff-user"
       http_method          = "POST"
       image_config_command = "${local.lambda_cmd_prefix}.add_staff_user_api.lambda_handler"
+      is_protected         = true
       timeout_seconds      = 10
     },
     {
       base_function_name   = "add-superuser-user"
       http_method          = "POST"
       image_config_command = "${local.lambda_cmd_prefix}.add_superuser_user_api.lambda_handler"
+      is_protected         = true
       timeout_seconds      = 10
     },
     {
       base_function_name   = "get-user"
       http_method          = "GET"
       image_config_command = "${local.lambda_cmd_prefix}.get_user_api.lambda_handler"
+      is_protected         = true
       timeout_seconds      = 10
     },
     {
       base_function_name   = "add-traveler"
       http_method          = "POST"
       image_config_command = "${local.lambda_cmd_prefix}.add_traveler_api.lambda_handler"
+      is_protected         = true
       timeout_seconds      = 10
     },
     {
       base_function_name   = "delete-traveler"
       http_method          = "DELETE"
       image_config_command = "${local.lambda_cmd_prefix}.delete_traveler_api.lambda_handler"
+      is_protected         = true
       timeout_seconds      = 10
     }
   ]
