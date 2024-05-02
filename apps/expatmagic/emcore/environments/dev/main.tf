@@ -103,6 +103,13 @@ module "app_python_serverless" {
       image_config_command = "${local.lambda_cmd_prefix}.delete_traveler_api.lambda_handler"
       is_protected         = true
       timeout_seconds      = 10
+    },
+    {
+      base_function_name   = "login"
+      http_method          = "DELETE"
+      image_config_command = "${local.lambda_cmd_prefix}.login_api.lambda_handler"
+      is_protected         = true
+      timeout_seconds      = 10
     }
   ]
 }
