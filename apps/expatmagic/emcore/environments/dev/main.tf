@@ -14,15 +14,26 @@ data "aws_cognito_user_pools" "shared" {
   name = local.secret_map["COGNITO_POOL_NAME"]
 }
 
+locals {
+  cognito_pool_arn = tolist(data.aws_cognito_user_pools.shared.arns)[0]
+  cognito_pool_id = tolist(data.aws_cognito_user_pools.shared.ids)[0]
+  lambda_cmd_prefix = "src.lambdas"
+}
+
+data "aws_cognito_user_pool_clients" "shared" {
+  user_pool_id = local.cognito_pool_id
+}
+
+locals {
+  cognito_pool_client_id = tolist(data.aws_cognito_user_pool_clients.shared.client_ids)[0]
+}
+
 module "dynamo_db" {
   source = "../../../../../modules/dynamo_db"
 
   name_prefix = local.name_prefix
 }
 
-locals {
-  lambda_cmd_prefix = "src.lambdas"
-}
 
 module "app_python_serverless" {
   source = "../../../../_templates/app_python_serverless"
@@ -31,8 +42,9 @@ module "app_python_serverless" {
   aws_access_key                 = var.aws_access_key
   aws_region                     = var.aws_region
   aws_secret_key                 = var.aws_access_key
-  cognito_pool_arn               = tolist(data.aws_cognito_user_pools.shared.arns)[0]
-  cognito_pool_id                = tolist(data.aws_cognito_user_pools.shared.ids)[0]
+  cognito_pool_arn               = local.cognito_pool_arn
+  cognito_pool_client_id         = local.cognito_pool_client_id
+  cognito_pool_id                = local.cognito_pool_id
   dynamo_db_table_name           = module.dynamo_db.table_name
   environment                    = local.environment
   lambda_configs = [

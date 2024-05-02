@@ -29,12 +29,17 @@ variable "environment" {
 }
 
 variable "cognito_pool_arn" {
-  description = "Shared cognito pool arn for apigw authenticator"
+  description = "Shared cognito pool arn"
+  type        = string
+}
+
+variable "cognito_pool_client_id" {
+  description = "Shared cognito pool client id"
   type        = string
 }
 
 variable "cognito_pool_id" {
-  description = "Shared cognito pool id for apigw authenticator"
+  description = "Shared cognito pool id"
   type        = string
 }
 

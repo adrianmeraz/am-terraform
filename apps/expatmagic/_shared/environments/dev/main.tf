@@ -15,9 +15,10 @@ module "shared_cognito" {
 
 locals {
   secret_map = {
-    "COGNITO_POOL_ARN":  module.shared_cognito.pool_arn
-    "COGNITO_POOL_ID":   module.shared_cognito.pool_id
-    "COGNITO_POOL_NAME": module.shared_cognito.pool_name
+    "COGNITO_POOL_ARN":         module.shared_cognito.pool_arn
+    "COGNITO_POOL_CLIENT_ID":   module.shared_cognito.pool_client_id
+    "COGNITO_POOL_ID":          module.shared_cognito.pool_id
+    "COGNITO_POOL_NAME":        module.shared_cognito.pool_name
   }
 }
 
