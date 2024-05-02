@@ -106,7 +106,7 @@ module "app_python_serverless" {
     },
     {
       base_function_name   = "login"
-      http_method          = "DELETE"
+      http_method          = "POST"
       image_config_command = "${local.lambda_cmd_prefix}.login_api.lambda_handler"
       is_protected         = true
       timeout_seconds      = 10
