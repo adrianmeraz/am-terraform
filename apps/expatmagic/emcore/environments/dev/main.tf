@@ -47,6 +47,7 @@ module "app_python_serverless" {
   cognito_pool_id                = local.cognito_pool_id
   dynamo_db_table_name           = module.dynamo_db.table_name
   environment                    = local.environment
+  force_overwrite_secrets        = var.force_overwrite_secrets
   lambda_configs = [
     {
       base_function_name   = "add-org-and-superuser"
