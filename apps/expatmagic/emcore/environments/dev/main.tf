@@ -109,7 +109,14 @@ module "app_python_serverless" {
       base_function_name   = "login"
       http_method          = "POST"
       image_config_command = "${local.lambda_cmd_prefix}.login_api.lambda_handler"
-      is_protected         = true
+      is_protected         = false
+      timeout_seconds      = 10
+    },
+    {
+      base_function_name   = "refresh-token"
+      http_method          = "POST"
+      image_config_command = "${local.lambda_cmd_prefix}.refresh_token_api.lambda_handler"
+      is_protected         = false
       timeout_seconds      = 10
     }
   ]
