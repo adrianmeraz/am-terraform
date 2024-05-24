@@ -39,6 +39,11 @@ resource "aws_api_gateway_integration" "lambda" {
 }
 
 resource "aws_api_gateway_integration_response" "proxy" {
+  # Note - CORS response headers will NOT be present in response if using proxy type integration.
+  # CORS response headers must be set in lambda response
+  # See below for further details:
+  # https://stackoverflow.com/a/54089431
+  # https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-cors.html#apigateway-enable-cors-proxy
   depends_on = [
     aws_api_gateway_method.proxy,
     aws_api_gateway_integration.lambda
