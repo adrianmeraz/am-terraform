@@ -1,3 +1,18 @@
+locals {
+  cors_integration_response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+    "method.response.header.Access-Control-Allow-Methods" = "'DELETE,GET,OPTIONS,POST,PUT'",
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'",
+    "method.response.header.Access-Control-Allow-Credentials"  = "'true'",
+  }
+  cors_method_response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true,
+    "method.response.header.Access-Control-Allow-Methods" = true,
+    "method.response.header.Access-Control-Allow-Origin"  = true,
+    "method.response.header.Access-Control-Allow-Credentials"  = true,
+  }
+}
+
 resource "aws_api_gateway_resource" "main" {
   parent_id   = var.root_resource_id
   path_part   = var.path_part
@@ -21,12 +36,7 @@ resource "aws_api_gateway_method_response" "proxy" {
   status_code = "200"
 
   //cors section
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = true,
-    "method.response.header.Access-Control-Allow-Methods" = true,
-    "method.response.header.Access-Control-Allow-Origin"  = true,
-    "method.response.header.Access-Control-Allow-Credentials"  = true,
-  }
+  response_parameters = local.cors_method_response_parameters
 }
 
 resource "aws_api_gateway_integration" "lambda" {
@@ -56,12 +66,7 @@ resource "aws_api_gateway_integration_response" "proxy" {
   status_code = aws_api_gateway_method_response.proxy.status_code
 
   //cors
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-    "method.response.header.Access-Control-Allow-Methods" = "'DELETE,GET,OPTIONS,POST,PUT'",
-    "method.response.header.Access-Control-Allow-Origin"  = "'*'",
-    "method.response.header.Access-Control-Allow-Credentials"  = "'true'",
-  }
+  response_parameters = local.cors_integration_response_parameters
 }
 
 ##############################################
@@ -83,12 +88,7 @@ resource "aws_api_gateway_method_response" "options" {
   rest_api_id = var.rest_api_id
   status_code = "200"
 
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = true,
-    "method.response.header.Access-Control-Allow-Methods" = true,
-    "method.response.header.Access-Control-Allow-Origin"  = true,
-    "method.response.header.Access-Control-Allow-Credentials"  = true,
-  }
+  response_parameters = local.cors_method_response_parameters
 }
 
 resource "aws_api_gateway_integration" "options" {
@@ -114,11 +114,7 @@ resource "aws_api_gateway_integration_response" "options" {
   rest_api_id = var.rest_api_id
   status_code = aws_api_gateway_method_response.options.status_code
 
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-    "method.response.header.Access-Control-Allow-Methods" = "'DELETE,GET,OPTIONS,POST,PUT'",
-    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
-  }
+  response_parameters = local.cors_integration_response_parameters
 }
 
 resource "aws_lambda_permission" "apigw_lambda" {
