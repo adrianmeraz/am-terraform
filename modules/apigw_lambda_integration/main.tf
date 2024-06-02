@@ -11,6 +11,9 @@ locals {
     "method.response.header.Access-Control-Allow-Origin"  = true,
     "method.response.header.Access-Control-Allow-Credentials"  = true,
   }
+  response_status_codes = [
+    200, 401, 403
+  ]
 }
 
 resource "aws_api_gateway_resource" "main" {
@@ -29,11 +32,13 @@ resource "aws_api_gateway_method" "proxy" {
   rest_api_id    = var.rest_api_id
 }
 
-resource "aws_api_gateway_method_response" "proxy" {
+resource "aws_api_gateway_method_response" "proxy_responses" {
+  for_each    = {for status_code in local.response_status_codes: status_code => status_code}
+
   http_method = aws_api_gateway_method.proxy.http_method
   resource_id = aws_api_gateway_resource.main.id
   rest_api_id = var.rest_api_id
-  status_code = "200"
+  status_code = each.key
 
   //cors section
   response_parameters = local.cors_method_response_parameters
@@ -59,11 +64,13 @@ resource "aws_api_gateway_integration_response" "proxy" {
     aws_api_gateway_method.proxy,
     aws_api_gateway_integration.lambda
   ]
+  for_each    = {for status_code in local.response_status_codes: status_code => status_code}
 
   http_method = aws_api_gateway_method.proxy.http_method
   resource_id = aws_api_gateway_resource.main.id
   rest_api_id = var.rest_api_id
-  status_code = aws_api_gateway_method_response.proxy.status_code
+  # status_code = aws_api_gateway_method_response.proxy_200.status_code
+  status_code = each.key
 
   //cors
   response_parameters = local.cors_integration_response_parameters
@@ -85,37 +92,46 @@ resource "aws_api_gateway_method" "options" {
   rest_api_id    = var.rest_api_id
 }
 
-resource "aws_api_gateway_method_response" "options" {
+resource "aws_api_gateway_method_response" "options_responses" {
+  for_each    = {for status_code in local.response_status_codes: status_code => status_code}
+
   http_method = aws_api_gateway_method.options.http_method
   resource_id = aws_api_gateway_resource.main.id
   rest_api_id = var.rest_api_id
-  status_code = "200"
+  status_code = each.key
 
   response_parameters = local.cors_method_response_parameters
 }
 
-resource "aws_api_gateway_integration" "options" {
+resource "aws_api_gateway_integration" "options_integrations" {
+  for_each                = {for status_code in local.response_status_codes: status_code => status_code}
   http_method             = aws_api_gateway_method.options.http_method
   # Removed to avoid redeploy on every apply per https://github.com/hashicorp/terraform-provider-aws/issues/11810
   # integration_http_method = "OPTIONS"
+
   resource_id             = aws_api_gateway_resource.main.id
   rest_api_id             = var.rest_api_id
   type                    = "MOCK"
+#   request_templates = {
+#     "application/json" = "{\"statusCode\": 200}"
+#   }
   request_templates = {
-    "application/json" = "{\"statusCode\": 200}"
+    "application/json" = "{\"statusCode\": ${each.key}}"
   }
 }
 
 resource "aws_api_gateway_integration_response" "options" {
   depends_on = [
     aws_api_gateway_method.options,
-    aws_api_gateway_integration.options,
+    aws_api_gateway_integration.options_integrations,
   ]
+  for_each    = {for status_code in local.response_status_codes: status_code => status_code}
 
   http_method = aws_api_gateway_method.options.http_method
   resource_id = aws_api_gateway_resource.main.id
   rest_api_id = var.rest_api_id
-  status_code = aws_api_gateway_method_response.options.status_code
+  # status_code = aws_api_gateway_method_response.options_200.status_code
+  status_code = each.key
 
   response_parameters = local.cors_integration_response_parameters
 }
