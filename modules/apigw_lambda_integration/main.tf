@@ -68,8 +68,9 @@ resource "aws_api_gateway_integration_response" "proxy" {
 
   http_method = aws_api_gateway_method.proxy.http_method
   resource_id = aws_api_gateway_resource.main.id
-  rest_api_id = var.rest_api_id
+  rest_api_id       = var.rest_api_id
   # status_code = aws_api_gateway_method_response.proxy_200.status_code
+  selection_pattern = ".*\"status\":${each.key}.*"
   status_code = each.key
 
   //cors
@@ -130,7 +131,9 @@ resource "aws_api_gateway_integration_response" "options" {
   http_method = aws_api_gateway_method.options.http_method
   resource_id = aws_api_gateway_resource.main.id
   rest_api_id = var.rest_api_id
-  # status_code = aws_api_gateway_method_response.options_200.status_code
+  # Use selection pattern detailed here:
+  # https://github.com/carrot/terraform-api-gateway-method-module/issues/2#issuecomment-615484255
+  selection_pattern = ".*\"statusCode\":${each.key}.*"
   status_code = each.key
 
   response_parameters = local.cors_integration_response_parameters
