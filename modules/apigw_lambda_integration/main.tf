@@ -5,6 +5,12 @@ locals {
     "method.response.header.Access-Control-Allow-Origin"  = "'*'",
     "method.response.header.Access-Control-Allow-Credentials"  = "'true'",
   }
+  cors_gw_response_parameters = {
+    "gatewayresponse.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+    "gatewayresponse.header.Access-Control-Allow-Methods" = "'DELETE,GET,POST,PUT'",
+    "gatewayresponse.header.Access-Control-Allow-Origin"  = "'*'",
+    "gatewayresponse.header.Access-Control-Allow-Credentials"  = "'true'",
+  }
   cors_method_response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = true,
     "method.response.header.Access-Control-Allow-Methods" = true,
@@ -12,7 +18,7 @@ locals {
     "method.response.header.Access-Control-Allow-Credentials"  = true,
   }
   response_status_codes = [
-    200, 401, 403
+    200
   ]
 }
 
@@ -30,6 +36,20 @@ resource "aws_api_gateway_method" "proxy" {
   operation_name = "${aws_api_gateway_resource.main.path_part}-${var.http_method}"
   resource_id    = aws_api_gateway_resource.main.id
   rest_api_id    = var.rest_api_id
+}
+
+resource "aws_api_gateway_gateway_response" "gw_response" {
+  # For further info about the params, see below:
+  # https://github.com/opendevsecops/terraform-aws-apigateway-api/blob/master/main.tf
+  rest_api_id   = var.rest_api_id
+  status_code   = "401"
+  response_type = "UNAUTHORIZED"
+
+  response_templates = {
+    "application/json" = "{\"message\":$context.error.messageString}"
+  }
+
+  response_parameters = local.cors_gw_response_parameters
 }
 
 resource "aws_api_gateway_method_response" "proxy_responses" {
@@ -70,7 +90,7 @@ resource "aws_api_gateway_integration_response" "proxy" {
   resource_id = aws_api_gateway_resource.main.id
   rest_api_id       = var.rest_api_id
   # status_code = aws_api_gateway_method_response.proxy_200.status_code
-  selection_pattern = ".*\"status\":${each.key}.*"
+  # selection_pattern = ".*\"status\":${each.key}.*"
   status_code = each.key
 
   //cors
@@ -133,7 +153,7 @@ resource "aws_api_gateway_integration_response" "options" {
   rest_api_id = var.rest_api_id
   # Use selection pattern detailed here:
   # https://github.com/carrot/terraform-api-gateway-method-module/issues/2#issuecomment-615484255
-  selection_pattern = ".*\"statusCode\":${each.key}.*"
+  # selection_pattern = ".*\"statusCode\":${each.key}.*"
   status_code = each.key
 
   response_parameters = local.cors_integration_response_parameters
