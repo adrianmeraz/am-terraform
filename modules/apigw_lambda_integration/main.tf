@@ -17,6 +17,7 @@ locals {
     "method.response.header.Access-Control-Allow-Origin"  = true,
     "method.response.header.Access-Control-Allow-Credentials"  = true,
   }
+  # No need to set other status codes besides 200 when using a proxy integration. Responses are set from lambdas
   response_status_codes = [
     200
   ]
