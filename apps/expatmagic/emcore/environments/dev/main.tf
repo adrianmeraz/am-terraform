@@ -118,6 +118,13 @@ module "app_python_serverless" {
       image_config_command = "${local.lambda_cmd_prefix}.refresh_token_api.lambda_handler"
       is_protected         = false
       timeout_seconds      = 10
+    },
+    {
+      base_function_name   = "validate-user-email"
+      http_method          = "POST"
+      image_config_command = "${local.lambda_cmd_prefix}.validate_user_email_api.lambda_handler"
+      is_protected         = false
+      timeout_seconds      = 10
     }
   ]
 }
