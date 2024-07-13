@@ -7,7 +7,7 @@ resource "aws_dynamodb_table" "main" {
   stream_view_type = "NEW_AND_OLD_IMAGES"
   ttl {
     enabled = true
-    attribute_name = "EXPIRES_AT"
+    attribute_name = "ExpiresAt"
   }
 
   attribute {
