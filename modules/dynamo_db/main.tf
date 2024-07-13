@@ -5,6 +5,10 @@ resource "aws_dynamodb_table" "main" {
   billing_mode     = var.billing_mode
   stream_enabled   = true
   stream_view_type = "NEW_AND_OLD_IMAGES"
+  ttl {
+    enabled = True
+    attribute_name = "EXPIRES_AT"
+  }
 
   attribute {
     name = "PK"
