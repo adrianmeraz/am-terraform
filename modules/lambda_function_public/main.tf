@@ -10,7 +10,8 @@ resource "aws_lambda_function" "main" {
   }
   environment {
     variables = {
-      AWS_SECRET_NAME = var.aws_secret_name
+      AWS_SECRET_NAME = var.env_aws_secret_name
+      LOG_LEVEL       = var.env_log_level
     }
   }
 

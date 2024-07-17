@@ -59,9 +59,15 @@ variable "role_arn" {
   type        = string
 }
 
-variable "aws_secret_name" {
-  description = "SSM Secret Name"
-  type = string
+variable "env_aws_secret_name" {
+  description = "Environment Variable SSM Secret Name"
+  type        = string
+}
+
+variable "env_log_level" {
+  description = "Environment Variable Log Level"
+  type        = string
+  default     = "DEBUG"
 }
 
 variable "source_code_hash" {
