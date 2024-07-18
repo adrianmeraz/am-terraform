@@ -64,10 +64,10 @@ variable "env_aws_secret_name" {
   type        = string
 }
 
-variable "env_log_level" {
-  description = "Environment Variable Log Level"
-  type        = string
-  default     = "INFO"
+variable "env_variables" {
+  description = "Environment Variables"
+  type        = map(string)
+  default     = {}
 }
 
 variable "source_code_hash" {

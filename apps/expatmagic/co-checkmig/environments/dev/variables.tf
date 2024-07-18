@@ -13,6 +13,12 @@ variable "aws_secret_key" {
   type = string
 }
 
+variable "lambda_env_variables" {
+  description = "Lambda Environment Variables Map"
+  type        = map(string)
+  default     = {}
+}
+
 variable "force_overwrite_secrets" {
   description = "Allows for forcing updates of secrets. Useful when new secrets are added"
   type        = bool

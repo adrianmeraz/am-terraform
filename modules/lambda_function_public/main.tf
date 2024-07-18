@@ -9,10 +9,9 @@ resource "aws_lambda_function" "main" {
     command = [var.image_config_command]
   }
   environment {
-    variables = {
+    variables = merge({
       AWS_SECRET_NAME = var.env_aws_secret_name
-      LOG_LEVEL       = var.env_log_level
-    }
+    }, var.env_variables)
   }
 
   tags = var.tags

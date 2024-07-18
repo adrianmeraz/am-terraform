@@ -51,6 +51,7 @@ module "app_python_serverless" {
   lambda_configs = [
     {
       base_function_name   = "get-travel-countries"
+      lambda_env_variables = var.lambda_env_variables
       http_method          = "GET"
       image_config_command = "${local.lambda_cmd_prefix}.api_get_travel_countries.lambda_handler"
       is_protected         = false
