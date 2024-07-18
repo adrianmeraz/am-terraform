@@ -5,7 +5,7 @@ output "base_function_name" {
 
 output "lambda_environment" {
   description = "lambda environment variables"
-  value       = aws_lambda_function.main.environment
+  value       = var.lambda_environment
 }
 
 output "function_name" {

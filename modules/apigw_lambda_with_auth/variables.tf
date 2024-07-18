@@ -27,12 +27,12 @@ variable "cognito_pool_arn" {
 variable "lambda_configs" {
   description = "List of lambda configs to setup integrations"
   type          = list(object({
-    env_log_level = string
-    function_name = string
-    http_method   = string
-    invoke_arn    = string
-    is_protected  = bool
-    path_part     = string
+    function_name      = string
+    http_method        = string
+    invoke_arn         = string
+    is_protected       = bool
+    lambda_environment = map(string)
+    path_part          = string
   }))
 }
 

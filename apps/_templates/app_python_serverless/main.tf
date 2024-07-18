@@ -92,7 +92,7 @@ module "lambdas" {
 
   app_name             = local.app_name
   env_aws_secret_name  = module.secrets.secretsmanager_secret_name
-  lambda_environment        = each.value.env_variables
+  lambda_environment   = each.value.lambda_environment
   base_function_name   = each.value.base_function_name
   environment          = local.environment
   http_method          = each.value.http_method
@@ -122,11 +122,11 @@ module "apigw_lambda_http" {
   cognito_pool_arn         = var.cognito_pool_arn
   lambda_configs = [
     for idx, lambda in module.lambdas : {
-      lambda_environment = lambda.lambda_environment
       function_name      = lambda.function_name
       http_method        = lambda.http_method
       invoke_arn         = lambda.invoke_arn
       is_protected       = lambda.is_protected
+      lambda_environment = lambda.lambda_environment
       path_part          = lambda.base_function_name
     }
   ]
