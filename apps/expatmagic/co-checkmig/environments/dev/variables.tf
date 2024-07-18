@@ -13,7 +13,7 @@ variable "aws_secret_key" {
   type = string
 }
 
-variable "lambda_env_variables" {
+variable "lambda_environment" {
   description = "Lambda Environment Variables Map"
   type        = map(string)
   default     = {}

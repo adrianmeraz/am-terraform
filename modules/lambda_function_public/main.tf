@@ -11,7 +11,7 @@ resource "aws_lambda_function" "main" {
   environment {
     variables = merge({
       AWS_SECRET_NAME = var.env_aws_secret_name
-    }, var.env_variables)
+    }, var.lambda_environment)
   }
 
   tags = var.tags

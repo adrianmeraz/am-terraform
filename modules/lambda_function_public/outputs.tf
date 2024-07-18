@@ -3,6 +3,11 @@ output "base_function_name" {
   value       = var.base_function_name
 }
 
+output "lambda_environment" {
+  description = "lambda environment variables"
+  value       = aws_lambda_function.main.environment
+}
+
 output "function_name" {
   description = "lambda function name"
   value       = aws_lambda_function.main.function_name

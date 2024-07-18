@@ -67,10 +67,10 @@ variable "lambda_configs" {
   description = "List of lambda configs to setup integrations"
   type          = list(object({
     base_function_name   = string
-    env_variables        = map(string)
     http_method          = string
     image_config_command = string
     is_protected         = bool
+    lambda_environment   = map(string)
     timeout_seconds      = number
   }))
 }
