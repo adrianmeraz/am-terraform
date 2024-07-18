@@ -92,7 +92,7 @@ module "lambdas" {
 
   app_name             = local.app_name
   env_aws_secret_name  = module.secrets.secretsmanager_secret_name
-  env_log_level        = "DEBUG"
+  env_log_level        = "INFO"
   base_function_name   = each.value.base_function_name
   environment          = local.environment
   http_method          = each.value.http_method

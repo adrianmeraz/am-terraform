@@ -67,7 +67,7 @@ variable "env_aws_secret_name" {
 variable "env_log_level" {
   description = "Environment Variable Log Level"
   type        = string
-  default     = "DEBUG"
+  default     = "INFO"
 }
 
 variable "source_code_hash" {
