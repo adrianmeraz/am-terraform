@@ -88,6 +88,14 @@ module "app_python_serverless" {
       is_protected         = false
       lambda_environment   = var.lambda_environment
       timeout_seconds      = 10
+    },
+    {
+      base_function_name   = "post-travel-details"
+      http_method          = "POST"
+      image_config_command = "${local.lambda_cmd_prefix}.api_post_travel_details.lambda_handler"
+      is_protected         = false
+      lambda_environment   = var.lambda_environment
+      timeout_seconds      = 10
     }
   ]
 }
