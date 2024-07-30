@@ -74,6 +74,14 @@ module "app_python_serverless" {
       timeout_seconds      = 10
     },
     {
+      base_function_name   = "travel-get-details"
+      http_method          = "GET"
+      image_config_command = "${local.lambda_cmd_prefix}.api_travel_get_details.lambda_handler"
+      is_protected         = false
+      lambda_environment   = var.lambda_environment
+      timeout_seconds      = 10
+    },
+    {
       base_function_name   = "travel-get-origin-cities"
       http_method          = "GET"
       image_config_command = "${local.lambda_cmd_prefix}.api_travel_get_origin_cities.lambda_handler"
@@ -85,14 +93,6 @@ module "app_python_serverless" {
       base_function_name   = "travel-get-routes"
       http_method          = "GET"
       image_config_command = "${local.lambda_cmd_prefix}.api_travel_get_routes.lambda_handler"
-      is_protected         = false
-      lambda_environment   = var.lambda_environment
-      timeout_seconds      = 10
-    },
-    {
-      base_function_name   = "travel-get-tokens"
-      http_method          = "GET"
-      image_config_command = "${local.lambda_cmd_prefix}.api_travel_get_details.lambda_handler"
       is_protected         = false
       lambda_environment   = var.lambda_environment
       timeout_seconds      = 10
