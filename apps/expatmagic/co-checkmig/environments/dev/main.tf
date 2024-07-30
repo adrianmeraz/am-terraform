@@ -50,57 +50,57 @@ module "app_python_serverless" {
   force_overwrite_secrets        = var.force_overwrite_secrets
   lambda_configs = [
     {
-      base_function_name   = "get-bio-details"
+      base_function_name   = "bio-get-details"
       http_method          = "GET"
-      image_config_command = "${local.lambda_cmd_prefix}.api_get_bio_details.lambda_handler"
+      image_config_command = "${local.lambda_cmd_prefix}.api_bio_get_details.lambda_handler"
       is_protected         = false
       lambda_environment   = var.lambda_environment
       timeout_seconds      = 10
     },
     {
-      base_function_name   = "get-travel-control-points"
+      base_function_name   = "travel-get-control-points"
       http_method          = "GET"
-      image_config_command = "${local.lambda_cmd_prefix}.api_get_travel_control_points.lambda_handler"
+      image_config_command = "${local.lambda_cmd_prefix}.api_travel_get_control_points.lambda_handler"
       is_protected         = false
       lambda_environment   = var.lambda_environment
       timeout_seconds      = 10
     },
     {
-      base_function_name   = "get-travel-countries"
+      base_function_name   = "travel-get-countries"
       http_method          = "GET"
-      image_config_command = "${local.lambda_cmd_prefix}.api_get_travel_countries.lambda_handler"
+      image_config_command = "${local.lambda_cmd_prefix}.api_travel_get_countries.lambda_handler"
       is_protected         = false
       lambda_environment   = var.lambda_environment
       timeout_seconds      = 10
     },
     {
-      base_function_name   = "get-travel-origin-cities"
+      base_function_name   = "travel-get-origin-cities"
       http_method          = "GET"
-      image_config_command = "${local.lambda_cmd_prefix}.api_get_travel_origin_cities.lambda_handler"
+      image_config_command = "${local.lambda_cmd_prefix}.api_travel_get_origin_cities.lambda_handler"
       is_protected         = false
       lambda_environment   = var.lambda_environment
       timeout_seconds      = 10
     },
     {
-      base_function_name   = "get-travel-routes"
+      base_function_name   = "travel-get-routes"
       http_method          = "GET"
-      image_config_command = "${local.lambda_cmd_prefix}.api_get_travel_routes.lambda_handler"
+      image_config_command = "${local.lambda_cmd_prefix}.api_travel_get_routes.lambda_handler"
       is_protected         = false
       lambda_environment   = var.lambda_environment
       timeout_seconds      = 10
     },
     {
-      base_function_name   = "get-travel-tokens"
+      base_function_name   = "travel-get-tokens"
       http_method          = "GET"
-      image_config_command = "${local.lambda_cmd_prefix}.api_get_travel_tokens.lambda_handler"
+      image_config_command = "${local.lambda_cmd_prefix}.api_travel_get_details.lambda_handler"
       is_protected         = false
       lambda_environment   = var.lambda_environment
       timeout_seconds      = 10
     },
     {
-      base_function_name   = "post-travel-details"
+      base_function_name   = "travel-post-details"
       http_method          = "POST"
-      image_config_command = "${local.lambda_cmd_prefix}.api_post_travel_details.lambda_handler"
+      image_config_command = "${local.lambda_cmd_prefix}.api_travel_post_details.lambda_handler"
       is_protected         = false
       lambda_environment   = var.lambda_environment
       timeout_seconds      = 10
