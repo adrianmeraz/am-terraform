@@ -58,6 +58,14 @@ module "app_python_serverless" {
       timeout_seconds      = 10
     },
     {
+      base_function_name   = "bio-get-document-types-by-nationality"
+      http_method          = "GET"
+      image_config_command = "${local.lambda_cmd_prefix}.api_bio_get_document_types_by_nationality.lambda_handler"
+      is_protected         = false
+      lambda_environment   = var.lambda_environment
+      timeout_seconds      = 10
+    },
+    {
       base_function_name   = "travel-get-control-points"
       http_method          = "GET"
       image_config_command = "${local.lambda_cmd_prefix}.api_travel_get_control_points.lambda_handler"
