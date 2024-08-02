@@ -16,6 +16,7 @@ locals {
   cognito_pool_id = tolist(data.aws_cognito_user_pools.shared.ids)[0]
   lambda_cmd_prefix = "src.lambdas"
   lambda_handler_name = "lambda_handler"
+  lambda_environment = merge(local.secret_map, var.lambda_environment)
 }
 
 data "aws_cognito_user_pool_clients" "shared" {
@@ -52,7 +53,7 @@ module "app_python_serverless" {
       http_method          = "GET"
       image_config_command = "${local.lambda_cmd_prefix}.api_bio_get_details.${local.lambda_handler_name}"
       is_protected         = false
-      lambda_environment   = var.lambda_environment
+      lambda_environment   = local.lambda_environment
       timeout_seconds      = 10
     },
     {
@@ -60,7 +61,7 @@ module "app_python_serverless" {
       http_method          = "GET"
       image_config_command = "${local.lambda_cmd_prefix}.api_bio_get_document_types_by_nationality.${local.lambda_handler_name}"
       is_protected         = false
-      lambda_environment   = var.lambda_environment
+      lambda_environment   = local.lambda_environment
       timeout_seconds      = 10
     },
     {
@@ -68,7 +69,7 @@ module "app_python_serverless" {
       http_method          = "GET"
       image_config_command = "${local.lambda_cmd_prefix}.api_bio_get_travel_reasons_by_nationality.${local.lambda_handler_name}"
       is_protected         = false
-      lambda_environment   = var.lambda_environment
+      lambda_environment   = local.lambda_environment
       timeout_seconds      = 10
     },
     {
@@ -76,7 +77,7 @@ module "app_python_serverless" {
       http_method          = "GET"
       image_config_command = "${local.lambda_cmd_prefix}.api_travel_get_control_points.${local.lambda_handler_name}"
       is_protected         = false
-      lambda_environment   = var.lambda_environment
+      lambda_environment   = local.lambda_environment
       timeout_seconds      = 10
     },
     {
@@ -84,7 +85,7 @@ module "app_python_serverless" {
       http_method          = "GET"
       image_config_command = "${local.lambda_cmd_prefix}.api_travel_get_countries.${local.lambda_handler_name}"
       is_protected         = false
-      lambda_environment   = var.lambda_environment
+      lambda_environment   = local.lambda_environment
       timeout_seconds      = 10
     },
     {
@@ -92,7 +93,7 @@ module "app_python_serverless" {
       http_method          = "GET"
       image_config_command = "${local.lambda_cmd_prefix}.api_travel_get_details.${local.lambda_handler_name}"
       is_protected         = false
-      lambda_environment   = var.lambda_environment
+      lambda_environment   = local.lambda_environment
       timeout_seconds      = 10
     },
     {
@@ -100,7 +101,7 @@ module "app_python_serverless" {
       http_method          = "GET"
       image_config_command = "${local.lambda_cmd_prefix}.api_travel_get_origin_cities.${local.lambda_handler_name}"
       is_protected         = false
-      lambda_environment   = var.lambda_environment
+      lambda_environment   = local.lambda_environment
       timeout_seconds      = 10
     },
     {
@@ -108,7 +109,7 @@ module "app_python_serverless" {
       http_method          = "GET"
       image_config_command = "${local.lambda_cmd_prefix}.api_travel_get_routes.${local.lambda_handler_name}"
       is_protected         = false
-      lambda_environment   = var.lambda_environment
+      lambda_environment   = local.lambda_environment
       timeout_seconds      = 10
     },
     {
@@ -116,7 +117,7 @@ module "app_python_serverless" {
       http_method          = "POST"
       image_config_command = "${local.lambda_cmd_prefix}.api_travel_post_details.${local.lambda_handler_name}"
       is_protected         = false
-      lambda_environment   = var.lambda_environment
+      lambda_environment   = local.lambda_environment
       timeout_seconds      = 10
     }
   ]
