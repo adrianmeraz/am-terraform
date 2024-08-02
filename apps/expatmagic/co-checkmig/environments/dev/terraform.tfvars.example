@@ -2,11 +2,16 @@
 ## Copy this file to a terraform.tfvars in this directory and set the values
 #############################################################################
 
+app_name                = "co-checkmig"
 aws_access_key          = "CHANGE_ME"
 aws_region              = "CHANGE_ME"
 aws_secret_key          = "CHANGE_ME"
+environment             = "dev"
 force_overwrite_secrets = false
 shared_secret_id        = "expatmagic/dev/shared/secret"
+lambda_environment = {
+  "LOG_LEVEL": "DEBUG"
+}
 secret_map = {
   "AWS_ECR_REGISTRY_NAME":  "KNOWN_AFTER_DEPLOY"
   "AWS_ECR_REPOSITORY_URL": "KNOWN_AFTER_DEPLOY"

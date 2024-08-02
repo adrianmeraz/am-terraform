@@ -25,8 +25,8 @@ provider "aws" {
   secret_key = var.aws_secret_key
   default_tags {
     tags = {
-      "app_name" :    local.app_name
-      "environment" : local.environment
+      "app_name" :    var.app_name
+      "environment" : var.environment
     }
   }
 }
