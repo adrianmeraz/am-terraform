@@ -76,6 +76,29 @@ module "apigw_logs" {
   tags             = local.default_tags
 }
 
+
+# Merges app secrets with shared secrets
+module "secret_version" {
+  # Only creates secrets if the secret string has changed
+  source          = "../../../modules/secret_version"
+  depends_on = [
+    module.ecr
+  ]
+
+  secret_id       = module.secrets.secretsmanager_secret_id
+  secret_map      = merge(
+    local.secrets_map,
+    {
+      "AWS_COGNITO_POOL_ID":        var.cognito_pool_id
+      "AWS_COGNITO_POOL_CLIENT_ID": var.cognito_pool_client_id
+      "AWS_DYNAMO_DB_TABLE_NAME":   var.dynamo_db_table_name
+      "AWS_ECR_REGISTRY_NAME":      module.ecr.name
+      "AWS_ECR_REPOSITORY_URL":     module.ecr.repository_url
+      "ENVIRONMENT":                var.environment
+    }
+  )
+}
+
 data "aws_ecr_image" "latest" {
   depends_on = [module.ecr]
   repository_name = module.ecr.name
@@ -92,7 +115,7 @@ module "lambdas" {
 
   app_name             = local.app_name
   env_aws_secret_name  = module.secrets.secretsmanager_secret_name
-  lambda_environment   = each.value.lambda_environment
+  lambda_environment   = merge(each.value.lambda_environment, module.secret_version.secret_map)
   base_function_name   = each.value.base_function_name
   environment          = local.environment
   http_method          = each.value.http_method
@@ -134,24 +157,3 @@ module "apigw_lambda_http" {
   tags = local.default_tags
 }
 
-# Merging secrets from created resources with prior secrets map
-module "secret_version" {
-  # Only creates secrets if the secret string has changed
-  source          = "../../../modules/secret_version"
-  depends_on = [
-    module.ecr
-  ]
-
-  secret_id       = module.secrets.secretsmanager_secret_id
-  secret_map      = merge(
-    local.secrets_map,
-    {
-      "AWS_COGNITO_POOL_ID":        var.cognito_pool_id
-      "AWS_COGNITO_POOL_CLIENT_ID": var.cognito_pool_client_id
-      "AWS_DYNAMO_DB_TABLE_NAME":   var.dynamo_db_table_name
-      "AWS_ECR_REGISTRY_NAME":      module.ecr.name
-      "AWS_ECR_REPOSITORY_URL":     module.ecr.repository_url
-      "ENVIRONMENT":                var.environment
-    }
-  )
-}
