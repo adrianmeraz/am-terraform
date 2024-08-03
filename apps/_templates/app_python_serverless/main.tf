@@ -19,9 +19,6 @@ locals {
   ecr = {
     image_tag: "latest"
   }
-  lambda = {
-    memory_size_mb = var.lambda_memory_MB
-  }
 }
 
 module "network" {
@@ -122,7 +119,7 @@ module "lambdas" {
   image_config_command = each.value.image_config_command
   image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
   is_protected         = each.value.is_protected
-  memory_size          = local.lambda.memory_size_mb
+  memory_size          = var.lambda_memory_MB
   package_type         = "Image"
   role_arn             = module.iam_lambda_dynamo.role_arn
   source_code_hash     = split(":", data.aws_ecr_image.latest.image_digest)[1] # Use only hash without sha256: prefix
