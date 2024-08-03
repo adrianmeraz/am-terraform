@@ -20,7 +20,7 @@ locals {
     image_tag: "latest"
   }
   lambda = {
-    memory_size_mb = 128
+    memory_size_mb = var.lambda_memory_MB
   }
 }
 

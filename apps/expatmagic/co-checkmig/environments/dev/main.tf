@@ -47,6 +47,7 @@ module "app_python_serverless" {
   dynamo_db_table_name           = module.dynamo_db.table_name
   environment                    = var.environment
   force_overwrite_secrets        = var.force_overwrite_secrets
+  lambda_memory_MB               = var.lambda_memory_MB
   lambda_configs = [
     {
       base_function_name   = "bio-get-details"

@@ -35,6 +35,12 @@ variable "lambda_environment" {
   default     = {}
 }
 
+variable "lambda_memory_MB" {
+  description = "Amount of memory in MB your Lambda Function can use at runtime"
+  type        = number
+  default     = 128
+}
+
 variable "secret_map" {
   description = "Map of secrets"
   type        = map(string)

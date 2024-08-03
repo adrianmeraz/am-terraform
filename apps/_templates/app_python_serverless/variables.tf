@@ -75,10 +75,10 @@ variable "lambda_configs" {
   }))
 }
 
-variable "memory_size_mb" {
+variable "lambda_memory_MB" {
   description = "Amount of memory in MB your Lambda Function can use at runtime"
-  type        = bool
-  default     = false
+  type        = number
+  default     = 128
 }
 
 variable "runtime" {
