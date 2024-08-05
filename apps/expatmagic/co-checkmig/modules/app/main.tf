@@ -33,6 +33,13 @@ locals {
       timeout_seconds      = 10
     },
     {
+      base_function_name   = "bio-get-is-visa-required"
+      http_method          = "GET"
+      module_name          = "api_bio_get_is_visa_required"
+      is_protected         = false
+      timeout_seconds      = 10
+    },
+    {
       base_function_name   = "bio-get-travel-reasons-by-nationality"
       http_method          = "GET"
       module_name          = "api_bio_get_travel_reasons_by_nationality"
