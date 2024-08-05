@@ -29,6 +29,18 @@ variable "force_overwrite_secrets" {
   default     = false
 }
 
+variable "lambda_environment" {
+  description = "Lambda Environment Variables Map"
+  type        = map(string)
+  default     = {}
+}
+
+variable "lambda_memory_MB" {
+  description = "Amount of memory in MB your Lambda Function can use at runtime"
+  type        = number
+  default     = 256
+}
+
 variable "secret_map" {
   description = "Map of secrets"
   type        = map(string)

@@ -31,7 +31,6 @@ variable "lambda_configs" {
     http_method        = string
     invoke_arn         = string
     is_protected       = bool
-    lambda_environment = map(string)
     path_part          = string
   }))
 }

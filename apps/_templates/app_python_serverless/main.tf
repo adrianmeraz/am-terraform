@@ -102,6 +102,10 @@ data "aws_ecr_image" "latest" {
   most_recent     = true
 }
 
+locals {
+  lambda_environment   = merge(var.lambda_environment, module.secret_version.secret_map)
+}
+
 module "lambdas" {
   source = "../../../modules/lambda_function_public"
   depends_on = [
@@ -112,11 +116,11 @@ module "lambdas" {
 
   app_name             = local.app_name
   env_aws_secret_name  = module.secrets.secretsmanager_secret_name
-  lambda_environment   = merge(each.value.lambda_environment, module.secret_version.secret_map)
+  lambda_environment   = local.lambda_environment
   base_function_name   = each.value.base_function_name
   environment          = local.environment
   http_method          = each.value.http_method
-  image_config_command = each.value.image_config_command
+  image_config_command = "${var.lambda_cmd_prefix}.${each.value.module_name}.${var.lambda_handler_name}"
   image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
   is_protected         = each.value.is_protected
   memory_size          = var.lambda_memory_MB

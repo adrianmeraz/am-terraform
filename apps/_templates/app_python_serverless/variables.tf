@@ -63,16 +63,31 @@ variable "force_overwrite_secrets" {
   default     = false
 }
 
+variable "lambda_cmd_prefix" {
+  description = "Lambda command prefix"
+  type        = string
+}
+
 variable "lambda_configs" {
   description = "List of lambda configs to setup integrations"
-  type          = list(object({
+  type        = list(object({
     base_function_name   = string
     http_method          = string
-    image_config_command = string
+    module_name          = string
     is_protected         = bool
-    lambda_environment   = map(string)
     timeout_seconds      = number
   }))
+}
+
+variable "lambda_environment" {
+  description = "Lambda Environment Variables Map"
+  type        = map(string)
+  default     = {}
+}
+
+variable "lambda_handler_name" {
+  description = "Lambda handler name"
+  type        = string
 }
 
 variable "lambda_memory_MB" {
