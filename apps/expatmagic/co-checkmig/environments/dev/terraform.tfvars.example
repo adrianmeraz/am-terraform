@@ -9,20 +9,6 @@ aws_secret_key          = "CHANGE_ME"
 environment             = "dev"
 force_overwrite_secrets = false
 shared_secret_id        = "expatmagic/dev/shared/secret"
-lambda_configs = [
-  {
-    base_function_name   = "bio-get-details"
-    http_method          = "GET"
-    image_config_command = "${local.lambda_cmd_prefix}.api_bio_get_details.${local.lambda_handler_name}"
-    is_protected         = false
-    lambda_environment   = local.lambda_environment
-    timeout_seconds      = 10
-  }
-]
-lambda_environment = {
-  "LOG_LEVEL": "DEBUG"
-}
-lambda_memory_MB        = 256
 secret_map = {
   "AWS_ECR_REGISTRY_NAME":  "KNOWN_AFTER_DEPLOY"
   "AWS_ECR_REPOSITORY_URL": "KNOWN_AFTER_DEPLOY"

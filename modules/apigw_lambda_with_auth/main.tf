@@ -21,7 +21,7 @@ resource "aws_api_gateway_authorizer" "cognito" {
 module "apigw_integration" {
   source = "../apigw_lambda_integration"
 
-  for_each                   = {for cfg in var.lambda_configs: cfg.function_name => cfg}
+  for_each                   = {for index, cfg in var.lambda_configs: cfg.function_name => cfg}
 
   cognito_authorizer_id      = aws_api_gateway_authorizer.cognito.id
   http_method                = each.value.http_method
