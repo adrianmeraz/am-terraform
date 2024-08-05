@@ -29,6 +29,18 @@ variable "force_overwrite_secrets" {
   default     = false
 }
 
+variable "lambda_configs" {
+  description = "List of lambda configs to setup integrations"
+  type          = list(object({
+    function_name      = string
+    http_method        = string
+    invoke_arn         = string
+    is_protected       = bool
+    lambda_environment = map(string)
+    path_part          = string
+  }))
+}
+
 variable "lambda_environment" {
   description = "Lambda Environment Variables Map"
   type        = map(string)
