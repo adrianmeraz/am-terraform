@@ -38,13 +38,13 @@ locals {
       is_protected         = false
       timeout_seconds      = 10
     },
-#     {
-#       base_function_name   = "bio-get-special-visa-types"
-#       http_method          = "GET"
-#       module_name          = "api_bio_get_special_visa_types"
-#       is_protected         = false
-#       timeout_seconds      = 10
-#     },
+    {
+      base_function_name   = "bio-get-special-visa-types"
+      http_method          = "GET"
+      module_name          = "api_bio_get_special_visa_types"
+      is_protected         = false
+      timeout_seconds      = 10
+    },
     {
       base_function_name   = "bio-get-travel-reasons-by-nationality"
       http_method          = "GET"
