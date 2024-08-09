@@ -97,7 +97,7 @@ locals {
     },
     {
       base_function_name   = "twocaptcha-post-pingback-event"
-      http_method          = "POST"
+      http_method          = "GET"
       module_name          = "api_twocaptcha_post_pingback_event"
       is_protected         = false
       timeout_seconds      = 10
