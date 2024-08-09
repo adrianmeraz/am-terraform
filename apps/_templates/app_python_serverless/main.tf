@@ -73,11 +73,6 @@ module "apigw_logs" {
   tags             = local.default_tags
 }
 
-locals {
-  test_1 = var.secret_map["CODECOV_TOKEN"]  # TODO Testing
-  test_2 = module.secrets.secret_map["CODECOV_TOKEN"]  # TODO Testing
-}
-
 # Merges app secrets with shared secrets
 module "secret_version" {
   # Only creates secrets if the secret string has changed
