@@ -94,6 +94,13 @@ locals {
       module_name          = "api_travel_post_details"
       is_protected         = false
       timeout_seconds      = 10
+    },
+    {
+      base_function_name   = "twocaptcha-post-pingback-event"
+      http_method          = "POST"
+      module_name          = "api_twocaptcha_post_pingback_event"
+      is_protected         = false
+      timeout_seconds      = 10
     }
   ]
 }
