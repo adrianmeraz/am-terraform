@@ -96,9 +96,9 @@ locals {
       timeout_seconds      = 10
     },
     {
-      base_function_name   = "twocaptcha-post-pingback-event"
+      base_function_name   = "twocaptcha-get-verification"
       http_method          = "GET"
-      module_name          = "api_twocaptcha_post_pingback_event"
+      module_name          = "api_twocaptcha_get_verification"
       is_protected         = false
       timeout_seconds      = 10
     }
