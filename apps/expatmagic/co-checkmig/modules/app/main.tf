@@ -4,7 +4,7 @@ data "aws_secretsmanager_secret_version" "shared" {
 
 locals  {
   name_prefix        = "${var.app_name}-${var.environment}"
-  secret_map         = jsondecode(data.aws_secretsmanager_secret_version.shared.secret_string)
+  secret_map         = merge(jsondecode(data.aws_secretsmanager_secret_version.shared.secret_string), var.secret_map)
 }
 
 data "aws_cognito_user_pools" "shared" {
