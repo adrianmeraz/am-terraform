@@ -112,13 +112,13 @@ module "lambdas" {
 
   app_name             = local.app_name
   env_aws_secret_name  = module.secrets.secretsmanager_secret_name
-  lambda_environment   = module.secret_version.secret_map
   base_function_name   = each.value.base_function_name
   environment          = local.environment
   http_method          = each.value.http_method
   image_config_command = "${var.lambda_cmd_prefix}.${each.value.module_name}.${var.lambda_handler_name}"
   image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
   is_protected         = each.value.is_protected
+  lambda_environment   = module.secret_version.secret_map
   memory_size          = var.lambda_memory_MB
   package_type         = "Image"
   role_arn             = module.iam_lambda_dynamo.role_arn

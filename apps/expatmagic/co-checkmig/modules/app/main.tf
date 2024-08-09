@@ -134,7 +134,7 @@ module "app_python_serverless" {
   force_overwrite_secrets        = var.force_overwrite_secrets
   lambda_cmd_prefix              = local.lambda_cmd_prefix
   lambda_configs                 = local.lambda_configs
-  lambda_environment             = local.secret_map
   lambda_handler_name            = local.lambda_handler_name
   lambda_memory_MB               = var.lambda_memory_MB
+  secret_map                     = local.secret_map
 }

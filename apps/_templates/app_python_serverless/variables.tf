@@ -79,12 +79,6 @@ variable "lambda_configs" {
   }))
 }
 
-variable "lambda_environment" {
-  description = "Lambda Environment Variables Map"
-  type        = map(string)
-  default     = {}
-}
-
 variable "lambda_handler_name" {
   description = "Lambda handler name"
   type        = string
