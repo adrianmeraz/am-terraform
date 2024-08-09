@@ -102,10 +102,6 @@ data "aws_ecr_image" "latest" {
   most_recent     = true
 }
 
-locals {
-  lambda_environment   = merge(var.lambda_environment, module.secret_version.secret_map)
-}
-
 module "lambdas" {
   source = "../../../modules/lambda_function_public"
   depends_on = [
@@ -116,7 +112,7 @@ module "lambdas" {
 
   app_name             = local.app_name
   env_aws_secret_name  = module.secrets.secretsmanager_secret_name
-  lambda_environment   = local.lambda_environment
+  lambda_environment   = module.secret_version.secret_map
   base_function_name   = each.value.base_function_name
   environment          = local.environment
   http_method          = each.value.http_method

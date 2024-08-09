@@ -16,7 +16,6 @@ locals {
   cognito_pool_id     = tolist(data.aws_cognito_user_pools.shared.ids)[0]
   lambda_cmd_prefix   = "src.lambdas"
   lambda_handler_name = "lambda_handler"
-  lambda_environment  = merge(local.secret_map, var.lambda_environment)
   lambda_configs = [
     {
       base_function_name   = "bio-get-details"
@@ -135,6 +134,7 @@ module "app_python_serverless" {
   force_overwrite_secrets        = var.force_overwrite_secrets
   lambda_cmd_prefix              = local.lambda_cmd_prefix
   lambda_configs                 = local.lambda_configs
+  lambda_environment             = local.secret_map
   lambda_handler_name            = local.lambda_handler_name
   lambda_memory_MB               = var.lambda_memory_MB
 }

@@ -6,8 +6,6 @@ module "app" {
   aws_secret_key     = var.aws_secret_key
   environment        = var.environment
   lambda_memory_MB   = 256
-  lambda_environment = {
-    "LOG_LEVEL": "DEBUG"
-  }
+  secret_map         = var.secret_map
   shared_secret_id   = var.shared_secret_id
 }
