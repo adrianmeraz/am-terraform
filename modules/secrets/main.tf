@@ -11,7 +11,7 @@ resource "aws_secretsmanager_secret_version" "main" {
   ${jsonencode(var.secret_map)}
 EOF
   lifecycle {
-    ignore_changes = all
+    ignore_changes = [secret_string]
   }
 }
 
