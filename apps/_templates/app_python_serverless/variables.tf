@@ -57,12 +57,6 @@ variable "ecs" {
   }
 }
 
-variable "force_overwrite_secrets" {
-  description = "Allows for forcing updates of secrets. Useful when new secrets are added"
-  type        = bool
-  default     = false
-}
-
 variable "lambda_cmd_prefix" {
   description = "Lambda command prefix"
   type        = string

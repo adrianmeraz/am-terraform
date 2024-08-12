@@ -4,7 +4,6 @@ module "secrets" {
   recovery_window_in_days = 0 # Allows for instant deletes
   secret_map              = var.secret_map
   secret_name_prefix      = "${var.app_name}/${var.environment}"
-  force_overwrite_secrets = var.force_overwrite_secrets
 }
 
 data "aws_default_tags" "main" {}

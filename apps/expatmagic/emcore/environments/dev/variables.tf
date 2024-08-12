@@ -13,12 +13,6 @@ variable "aws_secret_key" {
   type = string
 }
 
-variable "force_overwrite_secrets" {
-  description = "Allows for forcing updates of secrets. Useful when new secrets are added"
-  type        = bool
-  default     = false
-}
-
 variable "secret_map" {
   description = "Map of secrets"
   type = map(string)

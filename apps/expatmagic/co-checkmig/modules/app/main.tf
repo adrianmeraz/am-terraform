@@ -131,7 +131,6 @@ module "app_python_serverless" {
   cognito_pool_id                = local.cognito_pool_id
   dynamo_db_table_name           = module.dynamo_db.table_name
   environment                    = var.environment
-  force_overwrite_secrets        = var.force_overwrite_secrets
   lambda_cmd_prefix              = local.lambda_cmd_prefix
   lambda_configs                 = local.lambda_configs
   lambda_handler_name            = local.lambda_handler_name

@@ -10,7 +10,6 @@ module "app_spring_boot" {
   aws_access_key                 = var.aws_access_key
   aws_region                     = var.aws_region
   aws_secret_key                 = var.aws_access_key
-  force_overwrite_secrets        = var.force_overwrite_secrets
   environment                    = local.environment
   secret_map                     = var.secret_map
   ecs = {

@@ -23,12 +23,6 @@ variable "environment" {
   type = string
 }
 
-variable "force_overwrite_secrets" {
-  description = "Allows for forcing updates of secrets. Useful when new secrets are added"
-  type        = bool
-  default     = false
-}
-
 variable "lambda_memory_MB" {
   description = "Amount of memory in MB your Lambda Function can use at runtime"
   type        = number

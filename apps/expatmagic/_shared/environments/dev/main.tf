@@ -28,5 +28,4 @@ module "shared_secrets" {
   recovery_window_in_days   = 0 # Allows for instant deletes
   secret_map                = local.secret_map
   secret_name_prefix        = "${local.app_name}/${local.environment}/shared"
-  force_overwrite_secrets   = true
 }
