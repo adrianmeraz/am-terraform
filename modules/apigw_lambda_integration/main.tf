@@ -89,7 +89,7 @@ resource "aws_api_gateway_integration_response" "proxy" {
 
   http_method = aws_api_gateway_method.proxy.http_method
   resource_id = aws_api_gateway_resource.main.id
-  rest_api_id       = var.rest_api_id
+  rest_api_id = var.rest_api_id
   # status_code = aws_api_gateway_method_response.proxy_200.status_code
   # selection_pattern = ".*\"status\":${each.key}.*"
   status_code = each.key
