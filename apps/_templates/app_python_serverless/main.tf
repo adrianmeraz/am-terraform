@@ -6,7 +6,12 @@ module "secrets" {
   secret_name_prefix      = "${var.app_name}/${var.environment}"
 }
 
-data "aws_default_tags" "main" {}
+module "mandatory_tags" {
+  source = "../../../modules/mandatory_tags"
+
+  app_name = var.app_name
+  environment = var.environment
+}
 
 locals {
   secrets_map = module.secrets.secret_map
@@ -14,19 +19,18 @@ locals {
   app_name    = var.app_name
   environment = var.environment
   name_prefix = "${local.app_name}-${local.environment}"
-  default_tags = data.aws_default_tags.main.tags
   ecr = {
     image_tag: "latest"
   }
 }
 
 module "network" {
-  source = "../../../modules/network"
+  source      = "../../../modules/network"
 
-  cidr_block = "10.0.0.0/16"
+  cidr_block  = "10.0.0.0/16"
   name_prefix = local.name_prefix
 
-  tags       = local.default_tags
+  tags        = module.mandatory_tags.tags
 }
 
 resource "aws_ce_cost_allocation_tag" "main" {
@@ -43,7 +47,7 @@ module "ecr" {
   name_prefix  = local.name_prefix
   force_delete = true
 
-  tags         = local.default_tags
+  tags         = module.mandatory_tags.tags
 }
 
 locals {
@@ -52,11 +56,11 @@ locals {
 }
 
 module "iam_lambda_dynamo" {
-  source = "../../../modules/iam_lambda_dynamo"
+  source      = "../../../modules/iam_lambda_dynamo"
 
   name_prefix = local.name_prefix
 
-  tags        = local.default_tags
+  tags        = module.mandatory_tags.tags
 }
 
 module "apigw_logs" {
@@ -69,7 +73,7 @@ module "apigw_logs" {
   aws_service_name = "apigw"
   environment      = local.environment
 
-  tags             = local.default_tags
+  tags             = module.mandatory_tags.tags
 }
 
 # Merges app secrets with shared secrets
@@ -124,7 +128,7 @@ module "lambdas" {
   source_code_hash     = split(":", data.aws_ecr_image.latest.image_digest)[1] # Use only hash without sha256: prefix
   timeout_seconds      = each.value.timeout_seconds
 
-  tags                 = local.default_tags
+  tags                 = module.mandatory_tags.tags
 }
 
 module "apigw_lambda_http" {
@@ -150,6 +154,6 @@ module "apigw_lambda_http" {
     }
   ]
 
-  tags = local.default_tags
+  tags                     = module.mandatory_tags.tags
 }
 
