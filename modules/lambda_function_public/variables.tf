@@ -14,11 +14,6 @@ variable "environment" {
   type = string
 }
 
-variable "base_function_name" {
-  description = "Base unique name for Lambda Function"
-  type        = string
-}
-
 variable "http_method" {
   description = "Http Method for Lambda"
   type        = string
@@ -41,6 +36,11 @@ variable "memory_size" {
 
 variable "package_type" {
   description = "Lambda deployment package type."
+  type        = string
+}
+
+variable "path_part" {
+  description = "Last path segment of this API resource"
   type        = string
 }
 
@@ -68,6 +68,11 @@ variable "lambda_environment" {
   description = "Lambda Environment Variables"
   type        = map(string)
   default     = {}
+}
+
+variable "lambda_module_name" {
+  description = "Lambda Module Name"
+  type        = string
 }
 
 variable "source_code_hash" {

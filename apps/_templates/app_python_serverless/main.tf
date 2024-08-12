@@ -107,19 +107,20 @@ module "lambdas" {
     module.ecr
   ]
 
-  for_each             = {for index, cfg in var.lambda_configs: cfg.base_function_name => cfg}
+  for_each             = {for index, cfg in var.lambda_configs: cfg.module_name => cfg}
 
   app_name             = local.app_name
   env_aws_secret_name  = module.secrets.secretsmanager_secret_name
-  base_function_name   = each.value.base_function_name
   environment          = local.environment
   http_method          = each.value.http_method
   image_config_command = "${var.lambda_cmd_prefix}.${each.value.module_name}.${var.lambda_handler_name}"
   image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
   is_protected         = each.value.is_protected
   lambda_environment   = module.secret_version.secret_map
+  lambda_module_name   = each.value.module_name
   memory_size          = var.lambda_memory_MB
   package_type         = "Image"
+  path_part            = each.value.path_part
   role_arn             = module.iam_lambda_dynamo.role_arn
   source_code_hash     = split(":", data.aws_ecr_image.latest.image_digest)[1] # Use only hash without sha256: prefix
   timeout_seconds      = each.value.timeout_seconds
@@ -146,7 +147,7 @@ module "apigw_lambda_http" {
       invoke_arn         = lambda.invoke_arn
       is_protected       = lambda.is_protected
       lambda_environment = lambda.lambda_environment
-      path_part          = lambda.base_function_name
+      path_part          = lambda.path_part
     }
   ]
 

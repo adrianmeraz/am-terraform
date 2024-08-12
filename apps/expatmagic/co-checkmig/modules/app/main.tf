@@ -18,86 +18,86 @@ locals {
   lambda_handler_name = "lambda_handler"
   lambda_configs = [
     {
-      base_function_name   = "bio-get-details"
       http_method          = "GET"
       module_name          = "api_bio_get_details"
+      path_part            = "bio-get-details"
       is_protected         = false
       timeout_seconds      = 10
     },
     {
-      base_function_name   = "bio-get-document-types-by-nationality"
       http_method          = "GET"
       module_name          = "api_bio_get_document_types_by_nationality"
+      path_part            = "bio-get-document-types-by-nationality"
       is_protected         = false
       timeout_seconds      = 10
     },
     {
-      base_function_name   = "bio-get-is-visa-required"
       http_method          = "GET"
       module_name          = "api_bio_get_is_visa_required"
+      path_part   = "bio-get-is-visa-required"
       is_protected         = false
       timeout_seconds      = 10
     },
     {
-      base_function_name   = "bio-get-special-visa-types"
       http_method          = "GET"
       module_name          = "api_bio_get_special_visa_types"
+      path_part            = "bio-get-special-visa-types"
       is_protected         = false
       timeout_seconds      = 10
     },
     {
-      base_function_name   = "bio-get-travel-reasons-by-nationality"
       http_method          = "GET"
       module_name          = "api_bio_get_travel_reasons_by_nationality"
+      path_part            = "bio-get-travel-reasons-by-nationality"
       is_protected         = false
       timeout_seconds      = 10
     },
     {
-      base_function_name   = "travel-get-control-points"
       http_method          = "GET"
       module_name          = "api_travel_get_control_points"
+      path_part            = "travel-get-control-points"
       is_protected         = false
       timeout_seconds      = 10
     },
     {
-      base_function_name   = "travel-get-countries"
       http_method          = "GET"
       module_name          = "api_travel_get_countries"
+      path_part            = "travel-get-countries"
       is_protected         = false
       timeout_seconds      = 10
     },
     {
-      base_function_name   = "travel-get-details"
       http_method          = "GET"
       module_name          = "api_travel_get_details"
+      path_part            = "travel-get-details"
       is_protected         = false
       timeout_seconds      = 10
     },
     {
-      base_function_name   = "travel-get-origin-cities"
       http_method          = "GET"
       module_name          = "api_travel_get_origin_cities"
+      path_part            = "travel-get-origin-cities"
       is_protected         = false
       timeout_seconds      = 10
     },
     {
-      base_function_name   = "travel-get-routes"
       http_method          = "GET"
       module_name          = "api_travel_get_routes"
+      path_part            = "travel-get-routes"
       is_protected         = false
       timeout_seconds      = 10
     },
     {
-      base_function_name   = "travel-post-details"
       http_method          = "POST"
       module_name          = "api_travel_post_details"
+      path_part            = "travel-post-details"
       is_protected         = false
       timeout_seconds      = 10
     },
     {
-      base_function_name   = "twocaptcha-get-verification"
       http_method          = "GET"
       module_name          = "api_twocaptcha_get_verification"
+      path_part            = "2captcha.txt"
       is_protected         = false
       timeout_seconds      = 10
     }

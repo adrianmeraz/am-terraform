@@ -71,9 +71,9 @@ variable "lambda_cmd_prefix" {
 variable "lambda_configs" {
   description = "List of lambda configs to setup integrations"
   type        = list(object({
-    base_function_name   = string
     http_method          = string
     module_name          = string
+    path_part            = string
     is_protected         = bool
     timeout_seconds      = number
   }))

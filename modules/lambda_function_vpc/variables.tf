@@ -14,11 +14,6 @@ variable "environment" {
   type = string
 }
 
-variable "base_function_name" {
-  description = "Base unique name for Lambda Function"
-  type        = string
-}
-
 variable "http_method" {
   description = "Http Method for Lambda"
   type        = string
@@ -30,6 +25,11 @@ variable "http_method" {
 
 variable "image_config_command" {
   description = "Command for image"
+  type        = string
+}
+
+variable "lambda_module_name" {
+  description = "Lambda Module Name"
   type        = string
 }
 
