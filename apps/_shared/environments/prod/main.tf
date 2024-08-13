@@ -5,7 +5,7 @@ locals {
 }
 
 module "cognito" {
-  source = "../../../../../modules/cognito"
+  source = "../../../../modules/cognito"
 
   environment   = local.environment
   name_prefix   = local.name_prefix

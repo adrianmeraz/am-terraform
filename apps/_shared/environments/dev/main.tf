@@ -3,7 +3,7 @@ locals {
 }
 
 module "shared_cognito" {
-  source = "../../../../../modules/cognito"
+  source = "../../../../modules/cognito"
 
   environment   = var.environment
   name_prefix   = local.name_prefix
@@ -21,7 +21,7 @@ locals {
 }
 
 module "shared_secrets" {
-  source = "../../../../../modules/secrets"
+  source = "../../../../modules/secrets"
 
   recovery_window_in_days   = 0 # Allows for instant deletes
   secret_map                = local.secret_map
