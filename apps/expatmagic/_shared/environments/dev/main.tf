@@ -1,16 +1,14 @@
 locals {
-  app_name    = "expatmagic"
-  environment = "dev"
-  name_prefix = "${local.app_name}-${local.environment}"
+  name_prefix = "${var.app_name}-${var.environment}"
 }
 
 module "shared_cognito" {
   source = "../../../../../modules/cognito"
 
-  environment   = local.environment
+  environment   = var.environment
   name_prefix   = local.name_prefix
-  callback_urls = ["https://www.example.com/${local.environment}/cognito/callback"]
-  logout_urls   = ["https://www.example.com/${local.environment}/cognito/logout"]
+  callback_urls = ["https://www.example.com/${var.environment}/cognito/callback"]
+  logout_urls   = ["https://www.example.com/${var.environment}/cognito/logout"]
 }
 
 locals {
@@ -27,5 +25,5 @@ module "shared_secrets" {
 
   recovery_window_in_days   = 0 # Allows for instant deletes
   secret_map                = local.secret_map
-  secret_name_prefix        = "${local.app_name}/${local.environment}/shared"
+  secret_name_prefix        = "${var.app_name}/${var.environment}/shared"
 }

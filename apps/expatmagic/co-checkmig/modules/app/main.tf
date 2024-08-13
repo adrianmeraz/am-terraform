@@ -34,7 +34,7 @@ locals {
     {
       http_method          = "GET"
       module_name          = "api_bio_get_is_visa_required"
-      path_part   = "bio-get-is-visa-required"
+      path_part            = "bio-get-is-visa-required"
       is_protected         = false
       timeout_seconds      = 10
     },

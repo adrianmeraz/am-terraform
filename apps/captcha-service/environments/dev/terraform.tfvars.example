@@ -1,0 +1,18 @@
+#############################################################################
+## Copy this file to a terraform.tfvars in this directory and set the values
+#############################################################################
+
+app_name                = "captcha-service"
+aws_access_key          = "CHANGE_ME"
+aws_region              = "CHANGE_ME"
+aws_secret_key          = "CHANGE_ME"
+environment             = "dev"
+shared_secret_id        = "<CHANGE_ME>/dev/shared/secret"
+secret_map = {
+  "AWS_ECR_REGISTRY_NAME":  "KNOWN_AFTER_DEPLOY"
+  "AWS_ECR_REPOSITORY_URL": "KNOWN_AFTER_DEPLOY"
+  "CAPTCHA_PASSWORD": "CHANGE_ME"
+  "CODECOV_TOKEN": "CHANGE_ME"
+  "LOG_LEVEL": "DEBUG"
+  "TWOCAPTCHA_PINGBACK_TOKEN": "CHANGE_ME"
+}
