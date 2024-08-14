@@ -10,7 +10,9 @@ data "aws_route53_zone" "public" {
   private_zone = false
 }
 
-resource "aws_route53_record" "main" {
+### Record added for DNS Validation
+
+resource "aws_route53_record" "validation" {
   for_each = {
     for dvo in aws_acm_certificate.main.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
@@ -29,10 +31,10 @@ resource "aws_route53_record" "main" {
 
 resource "aws_acm_certificate_validation" "main" {
   certificate_arn         = aws_acm_certificate.main.arn
-  validation_record_fqdns = [for record in aws_route53_record.main : record.fqdn]
+  validation_record_fqdns = [for record in aws_route53_record.validation : record.fqdn]
 }
 
-###### Create Route 53 Records
+### Create Route 53 Records
 
 resource "aws_api_gateway_domain_name" "main" {
   domain_name = var.domain_main
