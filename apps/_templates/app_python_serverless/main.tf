@@ -159,7 +159,7 @@ module "apigw_lambda_http" {
 
 
 module "route53_custom_domain" {
-  count = var.domain_name ? 1 : 0
+  count = var.domain_name != "" ? 1 : 0
   source = "../../../modules/route53_custom_domain"
   depends_on = [
     module.apigw_lambda_http,
