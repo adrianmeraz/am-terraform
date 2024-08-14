@@ -18,6 +18,12 @@ variable "aws_secret_key" {
   type = string
 }
 
+variable "domain_name" {
+  description = "Custom domain name to use for API Gateway. Default is generated API Gateway domain"
+  type        = string
+  default     = ""
+}
+
 variable "environment" {
   description = "App Environment"
   type = string
