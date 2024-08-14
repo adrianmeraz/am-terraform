@@ -157,3 +157,15 @@ module "apigw_lambda_http" {
   tags                     = module.mandatory_tags.tags
 }
 
+
+module "route53_custom_domain" {
+  count = 1 ? var.domain_name : 0
+  source = "../../../modules/route53_custom_domain"
+  depends_on = [
+    module.apigw_lambda_http,
+  ]
+
+  api_id      = module.apigw_lambda_http.api_gateway_rest_api_id
+  domain_main = var.domain_name
+  stage_name  = module.apigw_lambda_http.api_gateway_stage_name
+}

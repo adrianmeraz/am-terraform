@@ -43,6 +43,12 @@ variable "cognito_pool_id" {
   type        = string
 }
 
+variable "domain_name" {
+  description = "Custom domain name to use for API Gateway. Default is generated API Gateway domain"
+  type        = string
+  default     = ""
+}
+
 variable "ecs" {
   description = "ECS task parameters"
   type = object({
