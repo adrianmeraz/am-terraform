@@ -26,7 +26,7 @@ locals {
     },
     {
       http_method     = "POST"
-      module_name     = "api_add_pingback"
+      module_name     = "api_post_add_pingback"
       path_part       = "pingback"
       is_protected    = false
       timeout_seconds = 10
