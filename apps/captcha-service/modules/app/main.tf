@@ -37,6 +37,13 @@ locals {
       path_part       = "pingback-event"
       is_protected    = false
       timeout_seconds = 10
+    },
+    {
+      http_method     = "POST"
+      module_name     = "api_post_solve_captcha"
+      path_part       = "solve-captcha"
+      is_protected    = false
+      timeout_seconds = 10
     }
   ]
 }
