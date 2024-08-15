@@ -10,7 +10,7 @@ resource "aws_acm_certificate" "main" {
 }
 
 data "aws_route53_zone" "public" {
-  name         = aws_acm_certificate.main.domain_name
+  name         = var.domain_name
   private_zone = false
 }
 
