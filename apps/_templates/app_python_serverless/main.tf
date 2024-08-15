@@ -159,13 +159,14 @@ module "apigw_lambda_http" {
 
 
 module "route53_custom_domain" {
-  count = var.domain_name != "" ? 1 : 0
-  source = "../../../modules/route53_custom_domain"
+  count          = var.domain_name != "" ? 1 : 0
+  source         = "../../../modules/route53_custom_domain"
   depends_on = [
     module.apigw_lambda_http,
   ]
 
-  api_id      = module.apigw_lambda_http.api_gateway_rest_api_id
-  domain_name = var.domain_name
-  stage_name  = module.apigw_lambda_http.api_gateway_stage_name
+  api_id         = module.apigw_lambda_http.api_gateway_rest_api_id
+  domain_name    = var.domain_name
+  subdomain_name = var.app_name
+  stage_name     = module.apigw_lambda_http.api_gateway_stage_name
 }

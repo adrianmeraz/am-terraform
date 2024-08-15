@@ -1,5 +1,9 @@
+locals {
+  fqdn = "${var.subdomain_name}.${var.domain_name}"
+}
+
 resource "aws_acm_certificate" "main" {
-  domain_name       = var.domain_name
+  domain_name       = local.fqdn
   validation_method = "DNS"
 
   tags = var.tags
@@ -37,7 +41,7 @@ resource "aws_acm_certificate_validation" "main" {
 ### Create Route 53 Records
 
 resource "aws_api_gateway_domain_name" "main" {
-  domain_name = var.domain_name
+  domain_name = local.fqdn
   certificate_arn = aws_acm_certificate.main.arn
 
   depends_on = [aws_acm_certificate_validation.main]
