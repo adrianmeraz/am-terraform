@@ -9,9 +9,10 @@ variable "api_id" {
   type        = string
 }
 
-variable "domain_main" {
-  description = "Domain name for which the certificate should be issued"
+variable "domain_name" {
+  description = "Route 53 Domain name to create records and map to API Gateway. Default is generated API Gateway domain"
   type        = string
+  default     = ""
 }
 
 variable "stage_name" {

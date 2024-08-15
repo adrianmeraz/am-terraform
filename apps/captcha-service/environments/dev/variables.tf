@@ -10,17 +10,23 @@ variable "aws_access_key" {
 
 variable "aws_region" {
   description = "AWS Region"
-  type = string
+  type        = string
 }
 
 variable "aws_secret_key" {
   description = "AWS Secret Key"
-  type = string
+  type        = string
+}
+
+variable "domain_name" {
+  description = "Route 53 Domain name to create records and map to API Gateway. Default is generated API Gateway domain"
+  type        = string
+  default     = ""
 }
 
 variable "environment" {
   description = "App Environment"
-  type = string
+  type        = string
 }
 
 variable "secret_map" {
@@ -31,5 +37,5 @@ variable "secret_map" {
 
 variable "shared_secret_id" {
   description = "ID of shared secrets"
-  type = string
+  type        = string
 }

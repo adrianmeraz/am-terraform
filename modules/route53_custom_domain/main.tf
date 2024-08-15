@@ -1,5 +1,5 @@
 resource "aws_acm_certificate" "main" {
-  domain_name       = var.domain_main
+  domain_name       = var.domain_name
   validation_method = "DNS"
 
   tags = var.tags
@@ -37,7 +37,7 @@ resource "aws_acm_certificate_validation" "main" {
 ### Create Route 53 Records
 
 resource "aws_api_gateway_domain_name" "main" {
-  domain_name = var.domain_main
+  domain_name = var.domain_name
   certificate_arn = aws_acm_certificate.main.arn
 
   depends_on = [aws_acm_certificate_validation.main]
@@ -60,5 +60,5 @@ resource "aws_route53_record" "main" {
 resource "aws_api_gateway_base_path_mapping" "main" {
   api_id = var.api_id
   stage_name = var.stage_name
-  domain_name = var.domain_main
+  domain_name = var.domain_name
 }

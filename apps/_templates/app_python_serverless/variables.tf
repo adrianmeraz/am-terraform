@@ -44,7 +44,7 @@ variable "cognito_pool_id" {
 }
 
 variable "domain_name" {
-  description = "Custom domain name to use for API Gateway. Default is generated API Gateway domain"
+  description = "Route 53 Domain name to create records and map to API Gateway. Default is generated API Gateway domain"
   type        = string
   default     = ""
 }
