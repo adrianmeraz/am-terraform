@@ -159,7 +159,7 @@ module "apigw_lambda_http" {
 }
 
 locals {
-  domain_name         = local.secrets_map["DOMAIN_NAME"]
+  domain_name = module.secret_version.secret_map["DOMAIN_NAME"]
 }
 
 
