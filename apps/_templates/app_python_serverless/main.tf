@@ -92,6 +92,7 @@ module "secret_version" {
       "AWS_DYNAMO_DB_TABLE_NAME":   var.dynamo_db_table_name
       "AWS_ECR_REGISTRY_NAME":      module.ecr.name
       "AWS_ECR_REPOSITORY_URL":     module.ecr.repository_url
+      "DOMAIN_NAME":                var.domain_name
       "ENVIRONMENT":                var.environment
     }
   )
@@ -160,20 +161,16 @@ data "aws_secretsmanager_secret_version" "main" {
   secret_id = module.secrets.secretsmanager_secret_id
 }
 
-locals {
-  domain_name = jsondecode(data.aws_secretsmanager_secret_version.main.secret_string)["DOMAIN_NAME"]
-}
-
 
 module "route53_custom_domain" {
-  count          = local.domain_name != "" ? 1 : 0
+  count          = var.domain_name != "" ? 1 : 0
   source         = "../../../modules/route53_custom_domain"
   depends_on = [
     module.apigw_lambda_http,
   ]
 
   api_gateway_id = module.apigw_lambda_http.api_gateway_rest_api_id
-  domain_name    = local.domain_name
+  domain_name    = var.domain_name
   subdomain_name = var.app_name
   stage_name     = module.apigw_lambda_http.api_gateway_stage_name
 }
