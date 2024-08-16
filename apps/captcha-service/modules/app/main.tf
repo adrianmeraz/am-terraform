@@ -18,9 +18,16 @@ locals {
   lambda_cmd_prefix   = "src.lambdas"
   lambda_handler_name = "lambda_handler"
   lambda_configs = [
+#     {
+#       http_method     = "GET"
+#       module_name     = "api_get_pingback_verification_token"
+#       path_part       = "2captcha.txt"
+#       is_protected    = false
+#       timeout_seconds = 10
+#     },
     {
       http_method     = "POST"
-      module_name     = "api_get_pingback_verification_token"
+      module_name     = "api_post_pingback_verification_token"
       path_part       = "2captcha.txt"
       is_protected    = false
       timeout_seconds = 10
