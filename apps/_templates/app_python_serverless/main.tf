@@ -69,11 +69,12 @@ module "apigw_logs" {
     module.iam_lambda_dynamo
   ]
 
-  app_name         = local.app_name
-  aws_service_name = "apigw"
-  environment      = local.environment
+  retention_in_days = 14
+  app_name          = local.app_name
+  aws_service_name  = "apigw"
+  environment       = local.environment
 
-  tags             = module.mandatory_tags.tags
+  tags              = module.mandatory_tags.tags
 }
 
 # Merges app secrets with shared secrets
