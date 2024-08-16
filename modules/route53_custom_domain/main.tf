@@ -3,6 +3,8 @@ locals {
 }
 
 resource "aws_acm_certificate" "main" {
+  provider = "aws.acm"
+
   domain_name       = local.fqdn
   validation_method = "DNS"
 
@@ -34,6 +36,8 @@ resource "aws_route53_record" "validation" {
 }
 
 resource "aws_acm_certificate_validation" "main" {
+  provider = "aws.acm"
+
   certificate_arn         = aws_acm_certificate.main.arn
   validation_record_fqdns = [for record in aws_route53_record.validation : record.fqdn]
 }
