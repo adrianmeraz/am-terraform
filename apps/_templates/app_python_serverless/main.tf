@@ -14,8 +14,6 @@ module "mandatory_tags" {
 }
 
 locals {
-  secrets_map = module.secrets.secret_map
-
   app_name    = var.app_name
   environment = var.environment
   name_prefix = "${local.app_name}-${local.environment}"
@@ -87,7 +85,7 @@ module "secret_version" {
 
   secret_id       = module.secrets.secretsmanager_secret_id
   secret_map      = merge(
-    local.secrets_map,
+    module.secrets.secret_map,
     {
       "AWS_COGNITO_POOL_ID":        var.cognito_pool_id
       "AWS_COGNITO_POOL_CLIENT_ID": var.cognito_pool_client_id
@@ -158,8 +156,12 @@ module "apigw_lambda_http" {
   tags                     = module.mandatory_tags.tags
 }
 
+data "aws_secretsmanager_secret_version" "main" {
+  secret_id = module.secrets.secretsmanager_secret_id
+}
+
 locals {
-  domain_name = module.secret_version.secret_map["DOMAIN_NAME"]
+  domain_name = jsondecode(data.aws_secretsmanager_secret_version.main.secret_string)["DOMAIN_NAME"]
 }
 
 
