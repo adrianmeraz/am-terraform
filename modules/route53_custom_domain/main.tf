@@ -44,6 +44,7 @@ resource "aws_api_gateway_domain_name" "main" {
   domain_name = local.fqdn
   certificate_arn = aws_acm_certificate.main.arn
 
+
   depends_on = [aws_acm_certificate_validation.main]
 
   tags = var.tags
