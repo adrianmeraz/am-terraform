@@ -158,16 +158,20 @@ module "apigw_lambda_http" {
   tags                     = module.mandatory_tags.tags
 }
 
+locals {
+  domain_name         = local.secrets_map["DOMAIN_NAME"]
+}
+
 
 module "route53_custom_domain" {
-  count          = var.domain_name != "" ? 1 : 0
+  count          = local.domain_name != "" ? 1 : 0
   source         = "../../../modules/route53_custom_domain"
   depends_on = [
     module.apigw_lambda_http,
   ]
 
-  api_gateway_id         = module.apigw_lambda_http.api_gateway_rest_api_id
-  domain_name    = var.domain_name
+  api_gateway_id = module.apigw_lambda_http.api_gateway_rest_api_id
+  domain_name    = local.domain_name
   subdomain_name = var.app_name
   stage_name     = module.apigw_lambda_http.api_gateway_stage_name
 }
