@@ -19,7 +19,7 @@ locals {
   lambda_handler_name = "lambda_handler"
   lambda_configs = [
     {
-      http_method     = "GET"
+      http_method     = "POST"
       module_name     = "api_get_pingback_verification_token"
       path_part       = "2captcha.txt"
       is_protected    = false
