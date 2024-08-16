@@ -23,10 +23,12 @@ provider "aws" {
   region     = var.aws_region
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
-  default_tags {
-    tags = {
-      "app_name" :    local.app_name
-      "environment" : local.environment
-    }
-  }
+}
+
+provider "aws" {
+  # us-east-1 instance
+  region = "us-east-1"
+  alias = "acm"
+  access_key = var.aws_access_key
+  secret_key = var.aws_secret_key
 }
