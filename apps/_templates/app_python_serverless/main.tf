@@ -165,7 +165,7 @@ module "route53_custom_domain" {
     module.apigw_lambda_http,
   ]
 
-  api_id         = module.apigw_lambda_http.api_gateway_rest_api_id
+  api_gateway_id         = module.apigw_lambda_http.api_gateway_rest_api_id
   domain_name    = var.domain_name
   subdomain_name = var.app_name
   stage_name     = module.apigw_lambda_http.api_gateway_stage_name

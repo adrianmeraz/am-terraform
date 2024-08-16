@@ -3,7 +3,8 @@ locals {
 }
 
 resource "aws_acm_certificate" "main" {
-  provider = "aws.acm"
+  # Added second us-east-1 provider per: https://github.com/hashicorp/terraform/issues/10957#issuecomment-269653276
+  # provider = aws.acm
 
   domain_name       = local.fqdn
   validation_method = "DNS"
@@ -36,7 +37,8 @@ resource "aws_route53_record" "validation" {
 }
 
 resource "aws_acm_certificate_validation" "main" {
-  provider = "aws.acm"
+  # Added second us-east-1 provider per: https://github.com/hashicorp/terraform/issues/10957#issuecomment-269653276
+  # provider = aws.acm
 
   certificate_arn         = aws_acm_certificate.main.arn
   validation_record_fqdns = [for record in aws_route53_record.validation : record.fqdn]
@@ -45,9 +47,13 @@ resource "aws_acm_certificate_validation" "main" {
 ### Create Route 53 Records
 
 resource "aws_api_gateway_domain_name" "main" {
+  # Changed to regional per: https://stackoverflow.com/a/57681383
   domain_name = local.fqdn
-  certificate_arn = aws_acm_certificate.main.arn
+  regional_certificate_arn = aws_acm_certificate.main.arn
 
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
 
   depends_on = [aws_acm_certificate_validation.main]
 
@@ -61,13 +67,13 @@ resource "aws_route53_record" "main" {
 
   alias {
     evaluate_target_health = true
-    name                   = aws_api_gateway_domain_name.main.cloudfront_domain_name
-    zone_id                = aws_api_gateway_domain_name.main.cloudfront_zone_id
+    name                   = aws_api_gateway_domain_name.main.regional_domain_name
+    zone_id                = aws_api_gateway_domain_name.main.regional_zone_id
   }
 }
 
 resource "aws_api_gateway_base_path_mapping" "main" {
-  api_id = var.api_id
+  api_id = var.api_gateway_id
+  domain_name = aws_api_gateway_domain_name.main.id
   stage_name = var.stage_name
-  domain_name = var.domain_name
 }

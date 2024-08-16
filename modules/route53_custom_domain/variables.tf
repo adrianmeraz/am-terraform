@@ -4,7 +4,7 @@ variable "tags" {
   default     = {}
 }
 
-variable "api_id" {
+variable "api_gateway_id" {
   description = "ID of the API to connect."
   type        = string
 }
