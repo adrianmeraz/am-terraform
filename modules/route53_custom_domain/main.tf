@@ -6,7 +6,7 @@ resource "aws_acm_certificate" "main" {
   # Added second us-east-1 provider per: https://github.com/hashicorp/terraform/issues/10957#issuecomment-269653276
   # provider = aws.acm
 
-  domain_name       = local.fqdn
+  domain_name       = lower(local.fqdn)
   validation_method = "DNS"
 
   tags = var.tags
@@ -34,6 +34,12 @@ resource "aws_route53_record" "validation" {
   ttl             = 60
   type            = each.value.type
   zone_id         = data.aws_route53_zone.public.zone_id
+
+  lifecycle {
+    ignore_changes = [
+      zone_id
+    ]
+  }
 }
 
 resource "aws_acm_certificate_validation" "main" {
@@ -48,7 +54,7 @@ resource "aws_acm_certificate_validation" "main" {
 
 resource "aws_api_gateway_domain_name" "main" {
   # Changed to regional per: https://stackoverflow.com/a/57681383
-  domain_name = local.fqdn
+  domain_name = lower(local.fqdn)
   regional_certificate_arn = aws_acm_certificate.main.arn
 
   endpoint_configuration {
@@ -69,6 +75,12 @@ resource "aws_route53_record" "main" {
     evaluate_target_health = true
     name                   = aws_api_gateway_domain_name.main.regional_domain_name
     zone_id                = aws_api_gateway_domain_name.main.regional_zone_id
+  }
+
+  lifecycle {
+    ignore_changes = [
+      zone_id
+    ]
   }
 }
 
