@@ -163,6 +163,7 @@ module "apigw_lambda_http" {
 
 locals {
   domain_name = module.secret_version.secret_map["BASE_DOMAIN_NAME"]
+  subdomain_name = "${var.environment}-${var.app_name}"
 }
 
 module "route53_custom_domain" {
@@ -174,6 +175,6 @@ module "route53_custom_domain" {
 
   api_gateway_id = module.apigw_lambda_http.api_gateway_rest_api_id
   domain_name    = local.domain_name
-  subdomain_name = var.app_name
+  subdomain_name = local.subdomain_name
   stage_name     = module.apigw_lambda_http.api_gateway_stage_name
 }
