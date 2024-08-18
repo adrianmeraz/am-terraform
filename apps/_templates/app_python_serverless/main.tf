@@ -87,6 +87,7 @@ module "secret_version" {
   secret_map      = merge(
     module.secrets.secret_map,
     {
+      "APP_NAME":                   var.app_name
       "AWS_COGNITO_POOL_ID":        var.cognito_pool_id
       "AWS_COGNITO_POOL_CLIENT_ID": var.cognito_pool_client_id
       "AWS_DYNAMO_DB_TABLE_NAME":   var.dynamo_db_table_name
