@@ -4,7 +4,6 @@ module "app" {
   aws_access_key          = var.aws_access_key
   aws_region              = var.aws_region
   aws_secret_key          = var.aws_secret_key
-  domain_name             = var.domain_name
   environment             = var.environment
   lambda_memory_MB        = 256
   secret_map              = var.secret_map
