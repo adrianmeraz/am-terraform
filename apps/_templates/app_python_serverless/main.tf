@@ -157,20 +157,23 @@ module "apigw_lambda_http" {
   tags                     = module.mandatory_tags.tags
 }
 
-data "aws_secretsmanager_secret_version" "main" {
-  secret_id = module.secrets.secretsmanager_secret_id
+# data "aws_secretsmanager_secret_version" "main" {
+#   secret_id = module.secrets.secretsmanager_secret_id
+# }
+
+locals {
+  domain_name = module.secret_version.secret_map["BASE_DOMAIN_NAME"]
 }
 
-
 module "route53_custom_domain" {
-  count          = var.domain_name != "" ? 1 : 0
+  count          = local.domain_name != "" ? 1 : 0
   source         = "../../../modules/route53_custom_domain"
   depends_on = [
     module.apigw_lambda_http,
   ]
 
   api_gateway_id = module.apigw_lambda_http.api_gateway_rest_api_id
-  domain_name    = var.domain_name
+  domain_name    = local.domain_name
   subdomain_name = var.app_name
   stage_name     = module.apigw_lambda_http.api_gateway_stage_name
 }

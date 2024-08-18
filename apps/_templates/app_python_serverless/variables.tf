@@ -43,12 +43,6 @@ variable "cognito_pool_id" {
   type        = string
 }
 
-variable "domain_name" {
-  description = "Route 53 Domain name to create records and map to API Gateway. Default is generated API Gateway domain"
-  type        = string
-  default     = ""
-}
-
 variable "ecs" {
   description = "ECS task parameters"
   type = object({
