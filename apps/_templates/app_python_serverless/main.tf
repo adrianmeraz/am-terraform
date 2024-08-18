@@ -16,7 +16,6 @@ module "mandatory_tags" {
 locals {
   app_name    = var.app_name
   environment = var.environment
-  fqdn        = "${var.app_name}.${var.domain_name}"
   name_prefix = "${local.app_name}-${local.environment}"
   ecr = {
     image_tag: "latest"
@@ -93,7 +92,7 @@ module "secret_version" {
       "AWS_DYNAMO_DB_TABLE_NAME":   var.dynamo_db_table_name
       "AWS_ECR_REGISTRY_NAME":      module.ecr.name
       "AWS_ECR_REPOSITORY_URL":     module.ecr.repository_url
-      "DOMAIN_NAME":                local.fqdn
+      "DOMAIN_NAME":                var.domain_name
       "ENVIRONMENT":                var.environment
     }
   )
