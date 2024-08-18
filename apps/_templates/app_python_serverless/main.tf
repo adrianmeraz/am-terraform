@@ -1,11 +1,3 @@
-module "secrets" {
-  source = "../../../modules/secrets"
-
-  recovery_window_in_days = 0 # Allows for instant deletes
-  secret_map              = var.secret_map
-  secret_name_prefix      = "${var.app_name}/${var.environment}"
-}
-
 module "mandatory_tags" {
   source = "../../../modules/mandatory_tags"
 
@@ -14,9 +6,7 @@ module "mandatory_tags" {
 }
 
 locals {
-  app_name    = var.app_name
-  environment = var.environment
-  name_prefix = "${local.app_name}-${local.environment}"
+  name_prefix = "${var.app_name}-${var.environment}"
   ecr = {
     image_tag: "latest"
   }
@@ -68,24 +58,51 @@ module "apigw_logs" {
   ]
 
   retention_in_days = 14
-  app_name          = local.app_name
+  app_name          = var.app_name
   aws_service_name  = "apigw"
-  environment       = local.environment
+  environment       = var.environment
 
   tags              = module.mandatory_tags.tags
 }
 
-# Merges app secrets with shared secrets
-module "secret_version" {
-  # Only creates secrets if the secret string has changed
-  source          = "../../../modules/secret_version"
+# module "secret_version" {
+#   source          = "../../../modules/secret_version"
+#   depends_on = [
+#     module.ecr
+#   ]
+#
+#   secret_id       = module.secrets.secretsmanager_secret_id
+#   secret_map      = merge(
+#     module.secrets.secret_map,
+#     {
+#       "APP_NAME":                   var.app_name
+#       "AWS_COGNITO_POOL_ID":        var.cognito_pool_id
+#       "AWS_COGNITO_POOL_CLIENT_ID": var.cognito_pool_client_id
+#       "AWS_DYNAMO_DB_TABLE_NAME":   var.dynamo_db_table_name
+#       "AWS_ECR_REGISTRY_NAME":      module.ecr.name
+#       "AWS_ECR_REPOSITORY_URL":     module.ecr.repository_url
+#       "ENVIRONMENT":                var.environment
+#     }
+#   )
+# }
+
+data "aws_ecr_image" "latest" {
+  depends_on = [module.ecr]
+  repository_name = module.ecr.name
+  most_recent     = true
+}
+
+# Secrets only created and stored the first run
+
+module "secrets" {
+  source = "../../../modules/secrets"
   depends_on = [
     module.ecr
   ]
 
-  secret_id       = module.secrets.secretsmanager_secret_id
+  recovery_window_in_days = 0 # Allows for instant deletes
   secret_map      = merge(
-    module.secrets.secret_map,
+    var.secret_map,
     {
       "APP_NAME":                   var.app_name
       "AWS_COGNITO_POOL_ID":        var.cognito_pool_id
@@ -96,30 +113,25 @@ module "secret_version" {
       "ENVIRONMENT":                var.environment
     }
   )
-}
-
-data "aws_ecr_image" "latest" {
-  depends_on = [module.ecr]
-  repository_name = module.ecr.name
-  most_recent     = true
+  secret_name_prefix      = "${var.app_name}/${var.environment}"
 }
 
 module "lambdas" {
   source = "../../../modules/lambda_function_public"
   depends_on = [
-    module.ecr
+    module.ecr,
   ]
 
   for_each             = {for index, cfg in var.lambda_configs: cfg.module_name => cfg}
 
-  app_name             = local.app_name
+  app_name             = var.app_name
   env_aws_secret_name  = module.secrets.secretsmanager_secret_name
-  environment          = local.environment
+  environment          = var.environment
   http_method          = each.value.http_method
   image_config_command = "${var.lambda_cmd_prefix}.${each.value.module_name}.${var.lambda_handler_name}"
   image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
   is_protected         = each.value.is_protected
-  lambda_environment   = module.secret_version.secret_map
+  lambda_environment   = module.secrets.secret_map
   lambda_module_name   = each.value.module_name
   memory_size          = var.lambda_memory_MB
   package_type         = "Image"
@@ -157,12 +169,14 @@ module "apigw_lambda_http" {
   tags                     = module.mandatory_tags.tags
 }
 
-# data "aws_secretsmanager_secret_version" "main" {
-#   secret_id = module.secrets.secretsmanager_secret_id
-# }
+data "aws_secretsmanager_secret_version" "main" {
+  secret_id = module.secrets.secretsmanager_secret_id
+}
 
 locals {
-  domain_name = module.secret_version.secret_map["BASE_DOMAIN_NAME"]
+  secret_map = jsondecode(data.aws_secretsmanager_secret_version.main.secret_string)
+  # secret_map = module.secrets.secret_map
+  domain_name = local.secret_map["BASE_DOMAIN_NAME"]
   subdomain_name = "${var.environment}-${var.app_name}"
 }
 

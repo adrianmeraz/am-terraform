@@ -36,9 +36,7 @@ resource "aws_route53_record" "validation" {
   zone_id         = data.aws_route53_zone.public.zone_id
 
   lifecycle {
-    ignore_changes = [
-      zone_id
-    ]
+    ignore_changes = [zone_id]
   }
 }
 
@@ -78,9 +76,7 @@ resource "aws_route53_record" "main" {
   }
 
   lifecycle {
-    ignore_changes = [
-      zone_id
-    ]
+    ignore_changes = [zone_id]
   }
 }
 
