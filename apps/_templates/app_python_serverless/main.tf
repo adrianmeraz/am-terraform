@@ -65,27 +65,6 @@ module "apigw_logs" {
   tags              = module.mandatory_tags.tags
 }
 
-# module "secret_version" {
-#   source          = "../../../modules/secret_version"
-#   depends_on = [
-#     module.ecr
-#   ]
-#
-#   secret_id       = module.secrets.secretsmanager_secret_id
-#   secret_map      = merge(
-#     module.secrets.secret_map,
-#     {
-#       "APP_NAME":                   var.app_name
-#       "AWS_COGNITO_POOL_ID":        var.cognito_pool_id
-#       "AWS_COGNITO_POOL_CLIENT_ID": var.cognito_pool_client_id
-#       "AWS_DYNAMO_DB_TABLE_NAME":   var.dynamo_db_table_name
-#       "AWS_ECR_REGISTRY_NAME":      module.ecr.name
-#       "AWS_ECR_REPOSITORY_URL":     module.ecr.repository_url
-#       "ENVIRONMENT":                var.environment
-#     }
-#   )
-# }
-
 data "aws_ecr_image" "latest" {
   depends_on = [module.ecr]
   repository_name = module.ecr.name
