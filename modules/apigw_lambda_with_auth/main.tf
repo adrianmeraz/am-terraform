@@ -19,6 +19,10 @@ resource "aws_api_gateway_authorizer" "cognito" {
 }
 
 module "apigw_integration" {
+  depends_on  = [
+    aws_api_gateway_rest_api.http,
+  ]
+
   source = "../apigw_lambda_integration"
 
   for_each                   = {for index, cfg in var.lambda_configs: cfg.function_name => cfg}
@@ -53,6 +57,10 @@ resource "aws_api_gateway_deployment" "main" {
 
 # Set a default stage
 resource "aws_api_gateway_stage" "default" {
+  depends_on  = [
+    aws_api_gateway_deployment.main,
+    aws_api_gateway_rest_api.http
+  ]
   deployment_id = aws_api_gateway_deployment.main.id
   rest_api_id   = aws_api_gateway_rest_api.http.id
   stage_name    = var.environment
