@@ -40,6 +40,20 @@ locals {
     },
     {
       http_method     = "POST"
+      module_name     = "api_post_report_bad_captcha"
+      path_part       = "report-bad-captcha"
+      is_protected    = false
+      timeout_seconds = 10
+    },
+    {
+      http_method     = "POST"
+      module_name     = "api_post_report_good_captcha"
+      path_part       = "report-good-captcha"
+      is_protected    = false
+      timeout_seconds = 10
+    },
+    {
+      http_method     = "POST"
       module_name     = "api_post_solve_captcha"
       path_part       = "solve-captcha"
       is_protected    = false
