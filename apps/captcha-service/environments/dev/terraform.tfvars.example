@@ -9,9 +9,9 @@ aws_secret_key          = "CHANGE_ME"
 environment             = "dev"
 shared_secret_id        = "<CHANGE_ME>/dev/shared/secret"
 secret_map = {
+  "BASE_DOMAIN_NAME": "example.com"
   "CAPTCHA_PASSWORD": "CHANGE_ME"
   "CODECOV_TOKEN": "CHANGE_ME"
   "LOG_LEVEL": "DEBUG"
-  "ROOT_DOMAIN_NAME": "example.com"
   "TWOCAPTCHA_PINGBACK_TOKEN": "CHANGE_ME"
 }

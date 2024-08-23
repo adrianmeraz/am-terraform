@@ -154,9 +154,7 @@ data "aws_secretsmanager_secret_version" "main" {
 
 locals {
   secret_map = jsondecode(data.aws_secretsmanager_secret_version.main.secret_string)
-  # secret_map = module.secrets.secret_map
   domain_name = local.secret_map["BASE_DOMAIN_NAME"]
-  subdomain_name = "${var.environment}-${var.app_name}"
 }
 
 module "route53_custom_domain" {
@@ -168,6 +166,6 @@ module "route53_custom_domain" {
 
   api_gateway_id = module.apigw_lambda_http.api_gateway_rest_api_id
   domain_name    = local.domain_name
-  subdomain_name = local.subdomain_name
+  subdomain_name = local.name_prefix
   stage_name     = module.apigw_lambda_http.api_gateway_stage_name
 }
