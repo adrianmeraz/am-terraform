@@ -28,21 +28,6 @@ variable "environment" {
   type = string
 }
 
-variable "cognito_pool_arn" {
-  description = "Shared cognito pool arn"
-  type        = string
-}
-
-variable "cognito_pool_client_id" {
-  description = "Shared cognito pool client id"
-  type        = string
-}
-
-variable "cognito_pool_id" {
-  description = "Shared cognito pool id"
-  type        = string
-}
-
 variable "ecs" {
   description = "ECS task parameters"
   type = object({
@@ -90,10 +75,9 @@ variable "runtime" {
   default     = false
 }
 
-variable "secret_map" {
-  description = "Map of secrets"
-  type        = map(string)
-  default     = {}
+variable "shared_app_name" {
+  description = "Shared app name"
+  type        = string
 }
 
 variable "security_group_ids" {
