@@ -1,5 +1,5 @@
 module "mandatory_tags" {
-  source = "../../../modules/mandatory_tags"
+  source = "../../modules/mandatory_tags"
 
   app_name = var.app_name
   environment = var.environment
@@ -13,7 +13,7 @@ locals {
 }
 
 module "network" {
-  source      = "../../../modules/network"
+  source      = "../../modules/network"
 
   cidr_block  = "10.0.0.0/16"
   name_prefix = local.name_prefix
@@ -30,7 +30,7 @@ resource "aws_ce_cost_allocation_tag" "main" {
 }
 
 module "ecr" {
-  source = "../../../modules/ecr"
+  source = "../../modules/ecr"
 
   name_prefix  = local.name_prefix
   force_delete = true
@@ -44,7 +44,7 @@ locals {
 }
 
 module "iam_lambda_dynamo" {
-  source      = "../../../modules/iam_lambda_dynamo"
+  source      = "../../modules/iam_lambda_dynamo"
 
   name_prefix = local.name_prefix
 
@@ -52,7 +52,7 @@ module "iam_lambda_dynamo" {
 }
 
 module "apigw_logs" {
-  source            = "../../../modules/logs"
+  source            = "../../modules/logs"
   depends_on = [
     module.iam_lambda_dynamo
   ]
@@ -74,7 +74,7 @@ data "aws_ecr_image" "latest" {
 # Secrets only created and stored the first run
 
 module "secrets" {
-  source = "../../../modules/secrets"
+  source = "../../modules/secrets"
   depends_on = [
     module.ecr
   ]
@@ -96,7 +96,7 @@ module "secrets" {
 }
 
 module "lambdas" {
-  source = "../../../modules/lambda_function_public"
+  source = "../../modules/lambda_function_public"
   depends_on = [
     module.ecr,
   ]
@@ -123,7 +123,7 @@ module "lambdas" {
 }
 
 module "apigw_lambda_http" {
-  source = "../../../modules/apigw_lambda_with_auth"
+  source = "../../modules/apigw_lambda_with_auth"
   depends_on = [
     module.ecr,
     module.lambdas
@@ -159,7 +159,7 @@ locals {
 
 module "route53_custom_domain" {
   count          = local.domain_name != "" ? 1 : 0
-  source         = "../../../modules/route53_custom_domain"
+  source         = "../../modules/route53_custom_domain"
   depends_on = [
     module.apigw_lambda_http,
   ]

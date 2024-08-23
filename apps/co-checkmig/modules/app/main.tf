@@ -120,7 +120,7 @@ module "dynamo_db" {
 
 
 module "app_python_serverless" {
-  source = "../../../_templates/app_python_serverless"
+  source = "../../../../_templates/app_python_serverless"
 
   app_name                       = var.app_name
   aws_access_key                 = var.aws_access_key

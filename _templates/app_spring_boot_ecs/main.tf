@@ -1,7 +1,7 @@
 data "aws_default_tags" "main" {}
 
 module "secrets" {
-  source = "../../../modules/secrets"
+  source = "../../modules/secrets"
 
   recovery_window_in_days        = 0 # Allows for instant deletes
   secret_map                     = var.secret_map
@@ -25,7 +25,7 @@ locals {
 }
 
 module "network" {
-  source = "../../../modules/network"
+  source = "../../modules/network"
 
   cidr_block  = "10.0.0.0/16"
   name_prefix = local.name_prefix
@@ -46,7 +46,7 @@ locals {
 }
 
 module "alb_http" {
-  source = "../../../modules/alb_http"
+  source = "../../modules/alb_http"
 
   environment = var.environment
   name_prefix = local.app_name
@@ -69,7 +69,7 @@ module "alb_http" {
 }
 
 module "apigw_logs" {
-  source            = "../../../modules/logs"
+  source            = "../../modules/logs"
 
   app_name         = local.app_name
   environment      = local.environment
@@ -78,7 +78,7 @@ module "apigw_logs" {
 }
 
 module "apigw_ecs_http" {
-  source = "../../../modules/apigwv2_ecs_http"
+  source = "../../modules/apigwv2_ecs_http"
 
   environment              = var.environment
   name_prefix              = local.name_prefix
@@ -91,7 +91,7 @@ module "apigw_ecs_http" {
 }
 
 module "postgres_db" {
-  source      = "../../../modules/rds_postgres"
+  source      = "../../modules/rds_postgres"
 
   allocated_storage      = 20
   db_name                = "${local.app_name}${local.environment}"
@@ -107,7 +107,7 @@ module "postgres_db" {
 }
 
 module "ecr" {
-  source = "../../../modules/ecr"
+  source = "../../modules/ecr"
 
   name_prefix  = local.name_prefix
   force_delete = true
@@ -116,7 +116,7 @@ module "ecr" {
 }
 
 module "iam_ecs" {
-  source = "../../../modules/iam_ecs"
+  source = "../../modules/iam_ecs"
 
   name_prefix = local.name_prefix
 
@@ -125,7 +125,7 @@ module "iam_ecs" {
 # Merging secrets from created resources with prior secrets map
 module "secret_version" {
   # Only creates secrets if the secret string has changed
-  source          = "../../../modules/secret_version"
+  source          = "../../modules/secret_version"
 
   secret_id       = module.secrets.secretsmanager_secret_id
   secret_map      = merge(
@@ -139,7 +139,7 @@ module "secret_version" {
 }
 
 module "ecs_logs" {
-  source            = "../../../modules/logs"
+  source            = "../../modules/logs"
 
   app_name         = local.app_name
   environment      = local.environment
@@ -181,7 +181,7 @@ module "ecs_container_definition" {
 }
 
 module "ecs_task_definition" {
-  source = "../../../modules/ecs_task_definition"
+  source = "../../modules/ecs_task_definition"
 
   name_prefix           = local.name_prefix
   container_definitions = <<EOF
@@ -193,7 +193,7 @@ module "ecs_task_definition" {
 }
 
 module "ecs_cluster_public" {
-  source = "../../../modules/ecs_cluster_public"
+  source = "../../modules/ecs_cluster_public"
 
   name_prefix         = local.name_prefix
   container_name      = local.container_name
