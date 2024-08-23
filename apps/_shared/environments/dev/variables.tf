@@ -18,6 +18,11 @@ variable "aws_secret_key" {
   type = string
 }
 
+variable "base_domain_name" {
+  description = "Base route53 zone domain"
+  type = string
+}
+
 variable "environment" {
   description = "App Environment"
   type = string

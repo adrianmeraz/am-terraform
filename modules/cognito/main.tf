@@ -5,7 +5,7 @@ resource "aws_cognito_user_pool" "main" {
     attribute_data_type      = "String"
     developer_only_attribute = false
     mutable                  = true
-    required                 = true
+    required                 = false
     string_attribute_constraints {
       min_length = 0
       max_length = 512
@@ -17,7 +17,7 @@ resource "aws_cognito_user_pool" "main" {
     attribute_data_type      = "String"
     developer_only_attribute = false
     mutable                  = true
-    required                 = true
+    required                 = false
     string_attribute_constraints {
       min_length = 0
       max_length = 512

@@ -13,6 +13,7 @@ module "shared_cognito" {
 
 locals {
   secret_map = {
+    "BASE_DOMAIN_NAME":         var.base_domain_name
     "COGNITO_POOL_ARN":         module.shared_cognito.pool_arn
     "COGNITO_POOL_CLIENT_ID":   module.shared_cognito.pool_client_id
     "COGNITO_POOL_ID":          module.shared_cognito.pool_id
