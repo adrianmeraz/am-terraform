@@ -38,6 +38,12 @@ module "ecr" {
   tags         = module.mandatory_tags.tags
 }
 
+module "dynamo_db" {
+  source = "../../modules/dynamo_db"
+
+  name_prefix = local.name_prefix
+}
+
 locals {
   private_subnet_ids = [for subnet in module.network.private_subnets: subnet.id]
   public_subnet_ids = [for subnet in module.network.public_subnets: subnet.id]
@@ -71,27 +77,10 @@ data "aws_ecr_image" "latest" {
   most_recent     = true
 }
 
-data "aws_secretsmanager_secret_version" "shared" {
-  secret_id = "shared/${var.shared_app_name}/dev/secret"
-}
+module "shared_secrets" {
+  source = "../../modules/shared_secrets"
 
-locals  {
-  shared_secret_map  = merge(jsondecode(data.aws_secretsmanager_secret_version.shared.secret_string))
-  cognito_pool_name  = local.shared_secret_map["COGNITO_POOL_NAME"]
-  cognito_pool_arn   = tolist(data.aws_cognito_user_pools.shared.arns)[0]
-  cognito_pool_id    = tolist(data.aws_cognito_user_pools.shared.ids)[0]
-}
-
-data "aws_cognito_user_pool_clients" "shared" {
-  user_pool_id = local.cognito_pool_id
-}
-
-locals {
-  cognito_pool_client_id = tolist(data.aws_cognito_user_pool_clients.shared.client_ids)[0]
-}
-
-data "aws_cognito_user_pools" "shared" {
-  name = local.cognito_pool_name
+  shared_app_name = var.shared_app_name
 }
 
 # Secrets only created and stored the first run
@@ -104,12 +93,12 @@ module "secrets" {
 
   recovery_window_in_days = 0 # Allows for instant deletes
   secret_map      = merge(
-    local.shared_secret_map,
+    module.shared_secrets.secret_map,
     {
       "APP_NAME":                   var.app_name
-      "AWS_COGNITO_POOL_ID":        local.cognito_pool_id
-      "AWS_COGNITO_POOL_CLIENT_ID": local.cognito_pool_client_id
-      "AWS_DYNAMO_DB_TABLE_NAME":   var.dynamo_db_table_name
+      "AWS_COGNITO_POOL_ID":        module.shared_secrets.cognito_pool_id
+      "AWS_COGNITO_POOL_CLIENT_ID": module.shared_secrets.cognito_pool_client_id
+      "AWS_DYNAMO_DB_TABLE_NAME":   module.dynamo_db.table_name
       "AWS_ECR_REGISTRY_NAME":      module.ecr.name
       "AWS_ECR_REPOSITORY_URL":     module.ecr.repository_url
       "ENVIRONMENT":                var.environment
@@ -156,7 +145,7 @@ module "apigw_lambda_http" {
   name_prefix              = local.name_prefix
   cloudwatch_log_group_arn = module.apigw_logs.cloudwatch_log_group_arn
   cloudwatch_role_arn      = module.iam_lambda_dynamo.role_arn
-  cognito_pool_arn         = local.cognito_pool_arn
+  cognito_pool_arn         = module.shared_secrets.cognito_pool_arn
   lambda_configs = [
     for idx, lambda in module.lambdas : {
       function_name      = lambda.function_name
@@ -171,13 +160,8 @@ module "apigw_lambda_http" {
   tags                     = module.mandatory_tags.tags
 }
 
-data "aws_secretsmanager_secret_version" "main" {
-  secret_id = module.secrets.secretsmanager_secret_id
-}
-
 locals {
-  secret_map = jsondecode(data.aws_secretsmanager_secret_version.main.secret_string)
-  domain_name = local.secret_map["BASE_DOMAIN_NAME"]
+  domain_name = module.shared_secrets.base_domain_name
 }
 
 module "route53_custom_domain" {
