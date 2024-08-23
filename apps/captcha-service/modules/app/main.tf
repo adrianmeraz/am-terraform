@@ -1,7 +1,3 @@
-locals  {
-  name_prefix        = "${var.app_name}-${var.environment}"
-}
-
 locals {
   lambda_cmd_prefix   = "src.lambdas"
   lambda_handler_name = "lambda_handler"
@@ -51,13 +47,6 @@ locals {
   ]
 }
 
-module "dynamo_db" {
-  source = "../../../../modules/dynamo_db"
-
-  name_prefix = local.name_prefix
-}
-
-
 module "app_python_serverless" {
   source = "../../../../_templates/app_python_serverless"
 
@@ -65,7 +54,6 @@ module "app_python_serverless" {
   aws_access_key                 = var.aws_access_key
   aws_region                     = var.aws_region
   aws_secret_key                 = var.aws_access_key
-  dynamo_db_table_name           = module.dynamo_db.table_name
   environment                    = var.environment
   lambda_cmd_prefix              = local.lambda_cmd_prefix
   lambda_configs                 = local.lambda_configs

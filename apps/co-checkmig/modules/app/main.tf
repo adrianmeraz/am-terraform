@@ -1,5 +1,4 @@
 locals {
-  name_prefix         = "${var.app_name}-${var.environment}"
   lambda_cmd_prefix   = "src.lambdas"
   lambda_handler_name = "lambda_handler"
   lambda_configs = [
