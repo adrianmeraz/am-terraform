@@ -7,5 +7,5 @@ module "app" {
   environment             = var.environment
   lambda_memory_MB        = 256
   secret_map              = var.secret_map
-  shared_secret_id        = var.shared_secret_id
+  shared_app_name         = var.shared_app_name
 }

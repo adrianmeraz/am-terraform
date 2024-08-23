@@ -23,13 +23,13 @@ variable "environment" {
   type        = string
 }
 
+variable "shared_app_name" {
+  description = "Shared app name"
+  type        = string
+}
+
 variable "secret_map" {
   description = "Map of secrets"
   type        = map(string)
   default     = {}
-}
-
-variable "shared_secret_id" {
-  description = "ID of shared secrets"
-  type        = string
 }

@@ -7,7 +7,7 @@ aws_access_key          = "CHANGE_ME"
 aws_region              = "CHANGE_ME"
 aws_secret_key          = "CHANGE_ME"
 environment             = "dev"
-shared_secret_id        = "<CHANGE_ME>/dev/shared/secret"
+shared_app_name         = "<CHANGE_ME>"
 secret_map = {
   "BASE_DOMAIN_NAME": "example.com"
   "CAPTCHA_PASSWORD": "CHANGE_ME"

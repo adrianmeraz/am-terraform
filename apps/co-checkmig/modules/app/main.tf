@@ -1,6 +1,7 @@
 data "aws_secretsmanager_secret_version" "shared" {
-  secret_id = var.shared_secret_id
+  secret_id = "shared/${var.shared_app_name}/dev/secret"
 }
+
 
 locals  {
   name_prefix        = "${var.app_name}-${var.environment}"
@@ -129,7 +130,6 @@ module "app_python_serverless" {
   cognito_pool_arn               = local.cognito_pool_arn
   cognito_pool_client_id         = local.cognito_pool_client_id
   cognito_pool_id                = local.cognito_pool_id
-  domain_name                    = var.domain_name
   dynamo_db_table_name           = module.dynamo_db.table_name
   environment                    = var.environment
   lambda_cmd_prefix              = local.lambda_cmd_prefix

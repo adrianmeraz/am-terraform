@@ -1,5 +1,5 @@
 data "aws_secretsmanager_secret_version" "shared" {
-  secret_id = var.shared_secret_id
+  secret_id = "shared/${var.shared_app_name}/dev/secret"
 }
 
 locals  {
