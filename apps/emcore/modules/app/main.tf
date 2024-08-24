@@ -95,5 +95,6 @@ module "app_python_serverless" {
   lambda_configs                 = local.lambda_configs
   lambda_handler_name            = local.lambda_handler_name
   lambda_memory_MB               = var.lambda_memory_MB
+  secret_map                     = var.secret_map
   shared_app_name                = var.shared_app_name
 }

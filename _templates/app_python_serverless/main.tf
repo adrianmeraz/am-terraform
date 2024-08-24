@@ -94,6 +94,7 @@ module "secrets" {
   recovery_window_in_days = 0 # Allows for instant deletes
   secret_map      = merge(
     module.shared_secrets.secret_map,
+    var.secret_map,
     {
       "APP_NAME":                   var.app_name
       "AWS_COGNITO_POOL_ID":        module.shared_secrets.cognito_pool_id
