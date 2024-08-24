@@ -3,6 +3,13 @@ locals {
   lambda_handler_name = "lambda_handler"
   lambda_configs = [
     {
+      http_method          = "POST"
+      module_name          = "api_bio_captcha_token_webhook"
+      path_part            = "bio-captcha-token-webhook"
+      is_protected         = false
+      timeout_seconds      = 10
+    },
+    {
       http_method          = "GET"
       module_name          = "api_bio_get_details"
       path_part            = "bio-get-details"
