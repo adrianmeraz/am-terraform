@@ -59,7 +59,7 @@ variable "role_arn" {
   type        = string
 }
 
-variable "lambda_environment" {
+variable "lambda_env_var_map" {
   description = "Lambda Environment Variables"
   type        = map(string)
   default     = {}

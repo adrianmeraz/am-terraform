@@ -122,7 +122,7 @@ module "lambdas" {
   image_config_command = "${var.lambda_cmd_prefix}.${each.value.module_name}.${var.lambda_handler_name}"
   image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
   is_protected         = each.value.is_protected
-  lambda_environment   = module.secrets.secret_map
+  lambda_env_var_map   = module.secrets.secret_map
   lambda_module_name   = each.value.module_name
   memory_size          = var.lambda_memory_MB
   package_type         = "Image"
@@ -152,7 +152,7 @@ module "apigw_lambda_http" {
       http_method        = lambda.http_method
       invoke_arn         = lambda.invoke_arn
       is_protected       = lambda.is_protected
-      lambda_environment = lambda.lambda_environment
+      lambda_env_var_map = lambda.lambda_env_var_map
       path_part          = lambda.path_part
     }
   ]

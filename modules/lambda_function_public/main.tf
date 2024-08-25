@@ -14,7 +14,7 @@ resource "aws_lambda_function" "main" {
     command = [var.image_config_command]
   }
   environment {
-    variables = var.lambda_environment
+    variables = var.lambda_env_var_map
   }
 
   tags = var.tags
@@ -27,7 +27,7 @@ module "lambda_logs" {
   ]
 
   aws_service_name  = "lambda"
-  group_name = aws_lambda_function.main.function_name
+  group_name        = aws_lambda_function.main.function_name
   retention_in_days = 14
 
   tags              = var.tags

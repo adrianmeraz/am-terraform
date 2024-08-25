@@ -1,6 +1,6 @@
-output "lambda_environment" {
+output "lambda_env_var_map" {
   description = "lambda environment variables"
-  value       = var.lambda_environment
+  value       = var.lambda_env_var_map
 }
 
 output "function_name" {
