@@ -69,3 +69,13 @@ Applies the changes real/current state of the infrastructure in order to achieve
 terraform apply
 ```
 
+## Destroy Single Resource
+```
+terraform destroy -target module.<CHANGE_ME>
+```
+
+Example:
+
+```
+terraform destroy -target module.secrets
+```
