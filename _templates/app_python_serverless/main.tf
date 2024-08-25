@@ -64,9 +64,8 @@ module "apigw_logs" {
   ]
 
   retention_in_days = 14
-  app_name          = var.app_name
+  group_name        = local.name_prefix
   aws_service_name  = "apigw"
-  environment       = var.environment
 
   tags              = module.mandatory_tags.tags
 }
@@ -102,7 +101,8 @@ module "secrets" {
       "AWS_DYNAMO_DB_TABLE_NAME":   module.dynamo_db.table_name
       "AWS_ECR_REGISTRY_NAME":      module.ecr.name
       "AWS_ECR_REPOSITORY_URL":     module.ecr.repository_url
-      "ENVIRONMENT":                var.environment
+      "AWS_SECRET_NAME":            module.secrets.secretsmanager_secret_name
+      "ENVIRONMENT":                var.environment,
     }
   )
   secret_name_prefix      = "${var.app_name}/${var.environment}"
@@ -117,7 +117,6 @@ module "lambdas" {
   for_each             = {for index, cfg in var.lambda_configs: cfg.module_name => cfg}
 
   app_name             = var.app_name
-  env_aws_secret_name  = module.secrets.secretsmanager_secret_name
   environment          = var.environment
   http_method          = each.value.http_method
   image_config_command = "${var.lambda_cmd_prefix}.${each.value.module_name}.${var.lambda_handler_name}"

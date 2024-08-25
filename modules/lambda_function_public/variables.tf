@@ -59,11 +59,6 @@ variable "role_arn" {
   type        = string
 }
 
-variable "env_aws_secret_name" {
-  description = "Environment Variable SSM Secret Name"
-  type        = string
-}
-
 variable "lambda_environment" {
   description = "Lambda Environment Variables"
   type        = map(string)
