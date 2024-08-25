@@ -11,9 +11,9 @@ resource "aws_secretsmanager_secret_version" "main" {
   ${jsonencode(var.secret_map)}
 EOF
   ### Comment out lifecycle block if setting new secrets ###
-#   lifecycle {
-#     ignore_changes = [secret_string]
-#   }
+  lifecycle {
+    ignore_changes = [secret_string]
+  }
 }
 
 locals {
