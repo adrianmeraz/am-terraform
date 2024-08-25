@@ -10,9 +10,9 @@ resource "aws_secretsmanager_secret_version" "main" {
   secret_string = <<EOF
   ${jsonencode(var.secret_map)}
 EOF
-  lifecycle {
-    ignore_changes = [secret_string]
-  }
+#   lifecycle {
+#     ignore_changes = [secret_string]
+#   }
 }
 
 locals {
