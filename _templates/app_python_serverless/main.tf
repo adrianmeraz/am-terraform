@@ -96,8 +96,6 @@ module "secrets" {
     var.secret_map,
     {
       "APP_NAME":                   var.app_name
-      # "AWS_COGNITO_POOL_ID":        module.shared_secrets.cognito_pool_id
-      # "AWS_COGNITO_POOL_CLIENT_ID": module.shared_secrets.cognito_pool_client_id
       "AWS_DYNAMO_DB_TABLE_NAME":   module.dynamo_db.table_name
       "AWS_ECR_REGISTRY_NAME":      module.ecr.name
       "AWS_ECR_REPOSITORY_URL":     module.ecr.repository_url
