@@ -4,8 +4,8 @@ locals {
   lambda_configs = [
     {
       http_method          = "POST"
-      module_name          = "api_bio_captcha_token_webhook"
-      path_part            = "bio-captcha-token-webhook"
+      module_name          = "api_bio_post_captcha_token_webhook"
+      path_part            = "bio-post-captcha-token-webhook"
       is_protected         = false
       timeout_seconds      = 10
     },
@@ -45,9 +45,9 @@ locals {
       timeout_seconds      = 10
     },
     {
-      http_method          = "GET"
-      module_name          = "api_travel_get_control_points"
-      path_part            = "travel-get-control-points"
+      http_method          = "POST"
+      module_name          = "api_bio_post_details"
+      path_part            = "bio-post-details"
       is_protected         = false
       timeout_seconds      = 10
     },
