@@ -53,6 +53,13 @@ locals {
     },
     {
       http_method          = "GET"
+      module_name          = "api_lodging_get_details"
+      path_part            = "lodging-get-details"
+      is_protected         = false
+      timeout_seconds      = 10
+    },
+    {
+      http_method          = "GET"
       module_name          = "api_travel_get_control_points"
       path_part            = "travel-get-control-points"
       is_protected         = false
