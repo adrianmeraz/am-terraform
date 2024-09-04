@@ -66,6 +66,13 @@ locals {
       timeout_seconds      = 10
     },
     {
+      http_method          = "POST"
+      module_name          = "api_lodging_post_details"
+      path_part            = "lodging-post-details"
+      is_protected         = false
+      timeout_seconds      = 10
+    },
+    {
       http_method          = "GET"
       module_name          = "api_travel_get_control_points"
       path_part            = "travel-get-control-points"
