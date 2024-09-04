@@ -53,6 +53,13 @@ locals {
     },
     {
       http_method          = "GET"
+      module_name          = "api_lodging_get_cities"
+      path_part            = "lodging-get-cities"
+      is_protected         = false
+      timeout_seconds      = 10
+    },
+    {
+      http_method          = "GET"
       module_name          = "api_lodging_get_details"
       path_part            = "lodging-get-details"
       is_protected         = false
