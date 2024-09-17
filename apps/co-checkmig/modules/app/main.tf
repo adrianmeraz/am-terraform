@@ -101,6 +101,13 @@ locals {
       timeout_seconds      = 10
     },
     {
+      http_method          = "POST"
+      module_name          = "api_pdf_post_details"
+      path_part            = "pdf-post-details"
+      is_protected         = false
+      timeout_seconds      = 10
+    },
+    {
       http_method          = "GET"
       module_name          = "api_travel_get_control_points"
       path_part            = "travel-get-control-points"
