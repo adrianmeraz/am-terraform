@@ -1,48 +1,49 @@
 locals {
   lambda_cmd_prefix   = "src.lambdas"
   lambda_handler_name = "lambda_handler"
+  lambda_timeout_seconds = 15
   lambda_configs = [
     {
       http_method     = "GET"
       module_name     = "api_get_pingback_verification_token"
       path_part       = "2captcha.txt"
       is_protected    = false
-      timeout_seconds = 10
+      timeout_seconds = lambda_timeout_seconds
     },
     {
       http_method     = "POST"
       module_name     = "api_post_add_pingback"
       path_part       = "pingback"
       is_protected    = false
-      timeout_seconds = 10
+      timeout_seconds = lambda_timeout_seconds
     },
     {
       http_method     = "POST"
       module_name     = "api_post_pingback_event"
       path_part       = "pingback-event"
       is_protected    = false
-      timeout_seconds = 10
+      timeout_seconds = lambda_timeout_seconds
     },
     {
       http_method     = "POST"
       module_name     = "api_post_report_bad_captcha"
       path_part       = "report-bad-captcha"
       is_protected    = false
-      timeout_seconds = 10
+      timeout_seconds = lambda_timeout_seconds
     },
     {
       http_method     = "POST"
       module_name     = "api_post_report_good_captcha"
       path_part       = "report-good-captcha"
       is_protected    = false
-      timeout_seconds = 10
+      timeout_seconds = lambda_timeout_seconds
     },
     {
       http_method     = "POST"
       module_name     = "api_post_solve_captcha"
       path_part       = "solve-captcha"
       is_protected    = false
-      timeout_seconds = 10
+      timeout_seconds = lambda_timeout_seconds
     }
   ]
 }
