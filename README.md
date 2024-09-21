@@ -79,3 +79,8 @@ Example:
 ```
 terraform destroy -target module.secrets
 ```
+
+## Lambda giving Missing Authentication Token error
+Through AWS console, navigate to API Gateway, and click "Deploy API"
+
+This should refresh the endpoints under the stage

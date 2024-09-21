@@ -45,7 +45,8 @@ resource "aws_api_gateway_deployment" "main" {
   stage_description = md5(file("main.tf")) # Forces redeployment of stage upon any change to apigw per https://github.com/hashicorp/terraform/issues/6613#issuecomment-322264393
   rest_api_id       = aws_api_gateway_rest_api.http.id
   # Solves bug with "creating API Gateway Stage (dev): ConflictException: Stage already exists" per https://github.com/hashicorp/terraform-provider-aws/issues/1153#issuecomment-505358799
-  # Hint: To force redeploy stage, change name, apply, and set it back to ""
+  # Hint: New lambda endpoints may not add correctly to the stage.
+  # To force redeploy stage, change name, apply, and set it back to ""
   stage_name        = ""
 
   # Fix for: deleting API Gateway Deployment (abcdef): BadRequestException: Active stages pointing to this deployment must be moved or deleted
