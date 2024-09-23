@@ -103,10 +103,8 @@ resource "aws_api_gateway_integration_response" "proxy" {
 ##############################################
 
 resource "aws_api_gateway_method" "options" {
-  # OPTIONS methods should be unauthorized
+  # OPTIONS methods should always be unauthorized
   # For more info, see: https://stackoverflow.com/a/73342943
-#   authorization  = var.is_protected ? "COGNITO_USER_POOLS" : "NONE"
-#   authorizer_id  = var.is_protected ? var.cognito_authorizer_id : ""
   authorization  = "NONE"
   http_method    = "OPTIONS"
   operation_name = "${aws_api_gateway_resource.main.path_part}-${var.http_method}"

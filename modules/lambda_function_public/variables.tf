@@ -39,11 +39,6 @@ variable "package_type" {
   type        = string
 }
 
-variable "path_part" {
-  description = "Last path segment of this API resource"
-  type        = string
-}
-
 variable "image_uri" {
   description = "ECR image URI containing the function's deployment package"
   type        = string
