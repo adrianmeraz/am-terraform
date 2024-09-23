@@ -124,6 +124,7 @@ module "lambdas" {
   lambda_module_name   = each.value.module_name
   memory_size          = var.lambda_memory_MB
   package_type         = "Image"
+  path_part            = each.value.path_part
   role_arn             = module.iam_lambda_dynamo.role_arn
   source_code_hash     = split(":", data.aws_ecr_image.latest.image_digest)[1] # Use only hash without sha256: prefix
   timeout_seconds      = each.value.timeout_seconds
