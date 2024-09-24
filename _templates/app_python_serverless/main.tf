@@ -5,28 +5,16 @@ module "mandatory_tags" {
   environment = var.environment
 }
 
+resource "aws_ce_cost_allocation_tag" "main" {
+  tag_key = "app_name"
+  status  = "Active"
+}
+
 locals {
   name_prefix = "${var.app_name}-${var.environment}"
   ecr = {
     image_tag: "latest"
   }
-}
-
-module "network" {
-  source      = "../../modules/network"
-
-  cidr_block  = "10.0.0.0/16"
-  name_prefix = local.name_prefix
-
-  tags        = module.mandatory_tags.tags
-}
-
-resource "aws_ce_cost_allocation_tag" "main" {
-  tag_key = "app_name"
-  status  = "Active"
-  depends_on = [
-    module.network
-  ]
 }
 
 module "ecr" {
@@ -42,11 +30,6 @@ module "dynamo_db" {
   source = "../../modules/dynamo_db"
 
   name_prefix = local.name_prefix
-}
-
-locals {
-  private_subnet_ids = [for subnet in module.network.private_subnets: subnet.id]
-  public_subnet_ids = [for subnet in module.network.public_subnets: subnet.id]
 }
 
 module "iam_lambda_dynamo" {
