@@ -10,6 +10,13 @@ locals {
       is_protected    = false
       timeout_seconds = local.lambda_timeout_seconds
     },
+#     {
+#       http_method     = "ANY"
+#       module_name     = "event_handler_auth"
+#       path_part       = "auth/{proxy+}"
+#       is_protected    = false
+#       timeout_seconds = local.lambda_timeout_seconds
+#     },
   ]
 }
 
