@@ -18,8 +18,8 @@ variable "http_method" {
   description = "Http Method for Lambda"
   type        = string
   validation {
-    condition     = contains(["DELETE", "GET", "POST", "UPDATE"], var.http_method)
-    error_message = "Valid values for var: http_method are (DELETE, GET, POST, UPDATE)."
+    condition     = contains(["DELETE", "GET", "POST", "UPDATE", "ANY"], var.http_method)
+    error_message = "Valid values for var: http_method are (DELETE, GET, POST, UPDATE, ANY)."
   }
 }
 

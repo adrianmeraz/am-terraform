@@ -4,8 +4,8 @@ locals {
   lambda_timeout_seconds = 15
   lambda_configs = [
     {
-      http_method     = "GET"
-      module_name     = "api_public_event_handler"
+      http_method     = "ANY"
+      module_name     = "event_handler"
       path_part       = "{proxy+}"
       is_protected    = false
       timeout_seconds = local.lambda_timeout_seconds
