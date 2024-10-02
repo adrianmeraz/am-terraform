@@ -2,6 +2,7 @@ locals {
   lambda_cmd_prefix      = "src.lambdas"
   lambda_handler_name    = "lambda_handler"
   lambda_timeout_seconds = 15
+  # TODO Need to add auth endpoints
   lambda_configs = [
       {
         http_method     = "ANY"

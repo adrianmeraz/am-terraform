@@ -1,6 +1,6 @@
 locals {
-  lambda_cmd_prefix   = "src.lambdas"
-  lambda_handler_name = "lambda_handler"
+  lambda_cmd_prefix      = "src.lambdas"
+  lambda_handler_name    = "lambda_handler"
   lambda_timeout_seconds = 15
   lambda_configs = [
     {
@@ -10,13 +10,6 @@ locals {
       is_protected    = false
       timeout_seconds = local.lambda_timeout_seconds
     },
-#     {
-#       http_method     = "ANY"
-#       module_name     = "event_handler_auth"
-#       path_part       = "auth/{proxy+}"
-#       is_protected    = false
-#       timeout_seconds = local.lambda_timeout_seconds
-#     },
   ]
 }
 
