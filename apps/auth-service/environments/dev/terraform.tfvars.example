@@ -1,0 +1,14 @@
+#############################################################################
+## Copy this file to a terraform.tfvars in this directory and set the values
+#############################################################################
+
+app_name                = "auth-service"
+aws_access_key          = "CHANGE_ME"
+aws_region              = "CHANGE_ME"
+aws_secret_key          = "CHANGE_ME"
+environment             = "dev"
+shared_app_name         = "<CHANGE_ME>"
+secret_map = {
+  "CODECOV_TOKEN": "CHANGE_ME"
+  "LOG_LEVEL": "DEBUG"
+}

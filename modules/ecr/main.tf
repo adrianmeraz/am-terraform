@@ -25,3 +25,25 @@ resource  "aws_ecr_repository" "main" {
     EOT
   }
 }
+
+
+resource "aws_ecr_lifecycle_policy" "main" {
+  repository = aws_ecr_repository.main.name
+
+  policy = jsonencode({
+    rules = [
+      {
+        rule_priority = 1
+        description   = "Keep only 10 images"
+        selection     = {
+          count_type   = "imageCountMoreThan"
+          count_number = 10
+          tag_status   = "any"
+        }
+        action = {
+          type = "expire"
+        }
+      }
+    ]
+  })
+}
