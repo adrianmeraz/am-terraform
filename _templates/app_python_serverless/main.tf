@@ -95,8 +95,11 @@ module "secrets" {
     module.ecr
   ]
 
+  tags                    = module.mandatory_tags.tags
+  app_name                = var.app_name
+  environment             = var.environment
   recovery_window_in_days = 0 # Allows for instant deletes
-  secret_map      = merge(
+  secret_map              = merge(
     module.shared_secrets.secret_map,
     var.secret_map,
     {
@@ -108,7 +111,6 @@ module "secrets" {
       "ENVIRONMENT":                var.environment,
     }
   )
-  secret_name_prefix      = "${var.app_name}/${var.environment}"
 }
 
 module "lambdas" {
