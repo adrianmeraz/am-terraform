@@ -67,34 +67,12 @@ module "shared_secrets" {
 
 # Secrets only created and stored the first run
 
-module "secrets_ssm" {
-  source = "../../modules/ssm"
-  depends_on = [
-    module.ecr
-  ]
-
-  secret_map      = merge(
-    module.shared_secrets.secret_map,
-    var.secret_map,
-    {
-      "APP_NAME":                   var.app_name
-      "AWS_DYNAMO_DB_TABLE_NAME":   module.dynamo_db.table_name
-      "AWS_ECR_REGISTRY_NAME":      module.ecr.name
-      "AWS_ECR_REPOSITORY_URL":     module.ecr.repository_url
-      "AWS_SECRET_NAME":            module.secrets_ssm.name
-      "ENVIRONMENT":                var.environment,
-    }
-  )
-  secret_name_prefix      = "${var.app_name}/${var.environment}"
-}
-
-# module "secrets" {
-#   source = "../../modules/secrets"
+# module "secrets_ssm" {
+#   source = "../../modules/ssm"
 #   depends_on = [
 #     module.ecr
 #   ]
 #
-#   recovery_window_in_days = 0 # Allows for instant deletes
 #   secret_map      = merge(
 #     module.shared_secrets.secret_map,
 #     var.secret_map,
@@ -103,12 +81,34 @@ module "secrets_ssm" {
 #       "AWS_DYNAMO_DB_TABLE_NAME":   module.dynamo_db.table_name
 #       "AWS_ECR_REGISTRY_NAME":      module.ecr.name
 #       "AWS_ECR_REPOSITORY_URL":     module.ecr.repository_url
-#       "AWS_SECRET_NAME":            module.secrets.secretsmanager_secret_name
+#       "AWS_SECRET_NAME":            module.secrets_ssm.name
 #       "ENVIRONMENT":                var.environment,
 #     }
 #   )
 #   secret_name_prefix      = "${var.app_name}/${var.environment}"
 # }
+
+module "secrets" {
+  source = "../../modules/secrets"
+  depends_on = [
+    module.ecr
+  ]
+
+  recovery_window_in_days = 0 # Allows for instant deletes
+  secret_map      = merge(
+    module.shared_secrets.secret_map,
+    var.secret_map,
+    {
+      "APP_NAME":                   var.app_name
+      "AWS_DYNAMO_DB_TABLE_NAME":   module.dynamo_db.table_name
+      "AWS_ECR_REGISTRY_NAME":      module.ecr.name
+      "AWS_ECR_REPOSITORY_URL":     module.ecr.repository_url
+      "AWS_SECRET_NAME":            module.secrets.name
+      "ENVIRONMENT":                var.environment,
+    }
+  )
+  secret_name_prefix      = "${var.app_name}/${var.environment}"
+}
 
 module "lambdas" {
   source = "../../modules/lambda_function_public"
