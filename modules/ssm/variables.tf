@@ -1,11 +1,11 @@
 variable "app_name" {
   description = "App Name"
-  type = string
+  type        = string
 }
 
 variable "environment" {
   description = "App Environment"
-  type = string
+  type        = string
 }
 
 variable "tags" {

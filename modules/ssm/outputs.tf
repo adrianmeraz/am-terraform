@@ -5,7 +5,7 @@ output "id" {
 
 output "name" {
   description = "name of the SSM parameter"
-  value       = aws_ssm_parameter.secret.name
+  value       = local.name
 }
 
 output "arn" {

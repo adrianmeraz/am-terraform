@@ -1,6 +1,9 @@
+locals {
+  name = "/${var.app_name}/${var.environment}/secrets"
+}
+
 resource "aws_ssm_parameter" "secret" {
-  name        = "/${var.app_name}/${var.environment}/secrets"
-  overwrite   = true
+  name        = local.name
   tier        = "Standard"
   data_type   = "text"
   type        = "SecureString"
@@ -13,8 +16,6 @@ EOF
   lifecycle {
     ignore_changes = [value]
   }
-
-
 }
 
 locals {
