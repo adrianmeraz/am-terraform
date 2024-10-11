@@ -67,8 +67,9 @@ module "shared_secrets" {
 
 # Secrets only created and stored the first run
 
-module "secrets" {
-  source = "../../modules/secrets"
+
+module "secrets_ssm" {
+  source = "../../modules/ssm"
   depends_on = [
     module.ecr
   ]
@@ -82,12 +83,34 @@ module "secrets" {
       "AWS_DYNAMO_DB_TABLE_NAME":   module.dynamo_db.table_name
       "AWS_ECR_REGISTRY_NAME":      module.ecr.name
       "AWS_ECR_REPOSITORY_URL":     module.ecr.repository_url
-      "AWS_SECRET_NAME":            module.secrets.secretsmanager_secret_name
+      "AWS_SECRET_NAME":            module.secrets_ssm.name
       "ENVIRONMENT":                var.environment,
     }
   )
   secret_name_prefix      = "${var.app_name}/${var.environment}"
 }
+
+# module "secrets" {
+#   source = "../../modules/secrets"
+#   depends_on = [
+#     module.ecr
+#   ]
+#
+#   recovery_window_in_days = 0 # Allows for instant deletes
+#   secret_map      = merge(
+#     module.shared_secrets.secret_map,
+#     var.secret_map,
+#     {
+#       "APP_NAME":                   var.app_name
+#       "AWS_DYNAMO_DB_TABLE_NAME":   module.dynamo_db.table_name
+#       "AWS_ECR_REGISTRY_NAME":      module.ecr.name
+#       "AWS_ECR_REPOSITORY_URL":     module.ecr.repository_url
+#       "AWS_SECRET_NAME":            module.secrets.secretsmanager_secret_name
+#       "ENVIRONMENT":                var.environment,
+#     }
+#   )
+#   secret_name_prefix      = "${var.app_name}/${var.environment}"
+# }
 
 module "lambdas" {
   source = "../../modules/lambda_function_public"
@@ -103,7 +126,7 @@ module "lambdas" {
   image_config_command = "${var.lambda_cmd_prefix}.${each.value.module_name}.${var.lambda_handler_name}"
   image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
   is_protected         = each.value.is_protected
-  lambda_env_var_map   = module.secrets.secret_map
+  lambda_env_var_map   = module.secrets_ssm.secret_map
   lambda_module_name   = each.value.module_name
   memory_size          = var.lambda_memory_MB
   package_type         = "Image"

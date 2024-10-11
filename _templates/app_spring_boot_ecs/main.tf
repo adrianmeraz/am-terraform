@@ -127,7 +127,7 @@ module "secret_version" {
   # Only creates secrets if the secret string has changed
   source          = "../../modules/secret_version"
 
-  secret_id       = module.secrets.secretsmanager_secret_id
+  secret_id       = module.secrets.id
   secret_map      = merge(
     local.secrets_map,
     {
