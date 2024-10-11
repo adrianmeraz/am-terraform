@@ -62,7 +62,8 @@ data "aws_ecr_image" "latest" {
 module "shared_secrets" {
   source = "../../modules/shared_secrets"
 
-  shared_app_name = var.shared_app_name
+  app_name = var.shared_app_name
+  environment = var.environment
 }
 
 # Secrets only created and stored the first run

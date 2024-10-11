@@ -1,4 +1,9 @@
-variable "shared_app_name" {
-  description = "Shared app name"
-  type        = string
+variable "app_name" {
+  description = "App Name"
+  type = string
+}
+
+variable "environment" {
+  description = "App Environment"
+  type = string
 }

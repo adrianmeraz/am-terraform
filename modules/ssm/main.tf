@@ -1,5 +1,5 @@
 resource "aws_ssm_parameter" "secret" {
-  name        = "${var.secret_name_prefix}/secret"
+  name        = "/${var.app_name}/${var.environment}/secrets"
   overwrite   = true
   tier        = "Standard"
   data_type   = "text"
