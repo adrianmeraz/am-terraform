@@ -67,14 +67,12 @@ module "shared_secrets" {
 
 # Secrets only created and stored the first run
 
-
 module "secrets_ssm" {
   source = "../../modules/ssm"
   depends_on = [
     module.ecr
   ]
 
-  recovery_window_in_days = 0 # Allows for instant deletes
   secret_map      = merge(
     module.shared_secrets.secret_map,
     var.secret_map,
