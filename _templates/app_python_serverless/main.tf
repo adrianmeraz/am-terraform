@@ -124,7 +124,7 @@ module "lambdas" {
   image_config_command = "${var.lambda_cmd_prefix}.${each.value.module_name}.${var.lambda_handler_name}"
   image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
   is_protected         = each.value.is_protected
-  lambda_env_var_map   = module.secrets_ssm.secret_map
+  lambda_env_var_map   = module.secrets.secret_map
   lambda_module_name   = each.value.module_name
   memory_size          = var.lambda_memory_MB
   package_type         = "Image"
