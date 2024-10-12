@@ -21,11 +21,20 @@ locals {
   }
 }
 
+# module "shared_secrets" {
+#   source = "../../../../modules/secrets"
+#
+#   app_name                  = "shared/${var.app_name}"
+#   environment               = var.environment
+#   recovery_window_in_days   = 0 # Allows for instant deletes
+#   secret_map                = local.secret_map
+# }
+
+
 module "shared_secrets" {
-  source = "../../../../modules/secrets"
+  source = "../../../../modules/ssm"
 
   app_name                  = "shared/${var.app_name}"
   environment               = var.environment
-  recovery_window_in_days   = 0 # Allows for instant deletes
   secret_map                = local.secret_map
 }

@@ -66,6 +66,13 @@ module "shared_secrets" {
   environment = var.environment
 }
 
+module "shared_secrets" {
+  source = "../../modules/ssm"
+
+  app_name    = var.shared_app_name
+  environment = var.environment
+}
+
 # Secrets only created and stored the first run
 
 module "secrets_ssm" {
