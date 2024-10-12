@@ -24,7 +24,8 @@ locals {
 module "shared_secrets" {
   source = "../../../../modules/secrets"
 
+  app_name                  = "shared/${var.app_name}"
+  environment               = var.environment
   recovery_window_in_days   = 0 # Allows for instant deletes
   secret_map                = local.secret_map
-  secret_name_prefix        = "shared/${var.app_name}/${var.environment}"
 }
