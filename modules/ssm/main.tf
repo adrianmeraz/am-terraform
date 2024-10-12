@@ -7,9 +7,7 @@ resource "aws_ssm_parameter" "secret" {
   tier        = "Standard"
   data_type   = "text"
   type        = "SecureString"
-  value       = <<EOF
-  ${jsonencode(var.secret_map)}
-EOF
+  value       = jsonencode(var.secret_map)
 
   tags        = var.tags
 
