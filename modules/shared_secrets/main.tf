@@ -3,7 +3,7 @@
 # }
 
 data "aws_ssm_parameter" "shared" {
-  name = "/shared/${var.app_name}/${var.environment}/secret"
+  name = "/shared/${var.app_name}/${var.environment}/secrets"
 }
 
 locals  {
