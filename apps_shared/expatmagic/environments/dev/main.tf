@@ -1,12 +1,8 @@
-locals {
-  name_prefix = "${var.app_name}-${var.environment}"
-}
-
 module "shared_cognito" {
   source = "../../../../modules/cognito"
 
   environment   = var.environment
-  name_prefix   = local.name_prefix
+  app_name      = var.app_name
   callback_urls = ["https://www.example.com/${var.environment}/cognito/callback"]
   logout_urls   = ["https://www.example.com/${var.environment}/cognito/logout"]
 }
@@ -34,7 +30,7 @@ locals {
 module "shared_secrets" {
   source = "../../../../modules/ssm"
 
-  app_name                  = "shared/${var.app_name}"
-  environment               = var.environment
-  secret_map                = local.secret_map
+  app_name    = "shared/${var.app_name}"
+  environment = var.environment
+  secret_map  = local.secret_map
 }
