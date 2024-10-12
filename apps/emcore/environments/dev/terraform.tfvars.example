@@ -7,7 +7,5 @@ aws_region              = "CHANGE_ME"
 aws_secret_key          = "CHANGE_ME"
 shared_secret_id        = "/shared/expatmagic/dev/secret"
 secret_map = {
-  "AWS_ECR_REGISTRY_NAME":  "KNOWN_AFTER_DEPLOY"
-  "AWS_ECR_REPOSITORY_URL": "KNOWN_AFTER_DEPLOY"
   "CODECOV_TOKEN": "CHANGE_ME"
 }
