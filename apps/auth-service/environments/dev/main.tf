@@ -5,7 +5,7 @@ module "app" {
   aws_region              = var.aws_region
   aws_secret_key          = var.aws_secret_key
   environment             = var.environment
-  lambda_memory_MB        = 128
+  lambda_memory_MB        = var.lambda_memory_MB
   secret_map              = var.secret_map
   shared_app_name         = var.shared_app_name
 }
