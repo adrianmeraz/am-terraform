@@ -25,7 +25,7 @@ Then, fill in the AWS secret id, secret key, and region.
 
 ## Creating S3 Buckets for tfstate files
 
-Use only one bucket per environment for ALL apps.
+All apps should use only one bucket per environment.
 
 Use a different key for each app to differentiate state files.
 
@@ -39,7 +39,7 @@ aws s3api create-bucket --bucket CHANGE_ME --create-bucket-configuration Locatio
 2. For a given app or group of apps, run any shared main modules under the ```_shared``` folder first. 
    1. Resources like Cognito User pools and shared secrets need to be initialized prior to apps.
 
-2. Do a ```cd``` to a given app and environment. Then the commands below can be run.
+3. ```cd``` to a given app and environment. Then the commands below can be run.
 
 ## Initializing Terraform
 

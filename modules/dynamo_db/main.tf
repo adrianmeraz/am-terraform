@@ -20,9 +20,5 @@ resource "aws_dynamodb_table" "main" {
     type = "S"
   }
 
-#  lifecycle {
-#    prevent_destroy = true
-#  }
-
   tags = var.tags
 }
