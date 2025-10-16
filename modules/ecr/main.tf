@@ -1,5 +1,10 @@
 data "aws_ecr_authorization_token" "token" {}
 
+resource "aws_ecr_account_setting" "basic_scan_type_version" {
+  name  = "BASIC_SCAN_TYPE_VERSION"
+  value = "AWS_NATIVE"
+}
+
 resource  "aws_ecr_repository" "main" {
   name                 = "${var.name_prefix}-ecr"
   force_delete         = var.force_delete

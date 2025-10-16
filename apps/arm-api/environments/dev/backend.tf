@@ -1,5 +1,5 @@
 terraform {
-  required_version = "1.12.1"
+  required_version = "1.13.3"
 
   backend "s3" {
     bucket  = "arm-api-dev-tfstate"
