@@ -1,22 +1,22 @@
 resource "aws_dynamodb_table" "main" {
   name             = "${var.name_prefix}-table"
-  hash_key         = "PK"
-  range_key        = "SK"
+  hash_key         = var.hash_key_name
+  range_key        = var.range_key_name
   billing_mode     = var.billing_mode
   stream_enabled   = true
   stream_view_type = "NEW_AND_OLD_IMAGES"
   ttl {
-    enabled = true
-    attribute_name = "ExpiresAt"
+    enabled = var.ttl_attr_name != ""
+    attribute_name = var.ttl_attr_name
   }
 
   attribute {
-    name = "PK"
+    name = var.hash_key_name
     type = "S"
   }
 
   attribute {
-    name = "SK"
+    name = var.range_key_name
     type = "S"
   }
 

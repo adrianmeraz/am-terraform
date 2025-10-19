@@ -101,7 +101,7 @@ module "lambdas" {
   http_method          = each.value.http_method
   image_config_command = "${var.lambda_cmd_prefix}.${each.value.module_name}.${var.lambda_handler_name}"
   image_uri            = "${module.ecr.repository_url}:${local.ecr.image_tag}"
-  is_protected         = each.value.is_protected
+  is_authorized         = each.value.is_authorized
   lambda_env_var_map   = module.secrets_ssm.secret_map
   lambda_module_name   = each.value.module_name
   memory_size          = var.lambda_memory_MB
@@ -115,7 +115,7 @@ module "lambdas" {
 }
 
 module "apigw_lambda_http" {
-  source = "../../modules/apigw_lambda_with_auth"
+  source = "../../modules/api_gateway"
   depends_on = [
     module.ecr,
     module.lambdas
@@ -131,7 +131,7 @@ module "apigw_lambda_http" {
       function_name      = lambda.function_name
       http_method        = lambda.http_method
       invoke_arn         = lambda.invoke_arn
-      is_protected       = lambda.is_protected
+      is_authorized      = lambda.is_authorized
       lambda_env_var_map = lambda.lambda_env_var_map
       path_part          = lambda.path_part
     }

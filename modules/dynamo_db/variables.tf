@@ -14,3 +14,21 @@ variable "billing_mode" {
   type        = string
   default     = "PAY_PER_REQUEST"
 }
+
+variable "hash_key_name" {
+  description = "Hash Key Name"
+  type        = string
+  default     = "PK"
+}
+
+variable "range_key_name" {
+  description = "Range (Sort) Key Name"
+  type        = string
+  default     = "SK"
+}
+
+variable "ttl_attr_name" {
+  description = "TTL Attribute Name"
+  type        = string
+  default     = "ExpiresAt"
+}

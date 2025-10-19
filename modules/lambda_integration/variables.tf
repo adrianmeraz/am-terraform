@@ -15,7 +15,7 @@ variable "http_method" {
   type        = string
 }
 
-variable "is_protected" {
+variable "is_authorized" {
   description = "Is protected by api gateway authorizer"
   type        = bool
 }

@@ -23,13 +23,13 @@ module "apigw_integration" {
     aws_api_gateway_rest_api.http,
   ]
 
-  source = "../apigw_lambda_integration"
+  source = "../lambda_integration"
 
   for_each                   = {for index, cfg in var.lambda_configs: cfg.function_name => cfg}
 
   cognito_authorizer_id      = aws_api_gateway_authorizer.cognito.id
   http_method                = each.value.http_method
-  is_protected               = each.value.is_protected
+  is_authorized              = each.value.is_authorized
   name_prefix                = var.name_prefix
   lambda_function_invoke_arn = each.value.invoke_arn
   lambda_function_name       = each.value.function_name

@@ -18,9 +18,9 @@ output "invoke_arn" {
   value       = aws_lambda_function.main.invoke_arn
 }
 
-output "is_protected" {
+output "is_authorized" {
   description = "is lambda endpoint protected by apigw authorizer"
-  value       = var.is_protected
+  value       = var.is_authorized
 }
 
 output "path_part" {
