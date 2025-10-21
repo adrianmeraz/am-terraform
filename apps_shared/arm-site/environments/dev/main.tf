@@ -19,7 +19,7 @@ locals {
 
 
 module "shared_secrets" {
-  source = "../../../../modules/ssm"
+  source = "../../../../modules/sm_parameter_store"
 
   app_name    = "shared/${var.app_name}"
   environment = var.environment

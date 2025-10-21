@@ -20,6 +20,11 @@ module "app_python_serverless" {
   aws_access_key                 = var.aws_access_key
   aws_region                     = var.aws_region
   aws_secret_key                 = var.aws_access_key
+  dynamo_db_config               = {
+    hash_key_name   = "pk",
+    range_key_name  = "sk",
+    ttl_attr_name   = "expires_at"
+  }
   environment                    = var.environment
   lambda_cmd_prefix              = local.lambda_cmd_prefix
   lambda_configs                 = local.lambda_configs

@@ -29,7 +29,10 @@ module "ecr" {
 module "dynamo_db" {
   source = "../../modules/dynamo_db"
 
-  name_prefix = local.name_prefix
+  name_prefix     = local.name_prefix
+  hash_key_name   = var.dynamo_db_config.hash_key_name
+  range_key_name  = var.dynamo_db_config.range_key_name
+  ttl_attr_name   = var.dynamo_db_config.ttl_attr_name
 }
 
 module "iam_lambda_dynamo" {
@@ -69,7 +72,7 @@ module "shared_secrets" {
 # Secrets only created and stored the first run
 
 module "secrets_ssm" {
-  source = "../../modules/ssm"
+  source = "../../modules/sm_parameter_store"
   depends_on = [
     module.ecr
   ]
@@ -80,6 +83,7 @@ module "secrets_ssm" {
     {
       "APP_NAME":                   var.app_name
       "AWS_DYNAMO_DB_TABLE_NAME":   module.dynamo_db.table_name
+      "AWS_ECR_REPOSITORY_URL":     module.ecr.repository_url
       "AWS_SECRET_NAME":            module.secrets_ssm.name
       "ENVIRONMENT":                var.environment
     }

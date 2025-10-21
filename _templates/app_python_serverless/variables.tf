@@ -18,6 +18,21 @@ variable "aws_secret_key" {
   type = string
 }
 
+variable "dynamo_db_config" {
+  description = "DynamoDB Configuration"
+  type        = object({
+    hash_key_name       = string
+    range_key_name      = string
+    ttl_attr_name       = string
+  })
+
+  default = {
+    hash_key_name       = "PK"
+    range_key_name      = "SK"
+    ttl_attr_name       = "ExpiresAt"
+  }
+}
+
 variable "environment" {
   description = "App Environment"
   type = string
