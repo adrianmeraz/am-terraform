@@ -5,7 +5,7 @@
 aws_access_key          = "CHANGE_ME"
 aws_region              = "CHANGE_ME"
 aws_secret_key          = "CHANGE_ME"
-shared_secret_id        = "/shared/expatmagic/dev/secret"
+shared_app_name         = "expatmagic"
 secret_map = {
   "CODECOV_TOKEN": "CHANGE_ME"
 }

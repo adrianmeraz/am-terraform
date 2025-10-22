@@ -1,7 +1,3 @@
-# data "aws_secretsmanager_secret_version" "shared" {
-#   secret_id = "shared/${var.app_name}/${var.environment}/secret"
-# }
-
 data "aws_ssm_parameter" "shared" {
   name = "/shared/${var.app_name}/${var.environment}/secrets"
 }

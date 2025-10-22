@@ -72,7 +72,7 @@ module "shared_secrets" {
 # Secrets only created and stored the first run
 
 module "secrets_ssm" {
-  source = "../../modules/sm_parameter_store"
+  source = "../../modules/ssm_parameter_store"
   depends_on = [
     module.ecr
   ]
@@ -86,6 +86,7 @@ module "secrets_ssm" {
       "AWS_ECR_REPOSITORY_URL":     module.ecr.repository_url
       "AWS_SECRET_NAME":            module.secrets_ssm.name
       "ENVIRONMENT":                var.environment
+      "SHARED_APP_NAME":            var.shared_app_name
     }
   )
   app_name        = var.app_name
@@ -130,6 +131,7 @@ module "apigw_lambda_http" {
   cloudwatch_log_group_arn = module.apigw_logs.cloudwatch_log_group_arn
   cloudwatch_role_arn      = module.iam_lambda_dynamo.role_arn
   cognito_pool_arn         = module.shared_secrets.cognito_pool_arn
+  tags                     = module.mandatory_tags.tags
   lambda_configs = [
     for idx, lambda in module.lambdas : {
       function_name      = lambda.function_name
@@ -140,8 +142,6 @@ module "apigw_lambda_http" {
       path_part          = lambda.path_part
     }
   ]
-
-  tags                     = module.mandatory_tags.tags
 }
 
 locals {
