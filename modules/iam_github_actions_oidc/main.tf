@@ -123,7 +123,6 @@ data "aws_iam_policy_document" "main" {
       "ecr:CompleteLayerUpload",
       "ecr:DescribeImages",
       "ecr:DescribeRepositories",
-      "ecr:GetAccountSetting",
       "ecr:InitiateLayerUpload",
       "ecr:GetLifecyclePolicy",
       "ecr:ListTagsForResource",
@@ -139,6 +138,7 @@ data "aws_iam_policy_document" "main" {
   statement {
     sid     = "ECRAuth"
     actions = [
+      "ecr:GetAccountSetting",
       "ecr:GetAuthorizationToken",
     ]
     effect    = "Allow"
