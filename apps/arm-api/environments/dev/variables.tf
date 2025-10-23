@@ -18,6 +18,16 @@ variable "aws_secret_key" {
   type        = string
 }
 
+variable "github_org" {
+  description = "Github Org"
+  type        = string
+}
+
+variable "github_repository" {
+  description = "Github Repository"
+  type        = string
+}
+
 variable "environment" {
   description = "App Environment"
   type        = string

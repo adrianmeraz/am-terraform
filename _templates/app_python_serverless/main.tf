@@ -1,7 +1,7 @@
 module "mandatory_tags" {
   source = "../../modules/mandatory_tags"
 
-  app_name = var.app_name
+  app_name    = var.app_name
   environment = var.environment
 }
 

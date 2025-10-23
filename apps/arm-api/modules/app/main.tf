@@ -17,9 +17,6 @@ module "app_python_serverless" {
   source = "../../../../_templates/app_python_serverless"
 
   app_name                       = var.app_name
-  aws_access_key                 = var.aws_access_key
-  aws_region                     = var.aws_region
-  aws_secret_key                 = var.aws_access_key
   dynamo_db_config               = {
     hash_key_name   = "pk",
     range_key_name  = "sk",
@@ -32,4 +29,22 @@ module "app_python_serverless" {
   lambda_memory_MB               = var.lambda_memory_MB
   secret_map                     = var.secret_map
   shared_app_name                = var.shared_app_name
+}
+
+module "mandatory_tags" {
+  source = "../../../../modules/mandatory_tags"
+
+  app_name    = var.app_name
+  environment = var.environment
+}
+
+module "iam_gha_serverless" {
+  source      = "../../../../modules/iam_github_actions_oidc"
+
+  name_prefix       = var.app_name
+  aws_account_id    = var.aws_access_key
+  github_org        = var.github_org
+  github_repository = var.github_repository
+
+  tags              = module.mandatory_tags.tags
 }
