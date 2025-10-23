@@ -116,7 +116,7 @@ data "aws_iam_policy_document" "main" {
   }
 
   statement {
-    sid     = "ECR"
+    sid     = "ECRAllowPushPull"
     actions = [
       "ecr:BatchCheckLayerAvailability",
       "ecr:BatchGetImage",
@@ -124,6 +124,7 @@ data "aws_iam_policy_document" "main" {
       "ecr:DescribeImages",
       "ecr:DescribeRepositories",
       "ecr:InitiateLayerUpload",
+      "ecr:GetDownloadUrlForLayer",
       "ecr:GetLifecyclePolicy",
       "ecr:ListTagsForResource",
       "ecr:PutImage",
@@ -139,7 +140,7 @@ data "aws_iam_policy_document" "main" {
     sid     = "ECRAuth"
     actions = [
       "ecr:GetAccountSetting",
-      "ecr:GetAuthorizationToken",
+      "ecr:GetAuthorizationToken"
     ]
     effect    = "Allow"
     resources = [
