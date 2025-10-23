@@ -99,7 +99,7 @@ data "aws_iam_policy_document" "main" {
     ]
     effect    = "Allow"
     resources = [
-      "arn:aws:cognito-idp:*:*:*"
+      "*"
     ]
   }
 
@@ -116,21 +116,34 @@ data "aws_iam_policy_document" "main" {
   }
 
   statement {
-    sid     = "ECRPush"
+    sid     = "ECR"
     actions = [
       "ecr:BatchCheckLayerAvailability",
       "ecr:BatchGetImage",
       "ecr:CompleteLayerUpload",
-      "ecr:Describe*",
-      "ecr:Get*",
+      "ecr:DescribeImages",
+      "ecr:DescribeRepositories",
+      "ecr:GetAccountSetting",
       "ecr:InitiateLayerUpload",
-      "ecr:List*",
+      "ecr:GetLifecyclePolicy",
+      "ecr:ListTagsForResource",
       "ecr:PutImage",
       "ecr:UploadLayerPart"
     ]
     effect    = "Allow"
     resources = [
       "arn:aws:ecr:*:*:*"
+    ]
+  }
+
+  statement {
+    sid     = "ECRAuth"
+    actions = [
+      "ecr:GetAuthorizationToken",
+    ]
+    effect    = "Allow"
+    resources = [
+      "*"
     ]
   }
 
