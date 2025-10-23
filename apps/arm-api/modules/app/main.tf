@@ -42,7 +42,6 @@ module "iam_gha_serverless" {
   source      = "../../../../modules/iam_github_actions_oidc"
 
   name_prefix       = var.app_name
-  aws_account_id    = var.aws_access_key
   github_org        = var.github_org
   github_repository = var.github_repository
 
