@@ -7,7 +7,6 @@ locals {
         http_method     = "ANY"
         module_name     = "event_handler"
         path_part       = "{proxy+}"
-        is_authorized    = false
         timeout_seconds = local.lambda_timeout_seconds
       }
   ]

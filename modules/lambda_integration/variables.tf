@@ -4,7 +4,7 @@ variable "tags" {
   default     = {}
 }
 
-variable "cognito_authorizer_id" {
+variable "authorizer_id" {
   description = "Cognito Authorizer"
   type        = string
   default     = ""
@@ -13,11 +13,6 @@ variable "cognito_authorizer_id" {
 variable "http_method" {
   description = "HTTP Method (GET, POST, PUT, DELETE, HEAD, OPTIONS, ANY)"
   type        = string
-}
-
-variable "is_authorized" {
-  description = "Is protected by api gateway authorizer"
-  type        = bool
 }
 
 variable "lambda_function_invoke_arn" {

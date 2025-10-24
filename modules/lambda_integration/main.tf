@@ -30,8 +30,7 @@ resource "aws_api_gateway_resource" "main" {
 }
 
 resource "aws_api_gateway_method" "proxy" {
-  authorization  = var.is_authorized ? "COGNITO_USER_POOLS" : "NONE"
-  authorizer_id  = var.is_authorized ? var.cognito_authorizer_id : ""
+  authorization  = "NONE"
   http_method    = var.http_method
   operation_name = "${aws_api_gateway_resource.main.path_part}-${var.http_method}"
   resource_id    = aws_api_gateway_resource.main.id

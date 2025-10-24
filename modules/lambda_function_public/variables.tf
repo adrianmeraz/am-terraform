@@ -49,11 +49,6 @@ variable "image_uri" {
   type        = string
 }
 
-variable "is_authorized" {
-  description = "Is protected by api gateway authorizer"
-  type        = bool
-}
-
 variable "role_arn" {
   description = "Amazon Resource Name (ARN) of the function's execution role."
   type        = string

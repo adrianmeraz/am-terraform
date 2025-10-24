@@ -34,7 +34,6 @@ variable "lambda_configs" {
     http_method          = string
     module_name          = string
     path_part            = string
-    is_authorized        = bool
     timeout_seconds      = number
   }))
 }

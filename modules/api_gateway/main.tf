@@ -11,13 +11,6 @@ resource "aws_api_gateway_rest_api" "http" {
   tags = var.tags
 }
 
-resource "aws_api_gateway_authorizer" "cognito" {
-  name          = "${var.name_prefix}-authorizer"
-  rest_api_id   = aws_api_gateway_rest_api.http.id
-  type          = "COGNITO_USER_POOLS"
-  provider_arns = [var.cognito_pool_arn]
-}
-
 module "apigw_integration" {
   depends_on  = [
     aws_api_gateway_rest_api.http,
@@ -27,9 +20,7 @@ module "apigw_integration" {
 
   for_each                   = {for index, cfg in var.lambda_configs: cfg.function_name => cfg}
 
-  cognito_authorizer_id      = aws_api_gateway_authorizer.cognito.id
   http_method                = each.value.http_method
-  is_authorized              = each.value.is_authorized
   name_prefix                = var.name_prefix
   lambda_function_invoke_arn = each.value.invoke_arn
   lambda_function_name       = each.value.function_name
