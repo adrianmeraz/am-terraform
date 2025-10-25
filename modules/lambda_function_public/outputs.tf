@@ -22,3 +22,8 @@ output "path_part" {
   description = "Last path segment of this API resource"
   value       = var.path_part
 }
+
+output "source_code_hash" {
+  description = "ECR Image Source Code Hash"
+  value       = aws_lambda_function.main.source_code_hash
+}

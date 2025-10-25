@@ -19,11 +19,6 @@ variable "cloudwatch_role_arn" {
   type        = string
 }
 
-variable "cognito_pool_arn" {
-  description = "Cognito Pool ARN"
-  type        = string
-}
-
 variable "lambda_configs" {
   description = "List of lambda configs to setup integrations"
   type          = list(object({
@@ -31,6 +26,7 @@ variable "lambda_configs" {
     http_method        = string
     invoke_arn         = string
     path_part          = string
+    source_code_hash   = string
   }))
 }
 

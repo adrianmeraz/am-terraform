@@ -2,7 +2,7 @@ resource "aws_api_gateway_account" "main" {
   cloudwatch_role_arn = var.cloudwatch_role_arn
 }
 
-resource "aws_api_gateway_rest_api" "http" {
+resource "aws_api_gateway_rest_api" "main" {
   name = "${var.name_prefix}-apigw"
   endpoint_configuration {
     types = ["REGIONAL"]
@@ -13,7 +13,7 @@ resource "aws_api_gateway_rest_api" "http" {
 
 module "apigw_integration" {
   depends_on  = [
-    aws_api_gateway_rest_api.http,
+    aws_api_gateway_rest_api.main,
   ]
 
   source = "../lambda_integration"
@@ -25,9 +25,9 @@ module "apigw_integration" {
   lambda_function_invoke_arn = each.value.invoke_arn
   lambda_function_name       = each.value.function_name
   path_part                  = each.value.path_part
-  rest_api_execution_arn     = aws_api_gateway_rest_api.http.execution_arn
-  rest_api_id                = aws_api_gateway_rest_api.http.id
-  root_resource_id           = aws_api_gateway_rest_api.http.root_resource_id
+  rest_api_execution_arn     = aws_api_gateway_rest_api.main.execution_arn
+  rest_api_id                = aws_api_gateway_rest_api.main.id
+  root_resource_id           = aws_api_gateway_rest_api.main.root_resource_id
 }
 
 resource "aws_api_gateway_deployment" "main" {
@@ -35,7 +35,13 @@ resource "aws_api_gateway_deployment" "main" {
     module.apigw_integration
   ]
 
-  rest_api_id       = aws_api_gateway_rest_api.http.id
+  rest_api_id       = aws_api_gateway_rest_api.main.id
+
+  triggers = {
+    redeployment = sha1(jsonencode([
+      var.lambda_configs,
+    ]))
+  }
 
   # Fix for: deleting API Gateway Deployment (abcdef): BadRequestException: Active stages pointing to this deployment must be moved or deleted
   # Per https://github.com/hashicorp/terraform/issues/10674#issuecomment-290767062
@@ -49,11 +55,11 @@ resource "aws_api_gateway_stage" "default" {
   depends_on  = [
     module.apigw_integration,
     aws_api_gateway_deployment.main,
-    aws_api_gateway_rest_api.http
+    aws_api_gateway_rest_api.main
   ]
   deployment_id = aws_api_gateway_deployment.main.id
   description   = md5(file("main.tf")) # Forces redeployment of stage upon any change to apigw per https://github.com/hashicorp/terraform/issues/6613#issuecomment-322264393
-  rest_api_id   = aws_api_gateway_rest_api.http.id
+  rest_api_id   = aws_api_gateway_rest_api.main.id
   stage_name    = var.environment
   access_log_settings {
     destination_arn = var.cloudwatch_log_group_arn
@@ -86,7 +92,7 @@ resource "aws_api_gateway_stage" "default" {
 
 resource "aws_api_gateway_method_settings" "main" {
   depends_on  = [aws_api_gateway_deployment.main]
-  rest_api_id = aws_api_gateway_rest_api.http.id
+  rest_api_id = aws_api_gateway_rest_api.main.id
   stage_name  = aws_api_gateway_stage.default.stage_name
   method_path = "*/*"
   settings {

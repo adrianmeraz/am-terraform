@@ -129,7 +129,6 @@ module "apigw_lambda_http" {
   name_prefix              = local.name_prefix
   cloudwatch_log_group_arn = module.apigw_logs.cloudwatch_log_group_arn
   cloudwatch_role_arn      = module.iam_lambda_dynamo.role_arn
-  cognito_pool_arn         = module.shared_secrets.cognito_pool_arn
   tags                     = module.mandatory_tags.tags
   lambda_configs = [
     for idx, lambda in module.lambdas : {
@@ -138,6 +137,7 @@ module "apigw_lambda_http" {
       invoke_arn         = lambda.invoke_arn
       lambda_env_var_map = lambda.lambda_env_var_map
       path_part          = lambda.path_part
+      source_code_hash   = lambda.source_code_hash
     }
   ]
 }

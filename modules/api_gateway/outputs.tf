@@ -1,6 +1,6 @@
 output "api_gateway_rest_api_id" {
   description = "ID of the API Gateway"
-  value = aws_api_gateway_rest_api.http.id
+  value = aws_api_gateway_rest_api.main.id
 }
 
 output "api_gateway_stage_name" {
