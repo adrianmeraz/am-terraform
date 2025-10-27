@@ -232,7 +232,7 @@ data "aws_iam_policy_document" "main" {
     ]
     effect    = "Allow"
     resources = [
-      "*"
+      "arn:aws:sns:*:*:*"
     ]
   }
 
