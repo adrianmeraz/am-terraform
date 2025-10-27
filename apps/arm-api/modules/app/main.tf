@@ -41,8 +41,7 @@ module "monthly_budget" {
   source = "../../../../modules/budget_monthly"
 
   name_prefix                = var.app_name
-  limit_amount               = var.budget_config.limit_amount
-  subscriber_email_addresses = var.budget_config.subscriber_email_addresses
+  limit_amount               = var.budget_limit_amount
 
   tags                       = module.mandatory_tags.tags
 }
