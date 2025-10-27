@@ -3,9 +3,17 @@ variable "app_name" {
   type = string
 }
 
-variable "aws_access_key" {
-  description = "AWS Access Key ID"
-  type = string
+variable "budget_config" {
+  description = "Budget Config"
+  type        = object({
+    limit_amount               = string
+    subscriber_email_addresses = list(string)
+  })
+
+  default = {
+    limit_amount               = "20"
+    subscriber_email_addresses = [""]
+  }
 }
 
 variable "environment" {

@@ -1,8 +1,8 @@
 module "app" {
   source                  = "../../modules/app"
   app_name                = var.app_name
-  aws_access_key          = var.aws_access_key
   environment             = var.environment
+  budget_config           = var.budget_config
   github_org              = var.github_org
   github_repository       = var.github_repository
   lambda_memory_MB        = 256

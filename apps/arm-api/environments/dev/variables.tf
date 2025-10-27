@@ -18,6 +18,19 @@ variable "aws_secret_key" {
   type        = string
 }
 
+variable "budget_config" {
+  description = "Budget Config"
+  type        = object({
+    limit_amount               = string
+    subscriber_email_addresses = list(string)
+  })
+
+  default = {
+    limit_amount               = "20"
+    subscriber_email_addresses = [""]
+  }
+}
+
 variable "github_org" {
   description = "Github Org"
   type        = string

@@ -37,6 +37,16 @@ module "mandatory_tags" {
   environment = var.environment
 }
 
+module "monthly_budget" {
+  source = "../../../../modules/budget_monthly"
+
+  name_prefix                = var.app_name
+  limit_amount               = var.budget_config.limit_amount
+  subscriber_email_addresses = var.budget_config.subscriber_email_addresses
+
+  tags                       = module.mandatory_tags.tags
+}
+
 module "iam_gha_serverless" {
   source      = "../../../../modules/iam_github_actions_oidc"
 

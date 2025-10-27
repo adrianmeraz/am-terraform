@@ -3,6 +3,7 @@ variable "app_name" {
   type = string
 }
 
+
 variable "dynamo_db_config" {
   description = "DynamoDB Configuration"
   type        = object({
