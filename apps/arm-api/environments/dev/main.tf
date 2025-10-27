@@ -2,7 +2,7 @@ module "app" {
   source                  = "../../modules/app"
   app_name                = var.app_name
   environment             = var.environment
-  budget_config           = var.budget_config
+  budget_limit_amount     = var.budget_limit_amount
   github_org              = var.github_org
   github_repository       = var.github_repository
   lambda_memory_MB        = 256

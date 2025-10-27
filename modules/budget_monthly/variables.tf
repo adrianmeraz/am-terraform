@@ -14,9 +14,3 @@ variable "limit_amount" {
   type        = string
   default     = "20"
 }
-
-variable "subscriber_email_addresses" {
-  description = "E-Mail addresses to notify"
-  type        = list(string)
-  default     = []
-}

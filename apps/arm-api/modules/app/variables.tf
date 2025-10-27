@@ -3,17 +3,10 @@ variable "app_name" {
   type = string
 }
 
-variable "budget_config" {
+variable "budget_limit_amount" {
   description = "Budget Config"
-  type        = object({
-    limit_amount               = string
-    subscriber_email_addresses = list(string)
-  })
-
-  default = {
-    limit_amount               = "20"
-    subscriber_email_addresses = [""]
-  }
+  type        = string
+  default     = "20"
 }
 
 variable "environment" {
