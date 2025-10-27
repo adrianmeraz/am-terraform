@@ -227,7 +227,8 @@ data "aws_iam_policy_document" "main" {
     actions = [
       "SNS:Get*",
       "SNS:List*",
-      "SNS:Publish"
+      "SNS:Publish",
+      "SNS:SetTopicAttributes"
     ]
     effect    = "Allow"
     resources = [
