@@ -70,6 +70,17 @@ data "aws_iam_policy_document" "main" {
   }
 
   statement {
+    sid     = "Budgets"
+    actions = [
+      "budgets:View*"
+    ]
+    effect    = "Allow"
+    resources = [
+      "arn:aws:budgets:*:*:*"
+    ]
+  }
+
+  statement {
     sid     = "CostExplorer"
     actions = [
       "ce:List*"
@@ -208,6 +219,17 @@ data "aws_iam_policy_document" "main" {
     effect    = "Allow"
     resources = [
       "*"
+    ]
+  }
+
+  statement {
+    sid     = "SNS"
+    actions = [
+      "SNS:Get*"
+    ]
+    effect    = "Allow"
+    resources = [
+      "arn:aws:sns:*:*:*"
     ]
   }
 
