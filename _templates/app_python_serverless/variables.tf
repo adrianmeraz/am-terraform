@@ -3,6 +3,11 @@ variable "app_name" {
   type = string
 }
 
+variable "budget_limit_amount" {
+  description = "Budget Config"
+  type        = string
+  default     = "20"
+}
 
 variable "dynamo_db_config" {
   description = "DynamoDB Configuration"
@@ -22,6 +27,16 @@ variable "dynamo_db_config" {
 variable "environment" {
   description = "App Environment"
   type = string
+}
+
+variable "github_org" {
+  description = "Github Org"
+  type        = string
+}
+
+variable "github_repository" {
+  description = "Github Repository"
+  type        = string
 }
 
 variable "lambda_cmd_prefix" {

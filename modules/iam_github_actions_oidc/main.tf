@@ -72,6 +72,7 @@ data "aws_iam_policy_document" "main" {
   statement {
     sid     = "Budgets"
     actions = [
+      "budgets:List*",
       "budgets:View*"
     ]
     effect    = "Allow"

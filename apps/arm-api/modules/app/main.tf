@@ -22,36 +22,12 @@ module "app_python_serverless" {
     ttl_attr_name   = "expires_at"
   }
   environment                    = var.environment
+  github_org                     = var.github_org
+  github_repository              = var.github_repository
   lambda_cmd_prefix              = local.lambda_cmd_prefix
   lambda_configs                 = local.lambda_configs
   lambda_handler_name            = local.lambda_handler_name
   lambda_memory_MB               = var.lambda_memory_MB
   secret_map                     = var.secret_map
   shared_app_name                = var.shared_app_name
-}
-
-module "mandatory_tags" {
-  source = "../../../../modules/mandatory_tags"
-
-  app_name    = var.app_name
-  environment = var.environment
-}
-
-module "monthly_budget" {
-  source = "../../../../modules/budget_monthly"
-
-  name_prefix                = var.app_name
-  limit_amount               = var.budget_limit_amount
-
-  tags                       = module.mandatory_tags.tags
-}
-
-module "iam_gha_serverless" {
-  source      = "../../../../modules/iam_github_actions_oidc"
-
-  name_prefix       = var.app_name
-  github_org        = var.github_org
-  github_repository = var.github_repository
-
-  tags              = module.mandatory_tags.tags
 }

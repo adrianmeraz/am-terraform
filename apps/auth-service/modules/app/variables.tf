@@ -8,19 +8,19 @@ variable "aws_access_key" {
   type = string
 }
 
-variable "aws_region" {
-  description = "AWS Region"
-  type = string
-}
-
-variable "aws_secret_key" {
-  description = "AWS Secret Key"
-  type = string
-}
-
 variable "environment" {
   description = "App Environment"
   type = string
+}
+
+variable "github_org" {
+  description = "Github Org"
+  type        = string
+}
+
+variable "github_repository" {
+  description = "Github Repository"
+  type        = string
 }
 
 variable "lambda_memory_MB" {

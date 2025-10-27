@@ -23,4 +23,6 @@ module "app_python_serverless" {
   lambda_memory_MB               = var.lambda_memory_MB
   secret_map                     = var.secret_map
   shared_app_name                = var.shared_app_name
+  github_org                     = var.github_org
+  github_repository              = var.github_repository
 }
